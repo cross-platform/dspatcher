@@ -15,8 +15,8 @@ DiagPin::DiagPin( PinType diagramType, QGraphicsItem* parent )
       {
         _nameText = new QGraphicsTextItem( this );
         _nameText->setOpacity(0.06);
-        _nameText->setPos(-30,-13);
         _nameText->setPlainText("in");
+        _nameText->setPos(-_nameText->boundingRect().width() - 7,-13);
       }
       _polygon << QPointF( -6, 5 ) << QPointF( 6, 5 ) << QPointF( 6, -5 ) << QPointF( -6, -5 )
           << QPointF( -6, 5 );
@@ -25,8 +25,8 @@ DiagPin::DiagPin( PinType diagramType, QGraphicsItem* parent )
       {
         _nameText = new QGraphicsTextItem( this );
         _nameText->setOpacity(0.06);
-        _nameText->setPos(15,-13);
         _nameText->setPlainText("out");
+        _nameText->setPos(7,-13);
       }
       _polygon << QPointF( -6, 5 ) << QPointF( 6, 5 ) << QPointF( 6, -5 ) << QPointF( -6, -5 )
           << QPointF( -6, 5 );

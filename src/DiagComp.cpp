@@ -21,7 +21,7 @@ DiagComp::DiagComp( CompType diagramType, QMenu* contextMenu, QPointF const& pos
       case Process:
       {
         _nameText = new QGraphicsTextItem( this );
-        _nameText->setPos(-34,-40);
+        _nameText->setPos(-34,-39);
         _nameText->setPlainText("Process 1");
         DiagPin* pin = new DiagPin( DiagPin::OutPin, this );
         pin->setPos( 21, 0 );
@@ -36,7 +36,7 @@ DiagComp::DiagComp( CompType diagramType, QMenu* contextMenu, QPointF const& pos
       case Process2:
       {
         _nameText = new QGraphicsTextItem( this );
-        _nameText->setPos(-34,-40);
+        _nameText->setPos(-34,-39);
         _nameText->setPlainText("Process 2");
         DiagPin* pin = new DiagPin( DiagPin::OutPin, this );
         pin->setPos( 21, 0 );
@@ -57,7 +57,7 @@ DiagComp::DiagComp( CompType diagramType, QMenu* contextMenu, QPointF const& pos
       case Process3:
       {
         _nameText = new QGraphicsTextItem( this );
-        _nameText->setPos(-34,-40);
+        _nameText->setPos(-34,-39);
         _nameText->setPlainText("Process 3");
         DiagPin* pin = new DiagPin( DiagPin::OutPin, this );
         pin->setPos( 21, 0 );
