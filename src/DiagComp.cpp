@@ -25,9 +25,9 @@ DiagComp::DiagComp( CompType compType, QMenu* contextMenu, QPointF const& positi
   {
     case Process:
     {
-//      setName("Gain");
-//      addInPin("Audio In");
-//      addOutPin("Audio Out");
+      setName("Gain");
+      addInPin("Audio In");
+      addOutPin("Audio Out");
     }
     break;
     case Process2:
@@ -118,6 +118,8 @@ void DiagComp::removePins()
   }
 
   _outPins.clear();
+
+  updatePolygon();
 }
 
 QPixmap DiagComp::image() const
@@ -152,7 +154,8 @@ void DiagComp::setName( QString name )
 
 void DiagComp::updatePolygon()
 {
-  int pinsAfterFirst = std::max( _inPins.size(), _outPins.size() ) - 1;
+  int pinsAfterFirst = std::max( _inPins.size(), _outPins.size() );
+  pinsAfterFirst = --pinsAfterFirst < 0 ? 0 : pinsAfterFirst;
   _polygon.clear();
   _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 15 + ( 20 * pinsAfterFirst ) )
            << QPointF( -15, 15 + ( 20 * pinsAfterFirst )) << QPointF( -15, -15 );
