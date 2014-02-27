@@ -127,9 +127,28 @@ QPixmap DiagComp::image() const
   QPixmap pixmap( 250, 250 );
   pixmap.fill( Qt::transparent );
   QPainter painter( &pixmap );
-  painter.setPen( QPen( Qt::black, 8 ) );
-  painter.translate( 125, 125 );
+  painter.setPen( QPen( Qt::black, 1 ) );
+
+  int pinsAfterFirst = std::max( _inPins.size(), _outPins.size() );
+  pinsAfterFirst = --pinsAfterFirst < 0 ? 0 : pinsAfterFirst;
+
+  painter.translate( 125, 125 - ( 10 * pinsAfterFirst ) );
   painter.drawPolyline( _polygon );
+
+  painter.translate( -20, 0 );
+  foreach( DiagPin* pin, _inPins )
+  {
+    painter.drawPolyline( pin->polygon() );
+    painter.translate( 0, 20 );
+  }
+
+  painter.resetTransform();
+  painter.translate( 150, 125 - ( 10 * pinsAfterFirst ) );
+  foreach( DiagPin* pin, _outPins )
+  {
+    painter.drawPolyline( pin->polygon() );
+    painter.translate( 0, 20 );
+  }
 
   return pixmap;
 }
@@ -156,6 +175,7 @@ void DiagComp::updatePolygon()
 {
   int pinsAfterFirst = std::max( _inPins.size(), _outPins.size() );
   pinsAfterFirst = --pinsAfterFirst < 0 ? 0 : pinsAfterFirst;
+
   _polygon.clear();
   _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 15 + ( 20 * pinsAfterFirst ) )
            << QPointF( -15, 15 + ( 20 * pinsAfterFirst )) << QPointF( -15, -15 );

@@ -63,12 +63,12 @@ void DiagMain::createToolBox()
   _buttonGroup->setExclusive( false );
   connect( _buttonGroup, SIGNAL( buttonClicked(int) ), this, SLOT( buttonGroupClicked(int) ) );
   QGridLayout* layout = new QGridLayout;
-  layout->addWidget( createCellWidget( tr( "1i-1o" ), DiagComp::Process ), 0, 0 );
-  layout->addWidget( createCellWidget( tr( "2i-2o" ), DiagComp::Process2 ), 0, 1 );
-  layout->addWidget( createCellWidget( tr( "3i-3o" ), DiagComp::Process3 ), 1, 0 );
+  layout->addWidget( createCellWidget( tr( "Gain" ), DiagComp::Process ), 0, 0 );
+  layout->addWidget( createCellWidget( tr( "Audio Device" ), DiagComp::Process2 ), 0, 1 );
+  layout->addWidget( createCellWidget( tr( "Ambisonix" ), DiagComp::Process3 ), 1, 0 );
 
-  layout->setRowStretch( 3, 10 );
-  layout->setColumnStretch( 2, 10 );
+  layout->setRowStretch( 3, 8 );
+  layout->setColumnStretch( 2, 8 );
 
   QWidget* compWidget = new QWidget;
   compWidget->setLayout( layout );
