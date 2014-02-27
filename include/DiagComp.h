@@ -26,7 +26,8 @@ public:
 
   void setColor( const QColor& color );
 
-  void addPin( DiagPin* pin );
+  void addInPin();
+  void addOutPin();
   void removePins();
 
   QPixmap image() const;
@@ -36,11 +37,15 @@ protected:
   void contextMenuEvent( QGraphicsSceneContextMenuEvent* event );
 
 private:
+  void updatePolygon();
+
+private:
   QColor _color;
   CompType _compType;
   QPolygonF _polygon;
   QMenu* _contextMenu;
-  QList< DiagPin* > _pins;
+  QList< DiagPin* > _inPins;
+  QList< DiagPin* > _outPins;
   QGraphicsTextItem* _nameText;
 };
 

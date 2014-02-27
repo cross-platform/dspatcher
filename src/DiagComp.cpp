@@ -7,8 +7,8 @@
 #include <QPainter>
 
 DiagComp::DiagComp( CompType diagramType, QMenu* contextMenu, QPointF const& position,
-    QGraphicsItem* parent )
-    : QGraphicsPolygonItem( parent )
+                    QGraphicsItem* parent )
+  : QGraphicsPolygonItem( parent )
 {
   setPos( position );
 
@@ -16,76 +16,43 @@ DiagComp::DiagComp( CompType diagramType, QMenu* contextMenu, QPointF const& pos
   _compType = diagramType;
   _contextMenu = contextMenu;
 
+  _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 15 ) << QPointF( -15, 15 )
+           << QPointF( -15, -15 );
+
+  _nameText = new QGraphicsTextItem( this );
+  _nameText->setPos(-34,-39);
+
   switch( _compType )
   {
-      case Process:
-      {
-        _nameText = new QGraphicsTextItem( this );
-        _nameText->setPos(-34,-39);
-        _nameText->setPlainText("Process 1");
-        DiagPin* pin = new DiagPin( DiagPin::OutPin, this );
-        pin->setPos( 21, 0 );
-        addPin( pin );
-        pin = new DiagPin( DiagPin::InPin, this );
-        pin->setPos( -21, 0 );
-        addPin( pin );
-      }
-      _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 15 ) << QPointF( -15, 15 )
-          << QPointF( -15, -15 );
-      break;
-      case Process2:
-      {
-        _nameText = new QGraphicsTextItem( this );
-        _nameText->setPos(-34,-39);
-        _nameText->setPlainText("Process 2");
-        DiagPin* pin = new DiagPin( DiagPin::OutPin, this );
-        pin->setPos( 21, 0 );
-        addPin( pin );
-        pin = new DiagPin( DiagPin::OutPin, this );
-        pin->setPos( 21, 20 );
-        addPin( pin );
-        pin = new DiagPin( DiagPin::InPin, this );
-        pin->setPos( -21, 0 );
-        addPin( pin );
-        pin = new DiagPin( DiagPin::InPin, this );
-        pin->setPos( -21, 20 );
-        addPin( pin );
-      }
-      _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 35 ) << QPointF( -15, 35 )
-          << QPointF( -15, -15 );
-      break;
-      case Process3:
-      {
-        _nameText = new QGraphicsTextItem( this );
-        _nameText->setPos(-34,-39);
-        _nameText->setPlainText("Process 3");
-        DiagPin* pin = new DiagPin( DiagPin::OutPin, this );
-        pin->setPos( 21, 0 );
-        addPin( pin );
-        pin = new DiagPin( DiagPin::OutPin, this );
-        pin->setPos( 21, 20 );
-        addPin( pin );
-        pin = new DiagPin( DiagPin::OutPin, this );
-        pin->setPos( 21, 40 );
-        addPin( pin );
-        pin = new DiagPin( DiagPin::InPin, this );
-        pin->setPos( -21, 0 );
-        addPin( pin );
-        pin = new DiagPin( DiagPin::InPin, this );
-        pin->setPos( -21, 20 );
-        addPin( pin );
-        pin = new DiagPin( DiagPin::InPin, this );
-        pin->setPos( -21, 40 );
-        addPin( pin );
-      }
-      _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 55 ) << QPointF( -15, 55 )
-          << QPointF( -15, -15 );
-      break;
-    default:
-      _polygon << QPointF( -120, -80 ) << QPointF( -70, 80 ) << QPointF( 120, 80 ) << QPointF( 70, -80 )
-          << QPointF( -120, -80 );
-      break;
+    case Process:
+    {
+      _nameText->setPlainText("Process 1");
+      addInPin();
+      addOutPin();
+    }
+    break;
+    case Process2:
+    {
+      _nameText->setPlainText("Process 2");
+      addInPin();
+      addInPin();
+      addOutPin();
+      addOutPin();
+    }
+    break;
+    case Process3:
+    {
+      _nameText->setPlainText("Process 3");
+      addInPin();
+      addInPin();
+      addInPin();
+      addOutPin();
+      addOutPin();
+      addOutPin();
+    }
+    break;
   }
+
   setPolygon( _polygon );
 
   setFlag( QGraphicsItem::ItemIsMovable, true );
@@ -107,26 +74,52 @@ void DiagComp::setColor( const QColor& color )
   _color = color;
   setBrush( _color );
 
-  foreach( DiagPin* pin, _pins )
+  foreach( DiagPin* pin, _inPins )
+  {
+    pin->setBrush( _color );
+  }
+
+  foreach( DiagPin* pin, _outPins )
   {
     pin->setBrush( _color );
   }
 }
 
-void DiagComp::addPin( DiagPin* pin )
+void DiagComp::addInPin()
 {
+  DiagPin* pin = new DiagPin( DiagPin::InPin, this );
+  pin->setPos( -21, 20 * _inPins.size() );
   pin->setBrush( _color );
-  _pins.append( pin );
+  _inPins.append( pin );
+
+  updatePolygon();
+}
+
+void DiagComp::addOutPin()
+{
+  DiagPin* pin = new DiagPin( DiagPin::OutPin, this );
+  pin->setPos( 21, 20 * _outPins.size() );
+  pin->setBrush( _color );
+  _outPins.append( pin );
+
+  updatePolygon();
 }
 
 void DiagComp::removePins()
 {
-  foreach( DiagPin* pin, _pins )
+  foreach( DiagPin* pin, _inPins )
   {
     delete pin;
   }
 
-  _pins.clear();
+  _inPins.clear();
+
+  foreach( DiagPin* pin, _outPins )
+  {
+    delete pin;
+  }
+
+  _outPins.clear();
 }
 
 QPixmap DiagComp::image() const
@@ -151,4 +144,12 @@ void DiagComp::contextMenuEvent( QGraphicsSceneContextMenuEvent* event )
   scene()->clearSelection();
   setSelected( true );
   _contextMenu->exec( event->screenPos() );
+}
+
+void DiagComp::updatePolygon()
+{
+  int pinsAfterFirst = std::max( _inPins.size(), _outPins.size() ) - 1;
+  _polygon.clear();
+  _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 15 + ( 20 * pinsAfterFirst ) )
+           << QPointF( -15, 15 + ( 20 * pinsAfterFirst )) << QPointF( -15, -15 );
 }
