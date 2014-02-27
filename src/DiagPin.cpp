@@ -4,7 +4,7 @@
 #include <QGraphicsScene>
 #include <QPainter>
 
-DiagPin::DiagPin( PinType diagramType, QGraphicsItem* parent )
+DiagPin::DiagPin( PinType diagramType, QString pinName, QGraphicsItem* parent )
     : QGraphicsPolygonItem( parent )
 {
   _pinType = diagramType;
@@ -14,9 +14,9 @@ DiagPin::DiagPin( PinType diagramType, QGraphicsItem* parent )
     case InPin:
       {
         _nameText = new QGraphicsTextItem( this );
-        _nameText->setOpacity(0.06);
-        _nameText->setPlainText("in");
-        _nameText->setPos(-_nameText->boundingRect().width() - 7,-13);
+        _nameText->setOpacity( 0.08 );
+        _nameText->setPlainText( pinName );
+        _nameText->setPos( -_nameText->boundingRect().width() - 7, -13 );
       }
       _polygon << QPointF( -6, 5 ) << QPointF( 6, 5 ) << QPointF( 6, -5 ) << QPointF( -6, -5 )
           << QPointF( -6, 5 );
@@ -24,9 +24,9 @@ DiagPin::DiagPin( PinType diagramType, QGraphicsItem* parent )
     case OutPin:
       {
         _nameText = new QGraphicsTextItem( this );
-        _nameText->setOpacity(0.06);
-        _nameText->setPlainText("out");
-        _nameText->setPos(7,-13);
+        _nameText->setOpacity( 0.08 );
+        _nameText->setPlainText( pinName );
+        _nameText->setPos( 7,-13 );
       }
       _polygon << QPointF( -6, 5 ) << QPointF( 6, 5 ) << QPointF( 6, -5 ) << QPointF( -6, -5 )
           << QPointF( -6, 5 );
@@ -105,7 +105,7 @@ void DiagPin::hover( bool hover )
   }
   else
   {
-    _nameText->setOpacity( 0.1 );
+    _nameText->setOpacity( 0.08 );
   }
 }
 

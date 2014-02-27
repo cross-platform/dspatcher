@@ -26,8 +26,8 @@ public:
 
   void setColor( const QColor& color );
 
-  void addInPin();
-  void addOutPin();
+  void addInPin( QString pinName );
+  void addOutPin( QString pinName );
   void removePins();
 
   QPixmap image() const;
@@ -37,6 +37,7 @@ protected:
   void contextMenuEvent( QGraphicsSceneContextMenuEvent* event );
 
 private:
+  void setName( QString name );
   void updatePolygon();
 
 private:

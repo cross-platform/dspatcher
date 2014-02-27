@@ -20,35 +20,33 @@ DiagComp::DiagComp( CompType diagramType, QMenu* contextMenu, QPointF const& pos
            << QPointF( -15, -15 );
 
   _nameText = new QGraphicsTextItem( this );
-  _nameText->setPos(-34,-39);
 
   switch( _compType )
   {
     case Process:
     {
-      _nameText->setPlainText("Process 1");
-      addInPin();
-      addOutPin();
+      setName("Gain");
+      addInPin("Audio In");
+      addOutPin("Audio Out");
     }
     break;
     case Process2:
     {
-      _nameText->setPlainText("Process 2");
-      addInPin();
-      addInPin();
-      addOutPin();
-      addOutPin();
+      setName("Audio Device");
+      addInPin("Left Spk");
+      addInPin("Right Spk");
+      addOutPin("Left Mic");
+      addOutPin("Right Mic");
     }
     break;
     case Process3:
     {
-      _nameText->setPlainText("Process 3");
-      addInPin();
-      addInPin();
-      addInPin();
-      addOutPin();
-      addOutPin();
-      addOutPin();
+      setName("Ambisonix");
+      addInPin("Audio In");
+      addOutPin("Spk LF");
+      addOutPin("Spk LR");
+      addOutPin("Spk RF");
+      addOutPin("Spk RR");
     }
     break;
   }
@@ -85,9 +83,9 @@ void DiagComp::setColor( const QColor& color )
   }
 }
 
-void DiagComp::addInPin()
+void DiagComp::addInPin( QString pinName )
 {
-  DiagPin* pin = new DiagPin( DiagPin::InPin, this );
+  DiagPin* pin = new DiagPin( DiagPin::InPin, pinName, this );
   pin->setPos( -21, 20 * _inPins.size() );
   pin->setBrush( _color );
   _inPins.append( pin );
@@ -95,9 +93,9 @@ void DiagComp::addInPin()
   updatePolygon();
 }
 
-void DiagComp::addOutPin()
+void DiagComp::addOutPin( QString pinName )
 {
-  DiagPin* pin = new DiagPin( DiagPin::OutPin, this );
+  DiagPin* pin = new DiagPin( DiagPin::OutPin, pinName, this );
   pin->setPos( 21, 20 * _outPins.size() );
   pin->setBrush( _color );
   _outPins.append( pin );
@@ -144,6 +142,12 @@ void DiagComp::contextMenuEvent( QGraphicsSceneContextMenuEvent* event )
   scene()->clearSelection();
   setSelected( true );
   _contextMenu->exec( event->screenPos() );
+}
+
+void DiagComp::setName( QString name )
+{
+  _nameText->setPlainText( name );
+  _nameText->setPos( -_nameText->boundingRect().width() / 2, -39 );
 }
 
 void DiagComp::updatePolygon()

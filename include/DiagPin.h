@@ -19,7 +19,7 @@ public:
     InPin, OutPin
   };
 
-  DiagPin( PinType pinType, QGraphicsItem* parent = 0 );
+  DiagPin( PinType pinType, QString pinName, QGraphicsItem* parent = 0 );
   ~DiagPin();
 
   int type() const;
