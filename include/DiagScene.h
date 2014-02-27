@@ -4,6 +4,8 @@
 #include <DiagComp.h>
 #include <QGraphicsScene>
 
+class DiagPin;
+
 class DiagScene : public QGraphicsScene
 {
 Q_OBJECT
@@ -49,6 +51,7 @@ private:
   QGraphicsLineItem* _line;
   QColor _compColor;
   QColor _lineColor;
+  DiagPin* _pinHovered;
 };
 
 #endif // DIAGSCENE_H

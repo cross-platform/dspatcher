@@ -14,6 +14,7 @@ DiagScene::DiagScene( QMenu* compMenu, QObject* parent )
   _line = 0;
   _compColor = Qt::white;
   _lineColor = Qt::black;
+  _pinHovered = 0;
 }
 
 void DiagScene::setLineColor( const QColor& color )
@@ -154,24 +155,24 @@ void DiagScene::mouseMoveEvent( QGraphicsSceneMouseEvent* mouseEvent )
     _line->setLine( newLine );
   }
 
-  // update pin hover info
-  foreach( QGraphicsItem* item, items() )
+  // clear _pinHovered
+  if( _pinHovered )
   {
-    if( item->type() == DiagPin::Type )
-    {
-      DiagPin* pin = qgraphicsitem_cast< DiagPin* >( item );
-      pin->hover( false );
-    }
+    _pinHovered->hover( false );
+    _pinHovered = 0;
   }
 
+  // update _pinHovered
   QList< QGraphicsItem* > hoverItems = items( mouseEvent->scenePos() );
   if( hoverItems.count() && hoverItems.first() == _line )
+  {
     hoverItems.removeFirst();
-
+  }
   if( hoverItems.count() && hoverItems.first()->type() == DiagPin::Type )
   {
     DiagPin* pin = qgraphicsitem_cast< DiagPin* >( hoverItems.first() );
     pin->hover( true );
+    _pinHovered = pin;
   }
 
   QGraphicsScene::mouseMoveEvent( mouseEvent );
