@@ -6,14 +6,14 @@
 #include <QMenu>
 #include <QPainter>
 
-DiagComp::DiagComp( CompType diagramType, QMenu* contextMenu, QPointF const& position,
+DiagComp::DiagComp( CompType compType, QMenu* contextMenu, QPointF const& position,
                     QGraphicsItem* parent )
   : QGraphicsPolygonItem( parent )
 {
   setPos( position );
 
   _color = Qt::black;
-  _compType = diagramType;
+  _compType = compType;
   _contextMenu = contextMenu;
 
   _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 15 ) << QPointF( -15, 15 )
@@ -25,9 +25,9 @@ DiagComp::DiagComp( CompType diagramType, QMenu* contextMenu, QPointF const& pos
   {
     case Process:
     {
-      setName("Gain");
-      addInPin("Audio In");
-      addOutPin("Audio Out");
+//      setName("Gain");
+//      addInPin("Audio In");
+//      addOutPin("Audio Out");
     }
     break;
     case Process2:

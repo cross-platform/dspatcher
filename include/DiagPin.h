@@ -37,6 +37,9 @@ protected:
   QVariant itemChange( GraphicsItemChange change, const QVariant& value );
 
 private:
+  void setName( QString name );
+
+private:
   PinType _pinType;
   QPolygonF _polygon;
   QList< DiagWire* > _wires;

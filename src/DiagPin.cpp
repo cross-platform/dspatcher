@@ -4,39 +4,18 @@
 #include <QGraphicsScene>
 #include <QPainter>
 
-DiagPin::DiagPin( PinType diagramType, QString pinName, QGraphicsItem* parent )
+DiagPin::DiagPin( PinType pinType, QString pinName, QGraphicsItem* parent )
     : QGraphicsPolygonItem( parent )
 {
-  _pinType = diagramType;
+  _pinType = pinType;
 
-  switch( _pinType )
-  {
-    case InPin:
-      {
-        _nameText = new QGraphicsTextItem( this );
-        _nameText->setOpacity( 0.08 );
-        _nameText->setPlainText( pinName );
-        _nameText->setPos( -_nameText->boundingRect().width() - 7, -13 );
-      }
-      _polygon << QPointF( -6, 5 ) << QPointF( 6, 5 ) << QPointF( 6, -5 ) << QPointF( -6, -5 )
-          << QPointF( -6, 5 );
-      break;
-    case OutPin:
-      {
-        _nameText = new QGraphicsTextItem( this );
-        _nameText->setOpacity( 0.08 );
-        _nameText->setPlainText( pinName );
-        _nameText->setPos( 7,-13 );
-      }
-      _polygon << QPointF( -6, 5 ) << QPointF( 6, 5 ) << QPointF( 6, -5 ) << QPointF( -6, -5 )
-          << QPointF( -6, 5 );
-      break;
-    default:
-      _polygon << QPointF( -120, -80 ) << QPointF( -70, 80 ) << QPointF( 120, 80 ) << QPointF( 70, -80 )
-          << QPointF( -120, -80 );
-      break;
-  }
+  _polygon << QPointF( -6, 5 ) << QPointF( 6, 5 ) << QPointF( 6, -5 ) << QPointF( -6, -5 )
+      << QPointF( -6, 5 );
 
+  _nameText = new QGraphicsTextItem( this );
+  _nameText->setOpacity( 0.08 );
+
+  setName( pinName );
   setPolygon( _polygon );
 }
 
@@ -120,4 +99,18 @@ QVariant DiagPin::itemChange( GraphicsItemChange change, const QVariant& value )
   }
 
   return value;
+}
+
+void DiagPin::setName( QString name )
+{
+  _nameText->setPlainText( name );
+
+  if( _pinType == InPin )
+  {
+    _nameText->setPos( -_nameText->boundingRect().width() - 7, -13 );
+  }
+  else
+  {
+    _nameText->setPos( 7,-13 );
+  }
 }
