@@ -11,7 +11,7 @@ int main( int argv, char* args[] )
   mainWindow.setGeometry( 100, 100, 800, 500 );
   mainWindow.show();
 
-  QtpComp::CompType comp;
+  QtpComp::CompInfo comp;
   comp.inPins.append( "in1" );
   comp.inPins.append( "in2" );
   comp.outPins.append( "out1" );

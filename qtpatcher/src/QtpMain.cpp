@@ -32,21 +32,21 @@ QtpMain::QtpMain()
   setUnifiedTitleAndToolBarOnMac( true );
 }
 
-void QtpMain::registerComp( QtpComp::CompType type )
+void QtpMain::registerComp( QtpComp::CompInfo const& compInfo )
 {
-  QtpComp comp( type, _compMenu, QPointF() );
+  QtpComp comp( compInfo, _compMenu, QPointF() );
   QIcon icon( comp.image() );
 
   QToolButton* button = new QToolButton;
   button->setIcon( icon );
   button->setIconSize( QSize( 50, 50 ) );
   button->setCheckable( true );
-  _compTypes.append( type );
-  _buttonGroup->addButton( button, _compTypes.size() - 1 );
+  _comps.append( compInfo );
+  _buttonGroup->addButton( button, _comps.size() - 1 );
 
   QGridLayout* layout = new QGridLayout;
   layout->addWidget( button, 0, 0, Qt::AlignHCenter );
-  layout->addWidget( new QLabel( type.name ), 1, 0, Qt::AlignCenter );
+  layout->addWidget( new QLabel( compInfo.name ), 1, 0, Qt::AlignCenter );
 
   QWidget* widget = new QWidget;
   widget->setLayout( layout );
@@ -63,7 +63,7 @@ void QtpMain::buttonGroupClicked( int id )
       button->setChecked(false);
   }
 
-  _scene->setCompType( _compTypes[id] );
+  _scene->setNextComp( _comps[id] );
   _scene->setMode( QtpScene::InsertComp );
 }
 

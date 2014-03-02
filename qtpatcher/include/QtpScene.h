@@ -26,7 +26,7 @@ public:
 
 public slots:
   void setMode( Mode mode );
-  void setCompType( QtpComp::CompType type );
+  void setNextComp( QtpComp::CompInfo const& compInfo );
 
   void bringToFront();
   void sendToBack();
@@ -43,7 +43,7 @@ protected:
 private:
   bool isItemChange( int type );
 
-  QtpComp::CompType _compType;
+  QtpComp::CompInfo _nextComp;
   QMenu* _compMenu;
   Mode _mode;
   bool _leftButtonDown;

@@ -14,19 +14,20 @@ public:
     Type = UserType + 1
   };
 
-  struct CompType
+  struct CompInfo
   {
-    CompType() {}
-    CompType( QString compName, QList< QString > compInPins, QList< QString > compOutPins )
+    CompInfo() {}
+    CompInfo( QString compName, QList< QString > compInPins, QList< QString > compOutPins )
       : name( compName ),
         inPins( compInPins ),
         outPins( compOutPins ) {}
+
     QString name;
     QList< QString > inPins;
     QList< QString > outPins;
   };
 
-  QtpComp( CompType compType, QMenu* contextMenu, QPointF const& position, QGraphicsItem* parent = 0 );
+  QtpComp( CompInfo const& compInfo, QMenu* contextMenu, QPointF const& position, QGraphicsItem* parent = 0 );
   ~QtpComp();
 
   int type() const;
@@ -38,7 +39,7 @@ public:
   void removePins();
 
   QPixmap image() const;
-  CompType compType() const;
+  CompInfo compInfo() const;
 
 protected:
   void contextMenuEvent( QGraphicsSceneContextMenuEvent* event );
@@ -49,7 +50,7 @@ private:
 
 private:
   QColor _color;
-  CompType _compType;
+  CompInfo _compInfo;
   QPolygonF _polygon;
   QMenu* _contextMenu;
   QList< QtpPin* > _inPins;

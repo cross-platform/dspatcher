@@ -10,7 +10,7 @@ QtpScene::QtpScene( QMenu* compMenu, QObject* parent )
 {
   _compMenu = compMenu;
   _mode = MoveComp;
-  _compType = QtpComp::CompType();
+  _nextComp = QtpComp::CompInfo();
   _line = 0;
   _compColor = Qt::white;
   _lineColor = Qt::black;
@@ -53,9 +53,9 @@ void QtpScene::setMode( Mode mode )
   _mode = mode;
 }
 
-void QtpScene::setCompType( QtpComp::CompType type )
+void QtpScene::setNextComp( QtpComp::CompInfo const& compInfo )
 {
-  _compType = type;
+  _nextComp = compInfo;
 }
 
 void QtpScene::bringToFront()
@@ -121,7 +121,7 @@ void QtpScene::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
 
   if( _mode == InsertComp )
   {
-    QtpComp* comp = new QtpComp( _compType, _compMenu, mouseEvent->scenePos() );
+    QtpComp* comp = new QtpComp( _nextComp, _compMenu, mouseEvent->scenePos() );
 
     comp->setColor( _compColor );
     addItem( comp );

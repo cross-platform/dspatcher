@@ -6,14 +6,14 @@
 #include <QMenu>
 #include <QPainter>
 
-QtpComp::QtpComp( CompType compType, QMenu* contextMenu, QPointF const& position,
+QtpComp::QtpComp( CompInfo const& compInfo, QMenu* contextMenu, QPointF const& position,
                     QGraphicsItem* parent )
   : QGraphicsPolygonItem( parent )
 {
   setPos( position );
 
   _color = Qt::black;
-  _compType = compType;
+  _compInfo = compInfo;
   _contextMenu = contextMenu;
 
   _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 15 ) << QPointF( -15, 15 )
@@ -21,45 +21,15 @@ QtpComp::QtpComp( CompType compType, QMenu* contextMenu, QPointF const& position
 
   _nameText = new QGraphicsTextItem( this );
 
-  setName( compType.name );
-  foreach( QString const& pin, compType.inPins )
+  setName( compInfo.name );
+  foreach( QString const& pin, compInfo.inPins )
   {
     addInPin( pin );
   }
-  foreach( QString const& pin, compType.outPins )
+  foreach( QString const& pin, compInfo.outPins )
   {
     addOutPin( pin );
   }
-
-//  switch( _compType )
-//  {
-//    case Process:
-//    {
-//      setName("Gain");
-//      addInPin("Audio In");
-//      addOutPin("Audio Out");
-//    }
-//    break;
-//    case Process2:
-//    {
-//      setName("Audio Device");
-//      addInPin("Left Spk");
-//      addInPin("Right Spk");
-//      addOutPin("Left Mic");
-//      addOutPin("Right Mic");
-//    }
-//    break;
-//    case Process3:
-//    {
-//      setName("Ambisonix");
-//      addInPin("Audio In");
-//      addOutPin("Spk LF");
-//      addOutPin("Spk LR");
-//      addOutPin("Spk RF");
-//      addOutPin("Spk RR");
-//    }
-//    break;
-//  }
 
   setPolygon( _polygon );
 
@@ -163,9 +133,9 @@ QPixmap QtpComp::image() const
   return pixmap;
 }
 
-QtpComp::CompType QtpComp::compType() const
+QtpComp::CompInfo QtpComp::compInfo() const
 {
-  return _compType;
+  return _compInfo;
 }
 
 void QtpComp::contextMenuEvent( QGraphicsSceneContextMenuEvent* event )

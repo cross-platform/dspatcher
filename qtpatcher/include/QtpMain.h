@@ -19,7 +19,7 @@ public:
   QtpMain();
 
 public slots:
-  void registerComp( QtpComp::CompType comp );
+  void registerComp( QtpComp::CompInfo const& compInfo );
 
 private slots:
   void buttonGroupClicked( int id );
@@ -55,7 +55,7 @@ private:
   QPointF _zoomViewportPos;
 
   QWidget* _compWidget;
-  QList< QtpComp::CompType > _compTypes;
+  QList< QtpComp::CompInfo > _comps;
 };
 
 #endif // QTPMAIN_H
