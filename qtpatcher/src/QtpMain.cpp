@@ -1,17 +1,17 @@
-#include <DiagScene.h>
-#include <DiagMain.h>
+#include <QtpScene.h>
+#include <QtpMain.h>
 
 #include <QtWidgets>
 
-DiagMain::DiagMain()
+QtpMain::QtpMain()
 {
   createActions();
   createToolBox();
   createMenus();
 
-  _scene = new DiagScene( _compMenu, this );
+  _scene = new QtpScene( _compMenu, this );
   _scene->setSceneRect( QRectF( 0, 0, 5000, 5000 ) );
-  connect( _scene, SIGNAL( compInserted( DiagComp* ) ), this, SLOT( compInserted( DiagComp* ) ) );
+  connect( _scene, SIGNAL( compInserted( QtpComp* ) ), this, SLOT( compInserted( QtpComp* ) ) );
   connect( _toFrontAction, SIGNAL( triggered() ), _scene, SLOT( bringToFront() ) );
   connect( _sendBackAction, SIGNAL( triggered() ), _scene, SLOT( sendToBack() ) );
   connect( _deleteAction, SIGNAL( triggered() ), _scene, SLOT( deleteItem() ) );
@@ -32,7 +32,7 @@ DiagMain::DiagMain()
   setUnifiedTitleAndToolBarOnMac( true );
 }
 
-void DiagMain::buttonGroupClicked( int id )
+void QtpMain::buttonGroupClicked( int id )
 {
   QList< QAbstractButton* > buttons = _buttonGroup->buttons();
   foreach( QAbstractButton* button, buttons )
@@ -41,31 +41,31 @@ void DiagMain::buttonGroupClicked( int id )
       button->setChecked(false);
   }
 
-  _scene->setCompType( DiagComp::CompType( id ) );
-  _scene->setMode( DiagScene::InsertComp );
+  _scene->setCompType( QtpComp::CompType( id ) );
+  _scene->setMode( QtpScene::InsertComp );
 }
 
-void DiagMain::compInserted( DiagComp* comp )
+void QtpMain::compInserted( QtpComp* comp )
 {
-  _scene->setMode( DiagScene::MoveComp );
+  _scene->setMode( QtpScene::MoveComp );
   _buttonGroup->button( int( comp->compType() ) )->setChecked( false );
 }
 
-void DiagMain::about()
+void QtpMain::about()
 {
   QMessageBox::about( this, tr( "About DSPatcher" ), tr( "<b>DSPatcher</b> is a graphical patching "
       "tool for creating DSPatch circuits." ) );
 }
 
-void DiagMain::createToolBox()
+void QtpMain::createToolBox()
 {
   _buttonGroup = new QButtonGroup( this );
   _buttonGroup->setExclusive( false );
   connect( _buttonGroup, SIGNAL( buttonClicked(int) ), this, SLOT( buttonGroupClicked(int) ) );
   QGridLayout* layout = new QGridLayout;
-  layout->addWidget( createCellWidget( tr( "Gain" ), DiagComp::Process ), 0, 0 );
-  layout->addWidget( createCellWidget( tr( "Audio Device" ), DiagComp::Process2 ), 0, 1 );
-  layout->addWidget( createCellWidget( tr( "Ambisonix" ), DiagComp::Process3 ), 1, 0 );
+  layout->addWidget( createCellWidget( tr( "Gain" ), QtpComp::Process ), 0, 0 );
+  layout->addWidget( createCellWidget( tr( "Audio Device" ), QtpComp::Process2 ), 0, 1 );
+  layout->addWidget( createCellWidget( tr( "Ambisonix" ), QtpComp::Process3 ), 1, 0 );
 
   layout->setRowStretch( 3, 8 );
   layout->setColumnStretch( 2, 8 );
@@ -79,7 +79,7 @@ void DiagMain::createToolBox()
   _toolBox->addItem( compWidget, tr( "Components" ) );
 }
 
-void DiagMain::createActions()
+void QtpMain::createActions()
 {
   _toFrontAction = new QAction( QIcon( ":/bringtofront.png" ), tr( "Bring to &Front" ), this );
   _toFrontAction->setShortcut( tr( "Ctrl+F" ) );
@@ -103,7 +103,7 @@ void DiagMain::createActions()
   connect( _aboutAction, SIGNAL( triggered() ), this, SLOT( about() ) );
 }
 
-void DiagMain::createMenus()
+void QtpMain::createMenus()
 {
   _fileMenu = menuBar()->addMenu( tr( "&File" ) );
   _fileMenu->addAction( _exitAction );
@@ -118,9 +118,9 @@ void DiagMain::createMenus()
   _aboutMenu->addAction( _aboutAction );
 }
 
-QWidget* DiagMain::createCellWidget( const QString& text, DiagComp::CompType type )
+QWidget* QtpMain::createCellWidget( const QString& text, QtpComp::CompType type )
 {
-  DiagComp comp( type, _compMenu, QPointF() );
+  QtpComp comp( type, _compMenu, QPointF() );
   QIcon icon( comp.image() );
 
   QToolButton* button = new QToolButton;
@@ -139,7 +139,7 @@ QWidget* DiagMain::createCellWidget( const QString& text, DiagComp::CompType typ
   return widget;
 }
 
-bool DiagMain::eventFilter( QObject*, QEvent *event )
+bool QtpMain::eventFilter( QObject*, QEvent *event )
 {
   if( event->type() == QEvent::Wheel && QApplication::keyboardModifiers() == Qt::ControlModifier )
   {

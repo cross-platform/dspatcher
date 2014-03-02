@@ -1,12 +1,12 @@
-#ifndef DIAGCOMP_H
-#define DIAGCOMP_H
+#ifndef QTPCOMP_H
+#define QTPCOMP_H
 
 #include <QGraphicsPolygonItem>
 #include <QList>
 
-class DiagPin;
+class QtpPin;
 
-class DiagComp : public QGraphicsPolygonItem
+class QtpComp : public QGraphicsPolygonItem
 {
 public:
   enum
@@ -19,8 +19,8 @@ public:
     Process, Process2, Process3
   };
 
-  DiagComp( CompType compType, QMenu* contextMenu, QPointF const& position, QGraphicsItem* parent = 0 );
-  ~DiagComp();
+  QtpComp( CompType compType, QMenu* contextMenu, QPointF const& position, QGraphicsItem* parent = 0 );
+  ~QtpComp();
 
   int type() const;
 
@@ -45,9 +45,9 @@ private:
   CompType _compType;
   QPolygonF _polygon;
   QMenu* _contextMenu;
-  QList< DiagPin* > _inPins;
-  QList< DiagPin* > _outPins;
+  QList< QtpPin* > _inPins;
+  QList< QtpPin* > _outPins;
   QGraphicsTextItem* _nameText;
 };
 
-#endif // DIAGCOMP_H
+#endif // QTPCOMP_H

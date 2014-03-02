@@ -1,10 +1,10 @@
-#include <DiagPin.h>
-#include <DiagWire.h>
+#include <QtpPin.h>
+#include <QtpWire.h>
 
 #include <QGraphicsScene>
 #include <QPainter>
 
-DiagPin::DiagPin( PinType pinType, QString pinName, QGraphicsItem* parent )
+QtpPin::QtpPin( PinType pinType, QString pinName, QGraphicsItem* parent )
     : QGraphicsPolygonItem( parent )
 {
   _pinType = pinType;
@@ -19,10 +19,10 @@ DiagPin::DiagPin( PinType pinType, QString pinName, QGraphicsItem* parent )
   setPolygon( _polygon );
 }
 
-DiagPin::~DiagPin()
+QtpPin::~QtpPin()
 {
   // delete wires attached to pin when pin is deleted
-  foreach( DiagWire* wire, _wires )
+  foreach( QtpWire* wire, _wires )
   {
     delete wire;
   }
@@ -30,14 +30,14 @@ DiagPin::~DiagPin()
   removeWires();
 }
 
-int DiagPin::type() const
+int QtpPin::type() const
 {
   return Type;
 }
 
-bool DiagPin::addWire( DiagWire* newWire )
+bool QtpPin::addWire( QtpWire* newWire )
 {
-  foreach( DiagWire* wire, _wires )
+  foreach( QtpWire* wire, _wires )
   {
     if( ( _pinType == InPin && wire->startPin() == newWire->startPin() ) ||
         ( _pinType == OutPin && wire->endPin() == newWire->endPin() ) )
@@ -51,7 +51,7 @@ bool DiagPin::addWire( DiagWire* newWire )
   return true;
 }
 
-void DiagPin::removeWire( DiagWire* wire )
+void QtpPin::removeWire( QtpWire* wire )
 {
   int index = _wires.indexOf( wire );
 
@@ -61,22 +61,22 @@ void DiagPin::removeWire( DiagWire* wire )
   }
 }
 
-void DiagPin::removeWires()
+void QtpPin::removeWires()
 {
   _wires.clear();
 }
 
-DiagPin::PinType DiagPin::pinType() const
+QtpPin::PinType QtpPin::pinType() const
 {
   return _pinType;
 }
 
-QPolygonF DiagPin::polygon() const
+QPolygonF QtpPin::polygon() const
 {
   return _polygon;
 }
 
-void DiagPin::hover( bool hover )
+void QtpPin::hover( bool hover )
 {
   if( hover )
   {
@@ -88,11 +88,11 @@ void DiagPin::hover( bool hover )
   }
 }
 
-QVariant DiagPin::itemChange( GraphicsItemChange change, const QVariant& value )
+QVariant QtpPin::itemChange( GraphicsItemChange change, const QVariant& value )
 {
   if( change == QGraphicsItem::ItemPositionChange )
   {
-    foreach( DiagWire* wire, _wires )
+    foreach( QtpWire* wire, _wires )
     {
       wire->updatePosition();
     }
@@ -101,7 +101,7 @@ QVariant DiagPin::itemChange( GraphicsItemChange change, const QVariant& value )
   return value;
 }
 
-void DiagPin::setName( QString name )
+void QtpPin::setName( QString name )
 {
   _nameText->setPlainText( name );
 

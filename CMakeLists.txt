@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(DSPatcher)
-
 if(WIN32)
   # N.B. Edit this path if your Windows Qt path differs
   set(CMAKE_PREFIX_PATH C:/Qt/Qt5.2.1/5.2.1/msvc2010/)
@@ -18,31 +16,12 @@ add_definitions(
     -Wextra
 )
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}/include
-)
-
-file(GLOB srcs src/*.cpp)
-file(GLOB hdrs include/*.h)
-file(GLOB qrcs data/*.qrc)
-
 set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5Widgets REQUIRED)
 
-qt5_add_resources(rcs ${qrcs})
-
-add_executable(
-  ${PROJECT_NAME}
-  ${srcs}
-  ${hdrs}
-  ${rcs}
-)
-
-qt5_use_modules(
-  ${PROJECT_NAME}
-  Widgets
-)
+add_subdirectory(dspatcher)
+add_subdirectory(qtpatcher)
 
 if(WIN32)
   set(

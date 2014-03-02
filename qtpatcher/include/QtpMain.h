@@ -1,25 +1,25 @@
-#ifndef DIAGMAIN_H
-#define DIAGMAIN_H
+#ifndef QTPMAIN_H
+#define QTPMAIN_H
 
-#include <DiagComp.h>
+#include <QtpComp.h>
 #include <QMainWindow>
 
-class DiagScene;
+class QtpScene;
 
 class QButtonGroup;
 class QGraphicsView;
 class QToolBox;
 
-class DiagMain : public QMainWindow
+class QtpMain : public QMainWindow
 {
 Q_OBJECT
 
 public:
-  DiagMain();
+  QtpMain();
 
 private slots:
   void buttonGroupClicked( int id );
-  void compInserted( DiagComp* comp );
+  void compInserted( QtpComp* comp );
   void about();
 
 private:
@@ -27,11 +27,11 @@ private:
   void createActions();
   void createMenus();
 
-  QWidget* createCellWidget( const QString& text, DiagComp::CompType type );
+  QWidget* createCellWidget( const QString& text, QtpComp::CompType type );
 
   bool eventFilter( QObject* object, QEvent* event );
 
-  DiagScene* _scene;
+  QtpScene* _scene;
   QGraphicsView* _view;
 
   QAction* _exitAction;
@@ -53,4 +53,4 @@ private:
   QPointF _zoomViewportPos;
 };
 
-#endif // DIAGMAIN_H
+#endif // QTPMAIN_H

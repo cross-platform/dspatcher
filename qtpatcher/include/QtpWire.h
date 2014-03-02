@@ -1,11 +1,11 @@
-#ifndef DIAGWIRE_H
-#define DIAGWIRE_H
+#ifndef QTPWIRE_H
+#define QTPWIRE_H
 
 #include <QGraphicsLineItem>
 
-class DiagPin;
+class QtpPin;
 
-class DiagWire : public QGraphicsLineItem
+class QtpWire : public QGraphicsLineItem
 {
 public:
   enum
@@ -13,15 +13,15 @@ public:
     Type = UserType + 3
   };
 
-  DiagWire( DiagPin* startPin, DiagPin* endPin, QGraphicsItem* parent = 0 );
-  ~DiagWire();
+  QtpWire( QtpPin* startPin, QtpPin* endPin, QGraphicsItem* parent = 0 );
+  ~QtpWire();
 
   int type() const;
 
   void setColor( const QColor& color );
 
-  DiagPin* startPin() const;
-  DiagPin* endPin() const;
+  QtpPin* startPin() const;
+  QtpPin* endPin() const;
 
   void updatePosition();
 
@@ -29,10 +29,10 @@ protected:
   void paint( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0 );
 
 private:
-  DiagPin* _startPin;
-  DiagPin* _endPin;
+  QtpPin* _startPin;
+  QtpPin* _endPin;
   QColor _color;
   QPolygonF _wireHead;
 };
 
-#endif // DIAGWIRE_H
+#endif // QTPWIRE_H

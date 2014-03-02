@@ -1,12 +1,12 @@
-#include <DiagComp.h>
-#include <DiagPin.h>
+#include <QtpComp.h>
+#include <QtpPin.h>
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
 
-DiagComp::DiagComp( CompType compType, QMenu* contextMenu, QPointF const& position,
+QtpComp::QtpComp( CompType compType, QMenu* contextMenu, QPointF const& position,
                     QGraphicsItem* parent )
   : QGraphicsPolygonItem( parent )
 {
@@ -57,35 +57,35 @@ DiagComp::DiagComp( CompType compType, QMenu* contextMenu, QPointF const& positi
   setFlag( QGraphicsItem::ItemIsSelectable, true );
 }
 
-DiagComp::~DiagComp()
+QtpComp::~QtpComp()
 {
   removePins();
 }
 
-int DiagComp::type() const
+int QtpComp::type() const
 {
   return Type;
 }
 
-void DiagComp::setColor( const QColor& color )
+void QtpComp::setColor( const QColor& color )
 {
   _color = color;
   setBrush( _color );
 
-  foreach( DiagPin* pin, _inPins )
+  foreach( QtpPin* pin, _inPins )
   {
     pin->setBrush( _color );
   }
 
-  foreach( DiagPin* pin, _outPins )
+  foreach( QtpPin* pin, _outPins )
   {
     pin->setBrush( _color );
   }
 }
 
-void DiagComp::addInPin( QString pinName )
+void QtpComp::addInPin( QString pinName )
 {
-  DiagPin* pin = new DiagPin( DiagPin::InPin, pinName, this );
+  QtpPin* pin = new QtpPin( QtpPin::InPin, pinName, this );
   pin->setPos( -21, 20 * _inPins.size() );
   pin->setBrush( _color );
   _inPins.append( pin );
@@ -93,9 +93,9 @@ void DiagComp::addInPin( QString pinName )
   updatePolygon();
 }
 
-void DiagComp::addOutPin( QString pinName )
+void QtpComp::addOutPin( QString pinName )
 {
-  DiagPin* pin = new DiagPin( DiagPin::OutPin, pinName, this );
+  QtpPin* pin = new QtpPin( QtpPin::OutPin, pinName, this );
   pin->setPos( 21, 20 * _outPins.size() );
   pin->setBrush( _color );
   _outPins.append( pin );
@@ -103,16 +103,16 @@ void DiagComp::addOutPin( QString pinName )
   updatePolygon();
 }
 
-void DiagComp::removePins()
+void QtpComp::removePins()
 {
-  foreach( DiagPin* pin, _inPins )
+  foreach( QtpPin* pin, _inPins )
   {
     delete pin;
   }
 
   _inPins.clear();
 
-  foreach( DiagPin* pin, _outPins )
+  foreach( QtpPin* pin, _outPins )
   {
     delete pin;
   }
@@ -122,7 +122,7 @@ void DiagComp::removePins()
   updatePolygon();
 }
 
-QPixmap DiagComp::image() const
+QPixmap QtpComp::image() const
 {
   QPixmap pixmap( 250, 250 );
   pixmap.fill( Qt::transparent );
@@ -136,7 +136,7 @@ QPixmap DiagComp::image() const
   painter.drawPolyline( _polygon );
 
   painter.translate( -20, 0 );
-  foreach( DiagPin* pin, _inPins )
+  foreach( QtpPin* pin, _inPins )
   {
     painter.drawPolyline( pin->polygon() );
     painter.translate( 0, 20 );
@@ -144,7 +144,7 @@ QPixmap DiagComp::image() const
 
   painter.resetTransform();
   painter.translate( 150, 125 - ( 10 * pinsAfterFirst ) );
-  foreach( DiagPin* pin, _outPins )
+  foreach( QtpPin* pin, _outPins )
   {
     painter.drawPolyline( pin->polygon() );
     painter.translate( 0, 20 );
@@ -153,30 +153,29 @@ QPixmap DiagComp::image() const
   return pixmap;
 }
 
-DiagComp::CompType DiagComp::compType() const
+QtpComp::CompType QtpComp::compType() const
 {
   return _compType;
 }
 
-void DiagComp::contextMenuEvent( QGraphicsSceneContextMenuEvent* event )
+void QtpComp::contextMenuEvent( QGraphicsSceneContextMenuEvent* event )
 {
   scene()->clearSelection();
   setSelected( true );
   _contextMenu->exec( event->screenPos() );
 }
 
-void DiagComp::setName( QString name )
+void QtpComp::setName( QString name )
 {
   _nameText->setPlainText( name );
   _nameText->setPos( -_nameText->boundingRect().width() / 2, -39 );
 }
 
-void DiagComp::updatePolygon()
+void QtpComp::updatePolygon()
 {
   int pinsAfterFirst = std::max( _inPins.size(), _outPins.size() );
   pinsAfterFirst = --pinsAfterFirst < 0 ? 0 : pinsAfterFirst;
 
-  _polygon.clear();
-  _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 15 + ( 20 * pinsAfterFirst ) )
-           << QPointF( -15, 15 + ( 20 * pinsAfterFirst )) << QPointF( -15, -15 );
+  _polygon.replace( 2, QPointF( 15, 15 + ( 20 * pinsAfterFirst ) ) );
+  _polygon.replace( 3, QPointF( -15, 15 + ( 20 * pinsAfterFirst ) ) );
 }

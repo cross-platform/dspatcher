@@ -1,12 +1,12 @@
-#ifndef DIAGPIN_H
-#define DIAGPIN_H
+#ifndef QTPPIN_H
+#define QTPPIN_H
 
 #include <QGraphicsPolygonItem>
 #include <QList>
 
-class DiagWire;
+class QtpWire;
 
-class DiagPin : public QGraphicsPolygonItem
+class QtpPin : public QGraphicsPolygonItem
 {
 public:
   enum
@@ -19,13 +19,13 @@ public:
     InPin, OutPin
   };
 
-  DiagPin( PinType pinType, QString pinName, QGraphicsItem* parent = 0 );
-  ~DiagPin();
+  QtpPin( PinType pinType, QString pinName, QGraphicsItem* parent = 0 );
+  ~QtpPin();
 
   int type() const;
 
-  bool addWire( DiagWire* newWire );
-  void removeWire( DiagWire* wire );
+  bool addWire( QtpWire* newWire );
+  void removeWire( QtpWire* wire );
   void removeWires();
 
   PinType pinType() const;
@@ -42,8 +42,8 @@ private:
 private:
   PinType _pinType;
   QPolygonF _polygon;
-  QList< DiagWire* > _wires;
+  QList< QtpWire* > _wires;
   QGraphicsTextItem* _nameText;
 };
 
-#endif // DIAGPIN_H
+#endif // QTPPIN_H

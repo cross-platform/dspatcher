@@ -1,5 +1,5 @@
-#include <DiagWire.h>
-#include <DiagPin.h>
+#include <QtpWire.h>
+#include <QtpPin.h>
 
 #include <QPainter>
 #include <QPen>
@@ -8,7 +8,7 @@
 
 const qreal Pi = 3.14;
 
-DiagWire::DiagWire( DiagPin* startPin, DiagPin* endPin, QGraphicsItem* parent )
+QtpWire::QtpWire( QtpPin* startPin, QtpPin* endPin, QGraphicsItem* parent )
     : QGraphicsLineItem( parent )
 {
   _startPin = startPin;
@@ -18,39 +18,39 @@ DiagWire::DiagWire( DiagPin* startPin, DiagPin* endPin, QGraphicsItem* parent )
   setPen( QPen( _color, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin ) );
 }
 
-DiagWire::~DiagWire()
+QtpWire::~QtpWire()
 {
   _startPin->removeWire( this );
   _endPin->removeWire( this );
 }
 
-int DiagWire::type() const
+int QtpWire::type() const
 {
   return Type;
 }
 
-void DiagWire::setColor( const QColor& color )
+void QtpWire::setColor( const QColor& color )
 {
   _color = color;
 }
 
-DiagPin* DiagWire::startPin() const
+QtpPin* QtpWire::startPin() const
 {
   return _startPin;
 }
 
-DiagPin* DiagWire::endPin() const
+QtpPin* QtpWire::endPin() const
 {
   return _endPin;
 }
 
-void DiagWire::updatePosition()
+void QtpWire::updatePosition()
 {
   QLineF line( mapFromItem( _startPin, 0, 0 ), mapFromItem( _endPin, 0, 0 ) );
   setLine( line );
 }
 
-void DiagWire::paint( QPainter* painter, const QStyleOptionGraphicsItem*, QWidget* )
+void QtpWire::paint( QPainter* painter, const QStyleOptionGraphicsItem*, QWidget* )
 {
   if( _startPin->collidesWithItem( _endPin ) )
     return;

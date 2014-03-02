@@ -1,12 +1,12 @@
-#ifndef DIAGSCENE_H
-#define DIAGSCENE_H
+#ifndef QTPSCENE_H
+#define QTPSCENE_H
 
-#include <DiagComp.h>
+#include <QtpComp.h>
 #include <QGraphicsScene>
 
-class DiagPin;
+class QtpPin;
 
-class DiagScene : public QGraphicsScene
+class QtpScene : public QGraphicsScene
 {
 Q_OBJECT
 
@@ -16,7 +16,7 @@ public:
     InsertComp, InsertLine, MoveComp
   };
 
-  explicit DiagScene( QMenu* compMenu, QObject* parent = 0 );
+  explicit QtpScene( QMenu* compMenu, QObject* parent = 0 );
 
   void setLineColor( const QColor& color );
   void setCompColor( const QColor& color );
@@ -26,14 +26,14 @@ public:
 
 public slots:
   void setMode( Mode mode );
-  void setCompType( DiagComp::CompType type );
+  void setCompType( QtpComp::CompType type );
 
   void bringToFront();
   void sendToBack();
   void deleteItem();
 
 signals:
-  void compInserted( DiagComp* comp );
+  void compInserted( QtpComp* comp );
 
 protected:
   void mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent );
@@ -43,7 +43,7 @@ protected:
 private:
   bool isItemChange( int type );
 
-  DiagComp::CompType _compType;
+  QtpComp::CompType _compType;
   QMenu* _compMenu;
   Mode _mode;
   bool _leftButtonDown;
@@ -51,7 +51,7 @@ private:
   QGraphicsLineItem* _line;
   QColor _compColor;
   QColor _lineColor;
-  DiagPin* _pinHovered;
+  QtpPin* _pinHovered;
 };
 
-#endif // DIAGSCENE_H
+#endif // QTPSCENE_H

@@ -1,64 +1,64 @@
-#include <DiagScene.h>
-#include <DiagPin.h>
-#include <DiagWire.h>
+#include <QtpScene.h>
+#include <QtpPin.h>
+#include <QtpWire.h>
 
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 
-DiagScene::DiagScene( QMenu* compMenu, QObject* parent )
+QtpScene::QtpScene( QMenu* compMenu, QObject* parent )
     : QGraphicsScene( parent )
 {
   _compMenu = compMenu;
   _mode = MoveComp;
-  _compType = DiagComp::Process;
+  _compType = QtpComp::Process;
   _line = 0;
   _compColor = Qt::white;
   _lineColor = Qt::black;
   _pinHovered = 0;
 }
 
-void DiagScene::setLineColor( const QColor& color )
+void QtpScene::setLineColor( const QColor& color )
 {
   _lineColor = color;
-  if( isItemChange( DiagWire::Type ) )
+  if( isItemChange( QtpWire::Type ) )
   {
-    DiagWire* wire = qgraphicsitem_cast< DiagWire* >( selectedItems().first() );
+    QtpWire* wire = qgraphicsitem_cast< QtpWire* >( selectedItems().first() );
     wire->setColor( _lineColor );
     update();
   }
 }
 
-void DiagScene::setCompColor( const QColor& color )
+void QtpScene::setCompColor( const QColor& color )
 {
   _compColor = color;
-  if( isItemChange( DiagComp::Type ) )
+  if( isItemChange( QtpComp::Type ) )
   {
-    DiagComp* comp = qgraphicsitem_cast< DiagComp* >( selectedItems().first() );
+    QtpComp* comp = qgraphicsitem_cast< QtpComp* >( selectedItems().first() );
     comp->setBrush( _compColor );
   }
 }
 
-QColor DiagScene::compColor() const
+QColor QtpScene::compColor() const
 {
   return _compColor;
 }
 
-QColor DiagScene::lineColor() const
+QColor QtpScene::lineColor() const
 {
   return _lineColor;
 }
 
-void DiagScene::setMode( Mode mode )
+void QtpScene::setMode( Mode mode )
 {
   _mode = mode;
 }
 
-void DiagScene::setCompType( DiagComp::CompType type )
+void QtpScene::setCompType( QtpComp::CompType type )
 {
   _compType = type;
 }
 
-void DiagScene::bringToFront()
+void QtpScene::bringToFront()
 {
   if( selectedItems().isEmpty() )
     return;
@@ -76,7 +76,7 @@ void DiagScene::bringToFront()
   selectedItem->setZValue( zValue );
 }
 
-void DiagScene::sendToBack()
+void QtpScene::sendToBack()
 {
   if( selectedItems().isEmpty() )
     return;
@@ -94,13 +94,13 @@ void DiagScene::sendToBack()
   selectedItem->setZValue( zValue );
 }
 
-void DiagScene::deleteItem()
+void QtpScene::deleteItem()
 {
   // remove wires first as they can be deleted with pins,
   // hence leaving invalid wire pointers behind
   foreach( QGraphicsItem* item, selectedItems() )
   {
-    if( item->type() == DiagWire::Type )
+    if( item->type() == QtpWire::Type )
     {
       delete item;
     }
@@ -112,7 +112,7 @@ void DiagScene::deleteItem()
   }
 }
 
-void DiagScene::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
+void QtpScene::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
 {
   if( mouseEvent->button() != Qt::LeftButton )
     return;
@@ -121,14 +121,14 @@ void DiagScene::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
 
   if( _mode == InsertComp )
   {
-    DiagComp* comp = new DiagComp( _compType, _compMenu, mouseEvent->scenePos() );
+    QtpComp* comp = new QtpComp( _compType, _compMenu, mouseEvent->scenePos() );
 
     comp->setColor( _compColor );
     addItem( comp );
 
     emit compInserted( comp );
   }
-  else if( startItems.count() && startItems.first()->type() == DiagPin::Type )
+  else if( startItems.count() && startItems.first()->type() == QtpPin::Type )
   {
     _mode = InsertLine;
     _line = new QGraphicsLineItem( QLineF( mouseEvent->scenePos(), mouseEvent->scenePos() ) );
@@ -147,7 +147,7 @@ void DiagScene::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
   QGraphicsScene::mousePressEvent( mouseEvent );
 }
 
-void DiagScene::mouseMoveEvent( QGraphicsSceneMouseEvent* mouseEvent )
+void QtpScene::mouseMoveEvent( QGraphicsSceneMouseEvent* mouseEvent )
 {
   if( _mode == InsertLine && _line != 0 )
   {
@@ -168,9 +168,9 @@ void DiagScene::mouseMoveEvent( QGraphicsSceneMouseEvent* mouseEvent )
   {
     hoverItems.removeFirst();
   }
-  if( hoverItems.count() && hoverItems.first()->type() == DiagPin::Type )
+  if( hoverItems.count() && hoverItems.first()->type() == QtpPin::Type )
   {
-    DiagPin* pin = qgraphicsitem_cast< DiagPin* >( hoverItems.first() );
+    QtpPin* pin = qgraphicsitem_cast< QtpPin* >( hoverItems.first() );
     pin->hover( true );
     _pinHovered = pin;
   }
@@ -178,7 +178,7 @@ void DiagScene::mouseMoveEvent( QGraphicsSceneMouseEvent* mouseEvent )
   QGraphicsScene::mouseMoveEvent( mouseEvent );
 }
 
-void DiagScene::mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent )
+void QtpScene::mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent )
 {
   views()[0]->setDragMode( QGraphicsView::NoDrag );
 
@@ -195,20 +195,20 @@ void DiagScene::mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent )
     delete _line;
 
     if( startItems.count() && endItems.count() &&
-        startItems.first()->type() == DiagPin::Type && endItems.first()->type() == DiagPin::Type &&
+        startItems.first()->type() == QtpPin::Type && endItems.first()->type() == QtpPin::Type &&
         startItems.first() != endItems.first() )
     {
-      DiagPin* startPin = qgraphicsitem_cast< DiagPin* >( startItems.first() );
-      DiagPin* endPin = qgraphicsitem_cast< DiagPin* >( endItems.first() );
+      QtpPin* startPin = qgraphicsitem_cast< QtpPin* >( startItems.first() );
+      QtpPin* endPin = qgraphicsitem_cast< QtpPin* >( endItems.first() );
 
       if( startPin->pinType() != endPin->pinType() )
       {
-        if( startPin->pinType() == DiagPin::InPin && endPin->pinType() == DiagPin::OutPin )
+        if( startPin->pinType() == QtpPin::InPin && endPin->pinType() == QtpPin::OutPin )
         {
           std::swap( startPin, endPin );
         }
 
-        DiagWire* wire = new DiagWire( startPin, endPin );
+        QtpWire* wire = new QtpWire( startPin, endPin );
         if( startPin->addWire( wire ) )
         {
           endPin->addWire( wire );
@@ -231,7 +231,7 @@ void DiagScene::mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent )
   QGraphicsScene::mouseReleaseEvent( mouseEvent );
 }
 
-bool DiagScene::isItemChange( int type )
+bool QtpScene::isItemChange( int type )
 {
   foreach( QGraphicsItem* item, selectedItems() )
   {
