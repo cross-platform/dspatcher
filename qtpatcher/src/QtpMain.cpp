@@ -34,24 +34,7 @@ QtpMain::QtpMain()
 
 void QtpMain::registerComp( QtpComp::CompInfo const& compInfo )
 {
-  QtpComp comp( compInfo, _compMenu, QPointF() );
-  QIcon icon( comp.image() );
-
-  QToolButton* button = new QToolButton;
-  button->setIcon( icon );
-  button->setIconSize( QSize( 50, 50 ) );
-  button->setCheckable( true );
-  _comps.append( compInfo );
-  _buttonGroup->addButton( button, _comps.size() - 1 );
-
-  QGridLayout* layout = new QGridLayout;
-  layout->addWidget( button, 0, 0, Qt::AlignHCenter );
-  layout->addWidget( new QLabel( compInfo.name ), 1, 0, Qt::AlignCenter );
-
-  QWidget* widget = new QWidget;
-  widget->setLayout( layout );
-
-  _compWidget->layout()->addWidget( widget );
+  _compWidget->layout()->addWidget( createCellWidget( compInfo ) );
 }
 
 void QtpMain::buttonGroupClicked( int id )
@@ -91,6 +74,11 @@ void QtpMain::createToolBox()
   connect( _buttonGroup, SIGNAL( buttonClicked(int) ), this, SLOT( buttonGroupClicked(int) ) );
 
   QGridLayout* compLayout = new QGridLayout;
+  compLayout->addWidget( createCellWidget( QtpComp::CompInfo( "Gain" ) ), 0, 0 );
+  compLayout->addWidget( createCellWidget( QtpComp::CompInfo( "Audio Device That is cool" ) ), 0, 1 );
+  compLayout->addWidget( createCellWidget( QtpComp::CompInfo( "Ambisonix" ) ), 1, 0 );
+
+  compLayout->setRowStretch( 3, 8 );
   compLayout->setColumnStretch( 1, 8 );
 
   _compWidget = new QWidget;
@@ -98,7 +86,7 @@ void QtpMain::createToolBox()
 
   _toolBox = new QToolBox;
   _toolBox->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Ignored ) );
-  _toolBox->setMinimumWidth( 185 );
+  _toolBox->setMinimumWidth( _compWidget->sizeHint().width() );
   _toolBox->addItem( _compWidget, tr( "Components" ) );
 }
 
@@ -139,6 +127,28 @@ void QtpMain::createMenus()
 
   _aboutMenu = menuBar()->addMenu( tr( "&Help" ) );
   _aboutMenu->addAction( _aboutAction );
+}
+
+QWidget* QtpMain::createCellWidget( QtpComp::CompInfo compInfo )
+{
+  QtpComp comp( compInfo, _compMenu, QPointF() );
+  QIcon icon( comp.image() );
+
+  QToolButton* button = new QToolButton;
+  button->setIcon( icon );
+  button->setIconSize( QSize( 50, 50 ) );
+  button->setCheckable( true );
+  _comps.append( compInfo );
+  _buttonGroup->addButton( button, _comps.size() - 1 );
+
+  QGridLayout* layout = new QGridLayout;
+  layout->addWidget( button, 0, 0, Qt::AlignHCenter );
+  layout->addWidget( new QLabel( compInfo.name ), 1, 0, Qt::AlignCenter );
+
+  QWidget* widget = new QWidget;
+  widget->setLayout( layout );
+
+  return widget;
 }
 
 bool QtpMain::eventFilter( QObject*, QEvent *event )

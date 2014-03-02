@@ -31,6 +31,8 @@ private:
   void createActions();
   void createMenus();
 
+  QWidget* createCellWidget( QtpComp::CompInfo compInfo );
+
   bool eventFilter( QObject* object, QEvent* event );
 
   QtpScene* _scene;
