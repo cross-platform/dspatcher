@@ -21,35 +21,45 @@ QtpComp::QtpComp( CompType compType, QMenu* contextMenu, QPointF const& position
 
   _nameText = new QGraphicsTextItem( this );
 
-  switch( _compType )
+  setName( compType.name );
+  foreach( QString const& pin, compType.inPins )
   {
-    case Process:
-    {
-      setName("Gain");
-      addInPin("Audio In");
-      addOutPin("Audio Out");
-    }
-    break;
-    case Process2:
-    {
-      setName("Audio Device");
-      addInPin("Left Spk");
-      addInPin("Right Spk");
-      addOutPin("Left Mic");
-      addOutPin("Right Mic");
-    }
-    break;
-    case Process3:
-    {
-      setName("Ambisonix");
-      addInPin("Audio In");
-      addOutPin("Spk LF");
-      addOutPin("Spk LR");
-      addOutPin("Spk RF");
-      addOutPin("Spk RR");
-    }
-    break;
+    addInPin( pin );
   }
+  foreach( QString const& pin, compType.outPins )
+  {
+    addOutPin( pin );
+  }
+
+//  switch( _compType )
+//  {
+//    case Process:
+//    {
+//      setName("Gain");
+//      addInPin("Audio In");
+//      addOutPin("Audio Out");
+//    }
+//    break;
+//    case Process2:
+//    {
+//      setName("Audio Device");
+//      addInPin("Left Spk");
+//      addInPin("Right Spk");
+//      addOutPin("Left Mic");
+//      addOutPin("Right Mic");
+//    }
+//    break;
+//    case Process3:
+//    {
+//      setName("Ambisonix");
+//      addInPin("Audio In");
+//      addOutPin("Spk LF");
+//      addOutPin("Spk LR");
+//      addOutPin("Spk RF");
+//      addOutPin("Spk RR");
+//    }
+//    break;
+//  }
 
   setPolygon( _polygon );
 

@@ -2,7 +2,7 @@ project(DSPatcher)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../qtpatcher/include
+    ${CMAKE_SOURCE_DIR}/qtpatcher/include
 )
 
 file(GLOB srcs src/*.cpp)

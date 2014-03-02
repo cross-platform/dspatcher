@@ -33,7 +33,7 @@ public slots:
   void deleteItem();
 
 signals:
-  void compInserted( QtpComp* comp );
+  void compInserted();
 
 protected:
   void mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent );

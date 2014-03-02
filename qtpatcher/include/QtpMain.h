@@ -8,6 +8,7 @@ class QtpScene;
 
 class QButtonGroup;
 class QGraphicsView;
+class QGridLayout;
 class QToolBox;
 
 class QtpMain : public QMainWindow
@@ -17,17 +18,18 @@ Q_OBJECT
 public:
   QtpMain();
 
+public slots:
+  void registerComp( QtpComp::CompType comp );
+
 private slots:
   void buttonGroupClicked( int id );
-  void compInserted( QtpComp* comp );
+  void compInserted();
   void about();
 
 private:
   void createToolBox();
   void createActions();
   void createMenus();
-
-  QWidget* createCellWidget( const QString& text, QtpComp::CompType type );
 
   bool eventFilter( QObject* object, QEvent* event );
 
@@ -51,6 +53,9 @@ private:
 
   QPointF _zoomScenePos;
   QPointF _zoomViewportPos;
+
+  QWidget* _compWidget;
+  QList< QtpComp::CompType > _compTypes;
 };
 
 #endif // QTPMAIN_H

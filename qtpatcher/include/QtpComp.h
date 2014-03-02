@@ -14,9 +14,16 @@ public:
     Type = UserType + 1
   };
 
-  enum CompType
+  struct CompType
   {
-    Process, Process2, Process3
+    CompType() {}
+    CompType( QString compName, QList< QString > compInPins, QList< QString > compOutPins )
+      : name( compName ),
+        inPins( compInPins ),
+        outPins( compOutPins ) {}
+    QString name;
+    QList< QString > inPins;
+    QList< QString > outPins;
   };
 
   QtpComp( CompType compType, QMenu* contextMenu, QPointF const& position, QGraphicsItem* parent = 0 );

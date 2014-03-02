@@ -10,7 +10,7 @@ QtpScene::QtpScene( QMenu* compMenu, QObject* parent )
 {
   _compMenu = compMenu;
   _mode = MoveComp;
-  _compType = QtpComp::Process;
+  _compType = QtpComp::CompType();
   _line = 0;
   _compColor = Qt::white;
   _lineColor = Qt::black;
@@ -126,7 +126,7 @@ void QtpScene::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
     comp->setColor( _compColor );
     addItem( comp );
 
-    emit compInserted( comp );
+    emit compInserted();
   }
   else if( startItems.count() && startItems.first()->type() == QtpPin::Type )
   {

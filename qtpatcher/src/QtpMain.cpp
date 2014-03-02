@@ -11,7 +11,7 @@ QtpMain::QtpMain()
 
   _scene = new QtpScene( _compMenu, this );
   _scene->setSceneRect( QRectF( 0, 0, 5000, 5000 ) );
-  connect( _scene, SIGNAL( compInserted( QtpComp* ) ), this, SLOT( compInserted( QtpComp* ) ) );
+  connect( _scene, SIGNAL( compInserted() ), this, SLOT( compInserted() ) );
   connect( _toFrontAction, SIGNAL( triggered() ), _scene, SLOT( bringToFront() ) );
   connect( _sendBackAction, SIGNAL( triggered() ), _scene, SLOT( sendToBack() ) );
   connect( _deleteAction, SIGNAL( triggered() ), _scene, SLOT( deleteItem() ) );
@@ -32,6 +32,28 @@ QtpMain::QtpMain()
   setUnifiedTitleAndToolBarOnMac( true );
 }
 
+void QtpMain::registerComp( QtpComp::CompType type )
+{
+  QtpComp comp( type, _compMenu, QPointF() );
+  QIcon icon( comp.image() );
+
+  QToolButton* button = new QToolButton;
+  button->setIcon( icon );
+  button->setIconSize( QSize( 50, 50 ) );
+  button->setCheckable( true );
+  _compTypes.append( type );
+  _buttonGroup->addButton( button, _compTypes.size() - 1 );
+
+  QGridLayout* layout = new QGridLayout;
+  layout->addWidget( button, 0, 0, Qt::AlignHCenter );
+  layout->addWidget( new QLabel( type.name ), 1, 0, Qt::AlignCenter );
+
+  QWidget* widget = new QWidget;
+  widget->setLayout( layout );
+
+  _compWidget->layout()->addWidget( widget );
+}
+
 void QtpMain::buttonGroupClicked( int id )
 {
   QList< QAbstractButton* > buttons = _buttonGroup->buttons();
@@ -41,14 +63,19 @@ void QtpMain::buttonGroupClicked( int id )
       button->setChecked(false);
   }
 
-  _scene->setCompType( QtpComp::CompType( id ) );
+  _scene->setCompType( _compTypes[id] );
   _scene->setMode( QtpScene::InsertComp );
 }
 
-void QtpMain::compInserted( QtpComp* comp )
+void QtpMain::compInserted()
 {
   _scene->setMode( QtpScene::MoveComp );
-  _buttonGroup->button( int( comp->compType() ) )->setChecked( false );
+
+  QList< QAbstractButton* > buttons = _buttonGroup->buttons();
+  foreach( QAbstractButton* button, buttons )
+  {
+    button->setChecked(false);
+  }
 }
 
 void QtpMain::about()
@@ -62,21 +89,17 @@ void QtpMain::createToolBox()
   _buttonGroup = new QButtonGroup( this );
   _buttonGroup->setExclusive( false );
   connect( _buttonGroup, SIGNAL( buttonClicked(int) ), this, SLOT( buttonGroupClicked(int) ) );
-  QGridLayout* layout = new QGridLayout;
-  layout->addWidget( createCellWidget( tr( "Gain" ), QtpComp::Process ), 0, 0 );
-  layout->addWidget( createCellWidget( tr( "Audio Device" ), QtpComp::Process2 ), 0, 1 );
-  layout->addWidget( createCellWidget( tr( "Ambisonix" ), QtpComp::Process3 ), 1, 0 );
 
-  layout->setRowStretch( 3, 8 );
-  layout->setColumnStretch( 2, 8 );
+  QGridLayout* compLayout = new QGridLayout;
+  compLayout->setColumnStretch( 1, 8 );
 
-  QWidget* compWidget = new QWidget;
-  compWidget->setLayout( layout );
+  _compWidget = new QWidget;
+  _compWidget->setLayout( compLayout );
 
   _toolBox = new QToolBox;
   _toolBox->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Ignored ) );
-  _toolBox->setMinimumWidth( compWidget->sizeHint().width() );
-  _toolBox->addItem( compWidget, tr( "Components" ) );
+  _toolBox->setMinimumWidth( 185 );
+  _toolBox->addItem( _compWidget, tr( "Components" ) );
 }
 
 void QtpMain::createActions()
@@ -116,27 +139,6 @@ void QtpMain::createMenus()
 
   _aboutMenu = menuBar()->addMenu( tr( "&Help" ) );
   _aboutMenu->addAction( _aboutAction );
-}
-
-QWidget* QtpMain::createCellWidget( const QString& text, QtpComp::CompType type )
-{
-  QtpComp comp( type, _compMenu, QPointF() );
-  QIcon icon( comp.image() );
-
-  QToolButton* button = new QToolButton;
-  button->setIcon( icon );
-  button->setIconSize( QSize( 50, 50 ) );
-  button->setCheckable( true );
-  _buttonGroup->addButton( button, int( type ) );
-
-  QGridLayout* layout = new QGridLayout;
-  layout->addWidget( button, 0, 0, Qt::AlignHCenter );
-  layout->addWidget( new QLabel( text ), 1, 0, Qt::AlignCenter );
-
-  QWidget* widget = new QWidget;
-  widget->setLayout( layout );
-
-  return widget;
 }
 
 bool QtpMain::eventFilter( QObject*, QEvent *event )
