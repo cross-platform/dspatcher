@@ -17,23 +17,15 @@ int main( int argv, char* args[] )
   comp.outPins.append( "out1" );
   comp.outPins.append( "out2" );
 
-  comp.name = "comp1";
+  comp.name = "Wave Decoder";
   mainWindow.registerComp( comp );
-  comp.name = "comp2";
+  comp.name = "Mp3 Decoder";
   mainWindow.registerComp( comp );
-  comp.name = "comp3";
+  comp.name = "Gain";
   mainWindow.registerComp( comp );
-  comp.name = "comp4";
+  comp.name = "Ambisonix";
   mainWindow.registerComp( comp );
-  mainWindow.registerComp( comp );
-  mainWindow.registerComp( comp );
-  mainWindow.registerComp( comp );
-  mainWindow.registerComp( comp );
-  mainWindow.registerComp( comp );
-  mainWindow.registerComp( comp );
-  mainWindow.registerComp( comp );
-  mainWindow.registerComp( comp );
-  mainWindow.registerComp( comp );
+  comp.name = "Audio Device";
   mainWindow.registerComp( comp );
 
   return app.exec();

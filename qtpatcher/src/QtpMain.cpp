@@ -35,6 +35,16 @@ QtpMain::QtpMain()
 void QtpMain::registerComp( QtpComp::CompInfo const& compInfo )
 {
   _compWidget->layout()->addWidget( createCellWidget( compInfo ) );
+
+  _toolBox->deleteLater();
+  _toolBox = new QToolBox;
+  _toolBox->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Ignored ) );
+  _toolBox->setMinimumWidth( _compWidget->sizeHint().width() + 15 );
+  _toolBox->addItem( _compWidget, tr( "Components" ) );
+
+  centralWidget()->layout()->removeWidget( _view );
+  centralWidget()->layout()->addWidget( _toolBox );
+  centralWidget()->layout()->addWidget( _view );
 }
 
 void QtpMain::buttonGroupClicked( int id )
@@ -74,19 +84,15 @@ void QtpMain::createToolBox()
   connect( _buttonGroup, SIGNAL( buttonClicked(int) ), this, SLOT( buttonGroupClicked(int) ) );
 
   QGridLayout* compLayout = new QGridLayout;
-  compLayout->addWidget( createCellWidget( QtpComp::CompInfo( "Gain" ) ), 0, 0 );
-  compLayout->addWidget( createCellWidget( QtpComp::CompInfo( "Audio Device That is cool" ) ), 0, 1 );
-  compLayout->addWidget( createCellWidget( QtpComp::CompInfo( "Ambisonix" ) ), 1, 0 );
-
-  compLayout->setRowStretch( 3, 8 );
-  compLayout->setColumnStretch( 1, 8 );
+  compLayout->setColumnStretch( 1, 1 );
+  compLayout->setRowStretch( 1000, 1 );
 
   _compWidget = new QWidget;
   _compWidget->setLayout( compLayout );
 
   _toolBox = new QToolBox;
   _toolBox->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Ignored ) );
-  _toolBox->setMinimumWidth( _compWidget->sizeHint().width() );
+  _toolBox->setMinimumWidth( 150 );
   _toolBox->addItem( _compWidget, tr( "Components" ) );
 }
 
