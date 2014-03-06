@@ -6,12 +6,13 @@
 #include <QMenu>
 #include <QPainter>
 
-QtpComp::QtpComp( CompInfo const& compInfo, QMenu* contextMenu, QPointF const& position,
+QtpComp::QtpComp( CompInfo const& compInfo, uint id, QMenu* contextMenu, QPointF const& position,
                     QGraphicsItem* parent )
   : QGraphicsPolygonItem( parent )
 {
   setPos( position );
 
+  _id = id;
   _color = Qt::black;
   _compInfo = compInfo;
   _contextMenu = contextMenu;
@@ -40,6 +41,11 @@ QtpComp::QtpComp( CompInfo const& compInfo, QMenu* contextMenu, QPointF const& p
 QtpComp::~QtpComp()
 {
   removePins();
+}
+
+uint QtpComp::id()
+{
+  return _id;
 }
 
 int QtpComp::type() const

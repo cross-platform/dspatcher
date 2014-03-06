@@ -4,7 +4,7 @@
 #include <QtpComp.h>
 #include <QMainWindow>
 
-class QtpScene;
+class QtpDiag;
 
 class QButtonGroup;
 class QGraphicsView;
@@ -18,12 +18,14 @@ Q_OBJECT
 public:
   QtpMain();
 
+  QtpDiag* diagram();
+
 public slots:
   void registerComp( QtpComp::CompInfo const& compInfo );
 
 private slots:
   void buttonGroupClicked( int id );
-  void compInserted();
+  void compInserted( std::string const& );
   void about();
 
 private:
@@ -35,7 +37,7 @@ private:
 
   bool eventFilter( QObject* object, QEvent* event );
 
-  QtpScene* _scene;
+  QtpDiag* _diagram;
   QGraphicsView* _view;
 
   QAction* _exitAction;
@@ -53,7 +55,7 @@ private:
   QToolBox* _toolBox;
   QButtonGroup* _buttonGroup;
 
-  QPointF _zoomScenePos;
+  QPointF _zoomDiagPos;
   QPointF _zoomViewportPos;
 
   QWidget* _compWidget;

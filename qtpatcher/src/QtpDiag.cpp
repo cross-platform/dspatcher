@@ -1,13 +1,14 @@
-#include <QtpScene.h>
+#include <QtpDiag.h>
 #include <QtpPin.h>
 #include <QtpWire.h>
 
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 
-QtpScene::QtpScene( QMenu* compMenu, QObject* parent )
+QtpDiag::QtpDiag( QMenu* compMenu, QObject* parent )
     : QGraphicsScene( parent )
 {
+  _compId = 0;
   _compMenu = compMenu;
   _mode = MoveComp;
   _nextComp = QtpComp::CompInfo();
@@ -17,7 +18,7 @@ QtpScene::QtpScene( QMenu* compMenu, QObject* parent )
   _pinHovered = 0;
 }
 
-void QtpScene::setLineColor( const QColor& color )
+void QtpDiag::setLineColor( const QColor& color )
 {
   _lineColor = color;
   if( isItemChange( QtpWire::Type ) )
@@ -28,7 +29,7 @@ void QtpScene::setLineColor( const QColor& color )
   }
 }
 
-void QtpScene::setCompColor( const QColor& color )
+void QtpDiag::setCompColor( const QColor& color )
 {
   _compColor = color;
   if( isItemChange( QtpComp::Type ) )
@@ -38,27 +39,27 @@ void QtpScene::setCompColor( const QColor& color )
   }
 }
 
-QColor QtpScene::compColor() const
+QColor QtpDiag::compColor() const
 {
   return _compColor;
 }
 
-QColor QtpScene::lineColor() const
+QColor QtpDiag::lineColor() const
 {
   return _lineColor;
 }
 
-void QtpScene::setMode( Mode mode )
+void QtpDiag::setMode( Mode mode )
 {
   _mode = mode;
 }
 
-void QtpScene::setNextComp( QtpComp::CompInfo const& compInfo )
+void QtpDiag::setNextComp( QtpComp::CompInfo const& compInfo )
 {
   _nextComp = compInfo;
 }
 
-void QtpScene::bringToFront()
+void QtpDiag::bringToFront()
 {
   if( selectedItems().isEmpty() )
     return;
@@ -76,7 +77,7 @@ void QtpScene::bringToFront()
   selectedItem->setZValue( zValue );
 }
 
-void QtpScene::sendToBack()
+void QtpDiag::sendToBack()
 {
   if( selectedItems().isEmpty() )
     return;
@@ -94,7 +95,7 @@ void QtpScene::sendToBack()
   selectedItem->setZValue( zValue );
 }
 
-void QtpScene::deleteItem()
+void QtpDiag::deleteItem()
 {
   // remove wires first as they can be deleted with pins,
   // hence leaving invalid wire pointers behind
@@ -102,6 +103,11 @@ void QtpScene::deleteItem()
   {
     if( item->type() == QtpWire::Type )
     {
+      QtpWire* wire = qgraphicsitem_cast< QtpWire* >( item );
+      emit wireDisconnected( qgraphicsitem_cast< QtpComp* >( wire->startPin()->parentItem() )->id(),
+                             wire->startPin()->name(),
+                             qgraphicsitem_cast< QtpComp* >( wire->endPin()->parentItem() )->id(),
+                             wire->endPin()->name() );
       delete item;
     }
   }
@@ -112,7 +118,7 @@ void QtpScene::deleteItem()
   }
 }
 
-void QtpScene::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
+void QtpDiag::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
 {
   if( mouseEvent->button() != Qt::LeftButton )
     return;
@@ -121,12 +127,12 @@ void QtpScene::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
 
   if( _mode == InsertComp )
   {
-    QtpComp* comp = new QtpComp( _nextComp, _compMenu, mouseEvent->scenePos() );
+    QtpComp* comp = new QtpComp( _nextComp, _compId++, _compMenu, mouseEvent->scenePos() );
 
     comp->setColor( _compColor );
     addItem( comp );
 
-    emit compInserted();
+    emit compInserted( _nextComp.name.toStdString(), comp->id() );
   }
   else if( startItems.count() && startItems.first()->type() == QtpPin::Type )
   {
@@ -147,7 +153,7 @@ void QtpScene::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
   QGraphicsScene::mousePressEvent( mouseEvent );
 }
 
-void QtpScene::mouseMoveEvent( QGraphicsSceneMouseEvent* mouseEvent )
+void QtpDiag::mouseMoveEvent( QGraphicsSceneMouseEvent* mouseEvent )
 {
   if( _mode == InsertLine && _line != 0 )
   {
@@ -178,7 +184,7 @@ void QtpScene::mouseMoveEvent( QGraphicsSceneMouseEvent* mouseEvent )
   QGraphicsScene::mouseMoveEvent( mouseEvent );
 }
 
-void QtpScene::mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent )
+void QtpDiag::mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent )
 {
   views()[0]->setDragMode( QGraphicsView::NoDrag );
 
@@ -218,6 +224,11 @@ void QtpScene::mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent )
           wire->updatePosition();
 
           addItem( wire );
+
+          emit wireConnected( qgraphicsitem_cast< QtpComp* >( startPin->parentItem() )->id(),
+                              startPin->name(),
+                              qgraphicsitem_cast< QtpComp* >( endPin->parentItem() )->id(),
+                              endPin->name() );
         }
         else
         {
@@ -231,7 +242,7 @@ void QtpScene::mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent )
   QGraphicsScene::mouseReleaseEvent( mouseEvent );
 }
 
-bool QtpScene::isItemChange( int type )
+bool QtpDiag::isItemChange( int type )
 {
   foreach( QGraphicsItem* item, selectedItems() )
   {

@@ -1,4 +1,4 @@
-#include <QtpScene.h>
+#include <QtpDiag.h>
 #include <QtpMain.h>
 
 #include <QtWidgets>
@@ -9,14 +9,14 @@ QtpMain::QtpMain()
   createToolBox();
   createMenus();
 
-  _scene = new QtpScene( _compMenu, this );
-  _scene->setSceneRect( QRectF( 0, 0, 5000, 5000 ) );
-  connect( _scene, SIGNAL( compInserted() ), this, SLOT( compInserted() ) );
-  connect( _toFrontAction, SIGNAL( triggered() ), _scene, SLOT( bringToFront() ) );
-  connect( _sendBackAction, SIGNAL( triggered() ), _scene, SLOT( sendToBack() ) );
-  connect( _deleteAction, SIGNAL( triggered() ), _scene, SLOT( deleteItem() ) );
+  _diagram = new QtpDiag( _compMenu, this );
+  _diagram->setSceneRect( QRectF( 0, 0, 5000, 5000 ) );
+  connect( _diagram, SIGNAL( compInserted() ), this, SLOT( compInserted() ) );
+  connect( _toFrontAction, SIGNAL( triggered() ), _diagram, SLOT( bringToFront() ) );
+  connect( _sendBackAction, SIGNAL( triggered() ), _diagram, SLOT( sendToBack() ) );
+  connect( _deleteAction, SIGNAL( triggered() ), _diagram, SLOT( deleteItem() ) );
 
-  _view = new QGraphicsView( _scene );
+  _view = new QGraphicsView( _diagram );
   _view->viewport()->installEventFilter( this );
   _view->setMouseTracking( true );
 
@@ -27,9 +27,15 @@ QtpMain::QtpMain()
   QWidget* widget = new QWidget;
   widget->setLayout( layout );
 
+  setGeometry( 100, 100, 800, 500 );
   setCentralWidget( widget );
   setWindowTitle( tr( "DSPatcher" ) );
   setUnifiedTitleAndToolBarOnMac( true );
+}
+
+QtpDiag* QtpMain::diagram()
+{
+    return _diagram;
 }
 
 void QtpMain::registerComp( QtpComp::CompInfo const& compInfo )
@@ -56,13 +62,13 @@ void QtpMain::buttonGroupClicked( int id )
       button->setChecked(false);
   }
 
-  _scene->setNextComp( _comps[id] );
-  _scene->setMode( QtpScene::InsertComp );
+  _diagram->setNextComp( _comps[id] );
+  _diagram->setMode( QtpDiag::InsertComp );
 }
 
-void QtpMain::compInserted()
+void QtpMain::compInserted(std::string const&)
 {
-  _scene->setMode( QtpScene::MoveComp );
+  _diagram->setMode( QtpDiag::MoveComp );
 
   QList< QAbstractButton* > buttons = _buttonGroup->buttons();
   foreach( QAbstractButton* button, buttons )
@@ -137,7 +143,7 @@ void QtpMain::createMenus()
 
 QWidget* QtpMain::createCellWidget( QtpComp::CompInfo compInfo )
 {
-  QtpComp comp( compInfo, _compMenu, QPointF() );
+  QtpComp comp( compInfo, 0, _compMenu, QPointF() );
   QIcon icon( comp.image() );
 
   QToolButton* button = new QToolButton;
@@ -168,11 +174,11 @@ bool QtpMain::eventFilter( QObject*, QEvent *event )
       double factor = qPow( 1.0015, angle );
 
       _view->scale( factor, factor );
-      _view->centerOn( _zoomScenePos );
+      _view->centerOn( _zoomDiagPos );
 
       QPointF deltaViewportPos = _zoomViewportPos
           - QPointF( _view->viewport()->width() / 2.0, _view->viewport()->height() / 2.0 );
-      QPointF viewportCenter = _view->mapFromScene( _zoomScenePos ) - deltaViewportPos;
+      QPointF viewportCenter = _view->mapFromScene( _zoomDiagPos ) - deltaViewportPos;
 
       _view->centerOn( _view->mapToScene( viewportCenter.toPoint() ) );
     }
@@ -192,7 +198,7 @@ bool QtpMain::eventFilter( QObject*, QEvent *event )
     }
 
     _zoomViewportPos = mousePos;
-    _zoomScenePos = _view->mapToScene( mousePos );
+    _zoomDiagPos = _view->mapToScene( mousePos );
   }
 
   return false;

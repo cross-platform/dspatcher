@@ -22,6 +22,7 @@ public:
   QtpPin( PinType pinType, QString pinName, QGraphicsItem* parent = 0 );
   ~QtpPin();
 
+  std::string name();
   int type() const;
 
   bool addWire( QtpWire* newWire );

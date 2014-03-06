@@ -30,6 +30,11 @@ QtpPin::~QtpPin()
   removeWires();
 }
 
+std::string QtpPin::name()
+{
+    return _nameText->toPlainText().toStdString();
+}
+
 int QtpPin::type() const
 {
   return Type;

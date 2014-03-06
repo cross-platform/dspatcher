@@ -1,12 +1,12 @@
-#ifndef QTPSCENE_H
-#define QTPSCENE_H
+#ifndef QTPDIAG_H
+#define QTPDIAG_H
 
 #include <QtpComp.h>
 #include <QGraphicsScene>
 
 class QtpPin;
 
-class QtpScene : public QGraphicsScene
+class QtpDiag : public QGraphicsScene
 {
 Q_OBJECT
 
@@ -16,7 +16,7 @@ public:
     InsertComp, InsertLine, MoveComp
   };
 
-  explicit QtpScene( QMenu* compMenu, QObject* parent = 0 );
+  explicit QtpDiag( QMenu* compMenu, QObject* parent = 0 );
 
   void setLineColor( const QColor& color );
   void setCompColor( const QColor& color );
@@ -33,7 +33,11 @@ public slots:
   void deleteItem();
 
 signals:
-  void compInserted();
+  void compInserted( std::string const& compName, uint compId );
+  void wireConnected( uint fromComp, std::string const& fromPin,
+                      uint toComp, std::string const& toPin );
+  void wireDisconnected( uint fromComp, std::string const& fromPin,
+                         uint toComp, std::string const& toPin );
 
 protected:
   void mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent );
@@ -43,6 +47,7 @@ protected:
 private:
   bool isItemChange( int type );
 
+  uint _compId;
   QtpComp::CompInfo _nextComp;
   QMenu* _compMenu;
   Mode _mode;
@@ -54,4 +59,4 @@ private:
   QtpPin* _pinHovered;
 };
 
-#endif // QTPSCENE_H
+#endif // QTPDIAG_H
