@@ -16,12 +16,6 @@ public:
 
   struct CompInfo
   {
-    CompInfo( QString compName = "", QList< QString > compInPins = QList< QString >(),
-              QList< QString > compOutPins = QList< QString >() )
-      : name( compName ),
-        inPins( compInPins ),
-        outPins( compOutPins ) {}
-
     QString name;
     QList< QString > inPins;
     QList< QString > outPins;

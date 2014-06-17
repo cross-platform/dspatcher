@@ -4,8 +4,6 @@
 
 int main( int argv, char* args[] )
 {
-  Q_INIT_RESOURCE( QtpRes );
-
   QApplication app( argv, args );
   QtpMain mainWindow;
   mainWindow.show();

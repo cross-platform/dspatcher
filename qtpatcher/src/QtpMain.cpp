@@ -5,6 +5,8 @@
 
 QtpMain::QtpMain()
 {
+  Q_INIT_RESOURCE( QtpRes );
+
   createActions();
   createToolBox();
   createMenus();
