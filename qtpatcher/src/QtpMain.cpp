@@ -163,7 +163,7 @@ QWidget* QtpMain::createCellWidget( QtpComp::CompInfo compInfo )
 
   QGridLayout* layout = new QGridLayout;
   layout->addWidget( button, 0, 0, Qt::AlignHCenter );
-  layout->addWidget( new QLabel( compInfo.name ), 1, 0, Qt::AlignCenter );
+  layout->addWidget( new QLabel( compInfo.typeName ), 1, 0, Qt::AlignCenter );
 
   QWidget* widget = new QWidget;
   widget->setLayout( layout );

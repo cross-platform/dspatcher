@@ -132,7 +132,7 @@ void QtpDiag::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
     comp->setColor( _compColor );
     addItem( comp );
 
-    emit compInserted( _nextComp.name.toStdString(), comp->id() );
+    emit compInserted( _nextComp, comp->id() );
   }
   else if( startItems.count() && startItems.first()->type() == QtpPin::Type )
   {

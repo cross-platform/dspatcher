@@ -22,7 +22,7 @@ QtpComp::QtpComp( CompInfo const& compInfo, uint id, QMenu* contextMenu, QPointF
 
   _nameText = new QGraphicsTextItem( this );
 
-  setName( compInfo.name );
+  setName( compInfo.typeName );
   foreach( QString const& pin, compInfo.inPins )
   {
     addInPin( pin );

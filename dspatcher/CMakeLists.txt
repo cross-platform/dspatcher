@@ -29,7 +29,7 @@ if(WIN32)
       TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
       ${CMAKE_PREFIX_PATH}bin/${QT5_DLL} ${CMAKE_CURRENT_BINARY_DIR}/Debug/${QT5_DLL}
     )
-  endforeach(QT5_DLL ${QT5_DLLS})
+  endforeach(QT5_DLL ${QT5_DEBUG_DLLS})
 
   set(
     QT5_RELEASE_DLLS
@@ -50,5 +50,5 @@ if(WIN32)
       TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
       ${CMAKE_PREFIX_PATH}bin/${QT5_DLL} ${CMAKE_CURRENT_BINARY_DIR}/RelWithDebInfo/${QT5_DLL}
     )
-  endforeach(QT5_DLL ${QT5_DLLS})
+  endforeach(QT5_DLL ${QT5_RELEASE_DLLS})
 endif(WIN32)

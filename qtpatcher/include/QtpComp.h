@@ -16,7 +16,8 @@ public:
 
   struct CompInfo
   {
-    QString name;
+    int typeId;
+    QString typeName;
     QList< QString > inPins;
     QList< QString > outPins;
   };
