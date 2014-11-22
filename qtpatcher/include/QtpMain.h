@@ -41,7 +41,6 @@ private:
   QGraphicsView* _view;
 
   QAction* _exitAction;
-  QAction* _addAction;
   QAction* _deleteAction;
 
   QAction* _toFrontAction;

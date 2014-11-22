@@ -14,6 +14,7 @@ QtpMain::QtpMain()
   _diagram = new QtpDiag( _compMenu, this );
   _diagram->setSceneRect( QRectF( 0, 0, 5000, 5000 ) );
   connect( _diagram, SIGNAL( compInserted() ), this, SLOT( compInserted() ) );
+
   connect( _toFrontAction, SIGNAL( triggered() ), _diagram, SLOT( bringToFront() ) );
   connect( _sendBackAction, SIGNAL( triggered() ), _diagram, SLOT( sendToBack() ) );
   connect( _deleteAction, SIGNAL( triggered() ), _diagram, SLOT( deleteItem() ) );
@@ -68,7 +69,7 @@ void QtpMain::buttonGroupClicked( int id )
   _diagram->setMode( QtpDiag::InsertComp );
 }
 
-void QtpMain::compInserted(std::string const&)
+void QtpMain::compInserted( std::string const& )
 {
   _diagram->setMode( QtpDiag::MoveComp );
 
@@ -109,22 +110,27 @@ void QtpMain::createActions()
   _toFrontAction = new QAction( QIcon( ":/bringtofront.png" ), tr( "Bring to &Front" ), this );
   _toFrontAction->setShortcut( tr( "Ctrl+F" ) );
   _toFrontAction->setStatusTip( tr( "Bring component to front" ) );
+  addAction( _toFrontAction );
 
   _sendBackAction = new QAction( QIcon( ":/sendtoback.png" ), tr( "Send to &Back" ), this );
   _sendBackAction->setShortcut( tr( "Ctrl+B" ) );
   _sendBackAction->setStatusTip( tr( "Send component to back" ) );
+  addAction( _sendBackAction );
 
   _deleteAction = new QAction( QIcon( ":/delete.png" ), tr( "&Delete" ), this );
   _deleteAction->setShortcut( tr( "Delete" ) );
   _deleteAction->setStatusTip( tr( "Delete component from diagram" ) );
+  addAction( _deleteAction );
 
   _exitAction = new QAction( tr( "E&xit" ), this );
   _exitAction->setShortcuts( QKeySequence::Quit );
   _exitAction->setStatusTip( tr( "Quit DSPatcher" ) );
+  addAction( _exitAction );
   connect( _exitAction, SIGNAL( triggered() ), this, SLOT( close() ) );
 
   _aboutAction = new QAction( tr( "Ab&out" ), this );
   _aboutAction->setShortcut( tr( "Ctrl+O" ) );
+  addAction( _aboutAction );
   connect( _aboutAction, SIGNAL( triggered() ), this, SLOT( about() ) );
 }
 
