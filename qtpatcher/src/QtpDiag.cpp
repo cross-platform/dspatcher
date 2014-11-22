@@ -114,6 +114,7 @@ void QtpDiag::deleteItem()
 
   foreach( QGraphicsItem* item, selectedItems() )
   {
+    emit compRemoved( qgraphicsitem_cast< QtpComp* >( item )->id() );
     delete item;
   }
 }

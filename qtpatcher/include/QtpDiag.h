@@ -34,6 +34,7 @@ public slots:
 
 signals:
   void compInserted( QtpComp::CompInfo const& compInfo, uint compId );
+  void compRemoved( uint compId );
   void wireConnected( uint fromComp, std::string const& fromPin,
                       uint toComp, std::string const& toPin );
   void wireDisconnected( uint fromComp, std::string const& fromPin,
