@@ -1,5 +1,3 @@
-project(DSPatcher)
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/qtpatcher/include
@@ -17,11 +15,6 @@ add_executable(
 target_link_libraries(
   ${PROJECT_NAME}
   QtPatcher
-)
-
-qt5_use_modules(
-  ${PROJECT_NAME}
-  Widgets
 )
 
 if(WIN32)
