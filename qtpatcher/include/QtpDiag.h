@@ -24,14 +24,6 @@ public:
   QColor compColor() const;
   QColor lineColor() const;
 
-public slots:
-  void setMode( Mode mode );
-  void setNextComp( QtpComp::CompInfo const& compInfo );
-
-  void bringToFront();
-  void sendToBack();
-  void deleteItem();
-
 signals:
   void compInserted( QtpComp::CompInfo const& compInfo, uint compId );
   void compRemoved( uint compId );
@@ -39,6 +31,14 @@ signals:
                       uint toComp, std::string const& toPin );
   void wireDisconnected( uint fromComp, std::string const& fromPin,
                          uint toComp, std::string const& toPin );
+
+public slots:
+  void setMode( Mode mode );
+  void setNextComp( QtpComp::CompInfo const& compInfo );
+
+  void bringToFront();
+  void sendToBack();
+  void deleteItem();
 
 protected:
   void mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent );

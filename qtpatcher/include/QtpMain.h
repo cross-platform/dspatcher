@@ -20,7 +20,6 @@ public:
 
   QtpDiag* diagram();
 
-public slots:
   void registerComp( QtpComp::CompInfo const& compInfo );
 
 private slots:
