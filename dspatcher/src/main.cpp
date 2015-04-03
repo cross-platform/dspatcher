@@ -2,11 +2,15 @@
 
 #include <QApplication>
 
+#include <DSPatch.h>
+
 int main( int argv, char* args[] )
 {
   QApplication app( argv, args );
   QtpMain mainWindow;
   mainWindow.show();
+
+  DspComponent c;
 
   QtpComp::CompInfo comp;
   comp.typeId = 0;

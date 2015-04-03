@@ -118,7 +118,10 @@ void QtpMain::createActions()
   addAction( _sendBackAction );
 
   _deleteAction = new QAction( QIcon( ":/delete.png" ), tr( "&Delete" ), this );
-  _deleteAction->setShortcut( tr( "Delete" ) );
+  QList<QKeySequence> deleteKeys;
+  deleteKeys.append( tr( "Delete" ) );
+  deleteKeys.append( tr( "Backspace" ) );
+  _deleteAction->setShortcuts( deleteKeys );
   _deleteAction->setStatusTip( tr( "Delete component from diagram" ) );
   addAction( _deleteAction );
 
