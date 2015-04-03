@@ -7,6 +7,8 @@ link_directories(${CMAKE_CURRENT_SOURCE_DIR}/link)
 file(GLOB srcs src/*.cpp)
 file(GLOB hdrs include/*.h)
 
+add_definitions(-DPLUGIN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/dspatchables")
+
 add_executable(
   ${PROJECT_NAME}
   ${srcs}

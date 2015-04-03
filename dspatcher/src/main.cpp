@@ -1,6 +1,7 @@
 #include <QtpMain.h>
 
 #include <QApplication>
+#include <QDir>
 
 #include <DSPatch.h>
 
@@ -10,51 +11,38 @@ int main(int argv, char* args[])
     QtpMain mainWindow;
     mainWindow.show();
 
-    DspComponent c;
+    std::vector<DspPluginLoader> componentLoaders;
 
-    QtpComp::CompInfo comp;
-    comp.typeId = 0;
-    comp.typeName = "Wave Decoder";
-    comp.outPins.append("L Channel");
-    comp.outPins.append("R Channel");
-    mainWindow.registerComp(comp);
+    // Read in DSPatch plugins
+    QDir dir(PLUGIN_DIR);
+    QFileInfoList files = dir.entryInfoList();
+    foreach(const QFileInfo &fi, files)
+    {
+        if (fi.isFile())
+        {
+            QString path = fi.absoluteFilePath();
+            DspPluginLoader loader(path.toStdString());
+            if (loader.IsLoaded())
+            {
+                std::map<std::string, DspParameter> params = loader.GetCreateParams();
+                DspComponent* x = loader.Create(params);
 
-    comp.typeId = 1;
-    comp.typeName = "Mp3 Decoder";
-    comp.inPins.clear();
-    comp.outPins.clear();
-    comp.outPins.append("L Channel");
-    comp.outPins.append("R Channel");
-    mainWindow.registerComp(comp);
-
-    comp.typeId = 2;
-    comp.typeName = "Gain";
-    comp.inPins.clear();
-    comp.outPins.clear();
-    comp.inPins.append("Input");
-    comp.outPins.append("Output");
-    mainWindow.registerComp(comp);
-
-    comp.typeId = 3;
-    comp.typeName = "Ambisonix";
-    comp.inPins.clear();
-    comp.outPins.clear();
-    comp.inPins.append("Mono Input");
-    comp.outPins.append("FL Output");
-    comp.outPins.append("FR Output");
-    comp.outPins.append("RL Output");
-    comp.outPins.append("RR Output");
-    mainWindow.registerComp(comp);
-
-    comp.typeId = 4;
-    comp.typeName = "Audio Device";
-    comp.inPins.clear();
-    comp.outPins.clear();
-    comp.inPins.append("L Input");
-    comp.inPins.append("R Input");
-    comp.outPins.append("L Output");
-    comp.outPins.append("R Output");
-    mainWindow.registerComp(comp);
+                QtpComp::CompInfo comp;
+                componentLoaders.push_back(loader);
+                comp.typeId = componentLoaders.size() - 1;
+                comp.typeName = fi.baseName().mid(0, 3) == "lib" ? fi.baseName().mid(3) : fi.baseName();
+                for (int i = 0; i < x->GetInputCount(); ++i)
+                {
+                    comp.inPins.append(x->GetInputName(i).c_str());
+                }
+                for (int i = 0; i < x->GetOutputCount(); ++i)
+                {
+                    comp.outPins.append(x->GetOutputName(i).c_str());
+                }
+                mainWindow.registerComp(comp);
+            }
+        }
+    }
 
     return app.exec();
 }
