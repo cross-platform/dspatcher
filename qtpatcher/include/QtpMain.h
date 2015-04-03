@@ -13,51 +13,51 @@ class QToolBox;
 
 class QtpMain : public QMainWindow
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-  QtpMain();
+    QtpMain();
 
-  QtpDiag* diagram();
+    QtpDiag* diagram();
 
-  void registerComp( QtpComp::CompInfo const& compInfo );
+    void registerComp(QtpComp::CompInfo const& compInfo);
 
 private slots:
-  void buttonGroupClicked( int id );
-  void compInserted( std::string const& );
-  void about();
+    void buttonGroupClicked(int id);
+    void compInserted(std::string const&);
+    void about();
 
 private:
-  void createToolBox();
-  void createActions();
-  void createMenus();
+    void createToolBox();
+    void createActions();
+    void createMenus();
 
-  QWidget* createCellWidget( QtpComp::CompInfo compInfo );
+    QWidget* createCellWidget(QtpComp::CompInfo compInfo);
 
-  bool eventFilter( QObject* object, QEvent* event );
+    bool eventFilter(QObject* object, QEvent* event);
 
-  QtpDiag* _diagram;
-  QGraphicsView* _view;
+    QtpDiag* _diagram;
+    QGraphicsView* _view;
 
-  QAction* _exitAction;
-  QAction* _deleteAction;
+    QAction* _exitAction;
+    QAction* _deleteAction;
 
-  QAction* _toFrontAction;
-  QAction* _sendBackAction;
-  QAction* _aboutAction;
+    QAction* _toFrontAction;
+    QAction* _sendBackAction;
+    QAction* _aboutAction;
 
-  QMenu* _fileMenu;
-  QMenu* _compMenu;
-  QMenu* _aboutMenu;
+    QMenu* _fileMenu;
+    QMenu* _compMenu;
+    QMenu* _aboutMenu;
 
-  QToolBox* _toolBox;
-  QButtonGroup* _buttonGroup;
+    QToolBox* _toolBox;
+    QButtonGroup* _buttonGroup;
 
-  QPointF _zoomDiagPos;
-  QPointF _zoomViewportPos;
+    QPointF _zoomDiagPos;
+    QPointF _zoomViewportPos;
 
-  QWidget* _compWidget;
-  QList< QtpComp::CompInfo > _comps;
+    QWidget* _compWidget;
+    QList<QtpComp::CompInfo> _comps;
 };
 
-#endif // QTPMAIN_H
+#endif  // QTPMAIN_H
