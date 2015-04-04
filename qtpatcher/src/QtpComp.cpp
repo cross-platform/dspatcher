@@ -69,7 +69,7 @@ void QtpComp::setColor(const QColor& color)
 
 void QtpComp::addInPin(QString pinName)
 {
-    QtpPin* pin = new QtpPin(QtpPin::InPin, pinName, this);
+    QtpPin* pin = new QtpPin(QtpPin::InPin, pinName, _inPins.size(), this);
     pin->setPos(-21, 20 * _inPins.size());
     pin->setBrush(_color);
     _inPins.append(pin);
@@ -79,7 +79,7 @@ void QtpComp::addInPin(QString pinName)
 
 void QtpComp::addOutPin(QString pinName)
 {
-    QtpPin* pin = new QtpPin(QtpPin::OutPin, pinName, this);
+    QtpPin* pin = new QtpPin(QtpPin::OutPin, pinName, _outPins.size(), this);
     pin->setPos(21, 20 * _outPins.size());
     pin->setBrush(_color);
     _outPins.append(pin);

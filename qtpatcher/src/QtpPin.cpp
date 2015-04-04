@@ -4,8 +4,9 @@
 #include <QGraphicsScene>
 #include <QPainter>
 
-QtpPin::QtpPin(PinType pinType, QString pinName, QGraphicsItem* parent)
-    : QGraphicsPolygonItem(parent)
+QtpPin::QtpPin(PinType pinType, QString pinName, int pinIndex, QGraphicsItem* parent)
+    : _pinIndex(pinIndex)
+    , QGraphicsPolygonItem(parent)
 {
     _pinType = pinType;
 
@@ -32,6 +33,11 @@ QtpPin::~QtpPin()
 std::string QtpPin::name()
 {
     return _nameText->toPlainText().toStdString();
+}
+
+int QtpPin::index()
+{
+    return _pinIndex;
 }
 
 int QtpPin::type() const

@@ -13,7 +13,7 @@ QtpMain::QtpMain()
 
     _diagram = new QtpDiag(_compMenu, this);
     _diagram->setSceneRect(QRectF(0, 0, 5000, 5000));
-    connect(_diagram, SIGNAL(compInserted()), this, SLOT(compInserted()));
+    connect(_diagram, &QtpDiag::compInserted, this, &QtpMain::compInserted);
 
     connect(_toFrontAction, SIGNAL(triggered()), _diagram, SLOT(bringToFront()));
     connect(_sendBackAction, SIGNAL(triggered()), _diagram, SLOT(sendToBack()));
@@ -71,7 +71,7 @@ void QtpMain::buttonGroupClicked(int id)
     _diagram->setMode(QtpDiag::InsertComp);
 }
 
-void QtpMain::compInserted(std::string const&)
+void QtpMain::compInserted(QtpComp::CompInfo const&, uint)
 {
     _diagram->setMode(QtpDiag::MoveComp);
 

@@ -4,6 +4,7 @@
 #include <QDir>
 
 #include <DSPatch.h>
+#include <Controller.h>
 
 int main(int argv, char* args[])
 {
@@ -16,7 +17,7 @@ int main(int argv, char* args[])
     // Load DSPatch plugins from "dspatchables" folder
     QDir dir(PLUGIN_DIR);
     QFileInfoList files = dir.entryInfoList();
-    foreach(const QFileInfo &fi, files)
+    foreach(QFileInfo const& fi, files)
     {
         if (fi.isFile())
         {
@@ -43,6 +44,8 @@ int main(int argv, char* args[])
             }
         }
     }
+
+    Controller controller(&mainWindow, pluginLoaders);
 
     return app.exec();
 }

@@ -20,10 +20,11 @@ public:
         OutPin
     };
 
-    QtpPin(PinType pinType, QString pinName, QGraphicsItem* parent = 0);
+    QtpPin(PinType pinType, QString pinName, int pinIndex, QGraphicsItem* parent = 0);
     ~QtpPin();
 
     std::string name();
+    int index();
     int type() const;
 
     bool addWire(QtpWire* newWire);
@@ -46,6 +47,7 @@ private:
     QPolygonF _polygon;
     QList<QtpWire*> _wires;
     QGraphicsTextItem* _nameText;
+    int _pinIndex;
 };
 
 #endif  // QTPPIN_H

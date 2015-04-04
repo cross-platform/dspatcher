@@ -113,9 +113,9 @@ void QtpDiag::deleteItem()
         {
             QtpWire* wire = qgraphicsitem_cast<QtpWire*>(item);
             emit wireDisconnected(qgraphicsitem_cast<QtpComp*>(wire->startPin()->parentItem())->id(),
-                                  wire->startPin()->name(),
+                                  wire->startPin()->index(),
                                   qgraphicsitem_cast<QtpComp*>(wire->endPin()->parentItem())->id(),
-                                  wire->endPin()->name());
+                                  wire->endPin()->index());
             delete item;
         }
     }
@@ -240,9 +240,9 @@ void QtpDiag::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
                     addItem(wire);
 
                     emit wireConnected(qgraphicsitem_cast<QtpComp*>(startPin->parentItem())->id(),
-                                       startPin->name(),
+                                       startPin->index(),
                                        qgraphicsitem_cast<QtpComp*>(endPin->parentItem())->id(),
-                                       endPin->name());
+                                       endPin->index());
                 }
                 else
                 {
