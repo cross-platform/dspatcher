@@ -36,100 +36,6 @@ QtpComp::QtpComp(CompInfo const& compInfo, uint id, QPointF const& position, QGr
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    //------------------------
-    _contextMenu->addSeparator();
-
-//    Null,
-//    Bool,
-//    Int,
-//    Float,
-//    String,
-//    FilePath,  // this is essentially just a string, but helps when determining an appropriate user input method
-//    List,    // this type acts as a vector (available items), an int (index selected), and a string (item selected)
-//    Trigger  // this type has no value, SetParam(triggerParam) simply represents a trigger. E.g. a button press
-
-    // Bool
-    {
-        QCheckBox* custom = new QCheckBox(_contextMenu);
-        custom ->setText("Enable");
-        QWidgetAction* customAction = new QWidgetAction(_contextMenu);
-        customAction->setDefaultWidget(custom);
-        _contextMenu->addAction(customAction);
-    }
-
-    // Int
-    // Float
-    {
-        QWidget* intSlider = new QWidget(_contextMenu);
-
-        QSlider* slider = new QSlider(Qt::Horizontal, intSlider);
-        slider ->setRange(0, 1000);
-
-        QLabel* label = new QLabel(intSlider);
-        label->setNum(slider->sliderPosition());
-
-        QObject::connect(slider, SIGNAL(valueChanged(int)), label, SLOT(setNum(int)));
-
-        QHBoxLayout* layout = new QHBoxLayout(intSlider);
-        layout->addWidget(slider);
-        layout->addWidget(label);
-
-        QWidgetAction* intSliderAction = new QWidgetAction(_contextMenu);
-        intSliderAction->setDefaultWidget(intSlider);
-        _contextMenu->addAction(intSliderAction);
-    }
-
-    // String
-    {
-        QLineEdit* custom = new QLineEdit(_contextMenu);
-        custom ->setText("Enable");
-        QWidgetAction* customAction = new QWidgetAction(_contextMenu);
-        customAction->setDefaultWidget(custom);
-        _contextMenu->addAction(customAction);
-    }
-
-    // FilePath
-    {
-        QWidget* fileBrowser = new QWidget(_contextMenu);
-
-        QLineEdit* edtPath = new QLineEdit(fileBrowser);
-        edtPath->setEnabled(false);
-
-        QPushButton* btnBrowse = new QPushButton(fileBrowser);
-        btnBrowse->setText("Browse");
-
-        QHBoxLayout* layout = new QHBoxLayout(fileBrowser);
-        layout->addWidget(edtPath);
-        layout->addWidget(btnBrowse);
-
-        QWidgetAction* fileBrowserAction = new QWidgetAction(_contextMenu);
-        fileBrowserAction->setDefaultWidget(fileBrowser);
-        _contextMenu->addAction(fileBrowserAction);
-
-//        QFileDialog* custom = new QFileDialog(_contextMenu);
-//        QWidgetAction* customAction = new QWidgetAction(_contextMenu);
-//        customAction->setDefaultWidget(custom);
-//        _contextMenu->addAction(customAction);
-    }
-
-    // List
-    {
-        QComboBox* custom = new QComboBox(_contextMenu);
-        QWidgetAction* customAction = new QWidgetAction(_contextMenu);
-        customAction->setDefaultWidget(custom);
-        _contextMenu->addAction(customAction);
-    }
-
-    // Trigger
-    {
-        QPushButton* custom = new QPushButton(_contextMenu);
-        custom->setText("Play");
-        QWidgetAction* customAction = new QWidgetAction(_contextMenu);
-        customAction->setDefaultWidget(custom);
-        _contextMenu->addAction(customAction);
-    }
-    //------------------------
 }
 
 QtpComp::~QtpComp()
@@ -169,7 +75,7 @@ void QtpComp::addInPin(QString pinName)
     QtpPin* pin = new QtpPin(QtpPin::InPin, pinName, _inPins.size(), this);
     pin->setPos(-21, 20 * _inPins.size());
     pin->setBrush(_color);
-    _inPins.append(pin);
+    _inPins.push_back(pin);
 
     updatePolygon();
 }
@@ -179,7 +85,23 @@ void QtpComp::addOutPin(QString pinName)
     QtpPin* pin = new QtpPin(QtpPin::OutPin, pinName, _outPins.size(), this);
     pin->setPos(21, 20 * _outPins.size());
     pin->setBrush(_color);
-    _outPins.append(pin);
+    _outPins.push_back(pin);
+
+    updatePolygon();
+}
+
+void QtpComp::removeInPin()
+{
+    delete _inPins.back();
+    _inPins.pop_back();
+
+    updatePolygon();
+}
+
+void QtpComp::removeOutPin()
+{
+    delete _outPins.back();
+    _outPins.pop_back();
 
     updatePolygon();
 }
@@ -201,6 +123,11 @@ void QtpComp::removePins()
     _outPins.clear();
 
     updatePolygon();
+}
+
+QMenu* QtpComp::contextMenu()
+{
+    return _contextMenu;
 }
 
 QPixmap QtpComp::image() const
@@ -241,9 +168,12 @@ QtpComp::CompInfo QtpComp::compInfo() const
 
 void QtpComp::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
-    scene()->clearSelection();
-    setSelected(true);
-    _contextMenu->exec(event->screenPos());
+    if (_contextMenu->actions().size() != 0)
+    {
+        scene()->clearSelection();
+        setSelected(true);
+        _contextMenu->exec(event->screenPos());
+    }
 }
 
 void QtpComp::setName(QString name)

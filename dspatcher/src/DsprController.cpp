@@ -1,20 +1,20 @@
-#include <Controller.h>
+#include <DsprController.h>
 
 #include <QtpDiag.h>
 
-Controller::Controller(QtpMain* mainWindow, std::vector<DspPluginLoader> const& pluginLoaders)
+DsprController::DsprController(QtpMain* mainWindow, std::vector<DspPluginLoader> const& pluginLoaders)
     : _mainWindow(mainWindow)
     , _pluginLoaders(pluginLoaders)
 {
     _circuit.StartAutoTick();
 
-    connect(_mainWindow->diagram(), &QtpDiag::compInserted, this, &Controller::compInserted);
-    connect(_mainWindow->diagram(), &QtpDiag::compRemoved, this, &Controller::compRemoved);
-    connect(_mainWindow->diagram(), &QtpDiag::wireConnected, this, &Controller::wireConnected);
-    connect(_mainWindow->diagram(), &QtpDiag::wireDisconnected, this, &Controller::wireDisconnected);
+    connect(_mainWindow->diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted);
+    connect(_mainWindow->diagram(), &QtpDiag::compRemoved, this, &DsprController::compRemoved);
+    connect(_mainWindow->diagram(), &QtpDiag::wireConnected, this, &DsprController::wireConnected);
+    connect(_mainWindow->diagram(), &QtpDiag::wireDisconnected, this, &DsprController::wireDisconnected);
 }
 
-Controller::~Controller()
+DsprController::~DsprController()
 {
     typedef std::pair<int, DspComponent*> ComponentPair;
     foreach(ComponentPair comp, _components)
@@ -28,7 +28,7 @@ Controller::~Controller()
     DSPatch::Finalize();
 }
 
-void Controller::compInserted(QtpComp::CompInfo const& compInfo, uint compId)
+void DsprController::compInserted(QtpComp::CompInfo const& compInfo, uint compId)
 {
     DspPluginLoader loader = _pluginLoaders[compInfo.typeId];
     std::map<std::string, DspParameter> params = loader.GetCreateParams();
@@ -39,19 +39,19 @@ void Controller::compInserted(QtpComp::CompInfo const& compInfo, uint compId)
     _circuit.AddComponent(x);
 }
 
-void Controller::compRemoved(uint compId)
+void DsprController::compRemoved(uint compId)
 {
     _circuit.RemoveComponent(_components[compId]);
     delete _components[compId];
     _components.erase(compId);
 }
 
-void Controller::wireConnected(uint fromComp, int fromPin, uint toComp, int toPin)
+void DsprController::wireConnected(uint fromComp, int fromPin, uint toComp, int toPin)
 {
     _circuit.ConnectOutToIn(_components[fromComp], fromPin, _components[toComp], toPin);
 }
 
-void Controller::wireDisconnected(uint fromComp, int fromPin, uint toComp, int toPin)
+void DsprController::wireDisconnected(uint fromComp, int fromPin, uint toComp, int toPin)
 {
     _circuit.DisconnectOutToIn(_components[fromComp], fromPin, _components[toComp], toPin);
 }

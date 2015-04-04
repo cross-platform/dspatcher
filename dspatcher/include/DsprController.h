@@ -2,13 +2,13 @@
 #include <DSPatch.h>
 #include <QObject>
 
-class Controller : public QObject
+class DsprController : public QObject
 {
     Q_OBJECT
 
 public:
-    Controller(QtpMain* mainWindow, std::vector<DspPluginLoader> const& pluginLoaders);
-    ~Controller();
+    DsprController(QtpMain* mainWindow, std::vector<DspPluginLoader> const& pluginLoaders);
+    ~DsprController();
 
 public slots:
     void compInserted(QtpComp::CompInfo const& compInfo, uint compId);

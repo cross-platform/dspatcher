@@ -4,7 +4,7 @@
 #include <QDir>
 
 #include <DSPatch.h>
-#include <Controller.h>
+#include <DsprController.h>
 
 int main(int argv, char* args[])
 {
@@ -47,7 +47,7 @@ int main(int argv, char* args[])
         }
     }
 
-    Controller controller(&mainWindow, pluginLoaders);
+    DsprController controller(&mainWindow, pluginLoaders);
 
     return app.exec();
 }

@@ -32,7 +32,11 @@ public:
 
     void addInPin(QString pinName);
     void addOutPin(QString pinName);
+    void removeInPin();
+    void removeOutPin();
     void removePins();
+
+    QMenu* contextMenu();
 
     QPixmap image() const;
     CompInfo compInfo() const;
