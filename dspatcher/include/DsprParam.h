@@ -13,9 +13,12 @@ class DsprParam : public QObject
     Q_OBJECT
 
 public:
-    DsprParam(std::string const& name, DspParameter const& param, QMenu* contextMenu);
+    DsprParam(int compId, int paramId, std::string const& name, DspParameter const& param, QMenu* contextMenu);
     QWidgetAction* action();
     DspParameter& param();
+
+    int compId();
+    int paramId();
 
     bool SetBool(bool const& value);
     bool SetInt(int const& value);
@@ -26,11 +29,11 @@ public:
     bool SetList(std::vector<std::string> const& value);
 
 signals:
-    void paramUpdated(bool value);
-    void paramUpdated(int value);
-    void paramUpdated(float value);
-    void paramUpdated(std::string const& value);
-    void paramUpdated();
+    void boolUpdated(bool value);
+    void intUpdated(int value);
+    void floatUpdated(float value);
+    void stringUpdated(std::string const& value);
+    void triggerUpdated();
 
 private slots:
     void paramChanged(int value);
@@ -38,6 +41,8 @@ private slots:
     void paramChanged();
 
 private:
+    int _compId;
+    int _paramId;
     DspParameter _param;
     QMenu* _contextMenu;
     QWidgetAction* _action;

@@ -1,9 +1,9 @@
 #include <DsprParam.h>
 
-#include <iostream>
-
-DsprParam::DsprParam(std::string const& name, DspParameter const& param, QMenu* contextMenu)
-    : _param(param)
+DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParameter const& param, QMenu* contextMenu)
+    : _compId(compId)
+    , _paramId(paramId)
+    , _param(param)
     , _contextMenu(contextMenu)
 {
     if (_param.Type() == DspParameter::Bool)
@@ -53,13 +53,13 @@ DsprParam::DsprParam(std::string const& name, DspParameter const& param, QMenu* 
         _slider = new QSlider(Qt::Horizontal, floatSlider);
         if (_param.GetFloatRange())
         {
-            _slider->setRange(_param.GetFloatRange()->first, _param.GetFloatRange()->second);
+            _slider->setRange(_param.GetFloatRange()->first * 100, _param.GetFloatRange()->second * 100);
         }
         else
         {
-            _slider->setRange(0, *_param.GetFloat() * 2);
+            _slider->setRange(0, *_param.GetFloat() * 200);
         }
-        _slider->setValue(*_param.GetFloat());
+        _slider->setValue(*_param.GetFloat() * 100);
 
         QLabel* label = new QLabel(floatSlider);
         label->setNum(_slider->sliderPosition());
@@ -92,7 +92,7 @@ DsprParam::DsprParam(std::string const& name, DspParameter const& param, QMenu* 
         QWidget* fileBrowser = new QWidget(_contextMenu);
 
         _textBox = new QLineEdit(fileBrowser);
-        _textBox->setEnabled(false);
+        //_textBox->setEnabled(false);
         _textBox->setText(_param.GetString()->c_str());
 
         QPushButton* btnBrowse = new QPushButton(fileBrowser);
@@ -115,7 +115,7 @@ DsprParam::DsprParam(std::string const& name, DspParameter const& param, QMenu* 
     else if (_param.Type() == DspParameter::List)
     {
         _listBox = new QComboBox(_contextMenu);
-        for (int i = 0; i < _param.GetList()->size(); ++i)
+        for (size_t i = 0; i < _param.GetList()->size(); ++i)
         {
             _listBox->addItem((*_param.GetList())[i].c_str());
         }
@@ -147,6 +147,16 @@ QWidgetAction* DsprParam::action()
 DspParameter& DsprParam::param()
 {
     return _param;
+}
+
+int DsprParam::compId()
+{
+    return _compId;
+}
+
+int DsprParam::paramId()
+{
+    return _paramId;
 }
 
 bool DsprParam::SetBool(bool const& value)
@@ -246,23 +256,19 @@ void DsprParam::paramChanged(int value)
 {
     if (_param.Type() == DspParameter::Bool)
     {
-        std::cerr << "Bool" << std::endl;
-        emit paramUpdated(value != 0);
+        emit boolUpdated(value != 0);
     }
     else if (_param.Type() == DspParameter::Int)
     {
-        std::cerr << "Int" << std::endl;
-        emit paramUpdated(value);
+        emit intUpdated(value);
     }
     else if (_param.Type() == DspParameter::Float)
     {
-        std::cerr << "Float" << std::endl;
-        emit paramUpdated((float)value / 100.f);
+        emit floatUpdated((float)value / 100.f);
     }
     else if (_param.Type() == DspParameter::List)
     {
-        std::cerr << "List" << std::endl;
-        emit paramUpdated(value);
+        emit intUpdated(value);
     }
 }
 
@@ -270,13 +276,11 @@ void DsprParam::paramChanged(QString const& newString)
 {
     if (_param.Type() == DspParameter::String)
     {
-        std::cerr << "String" << std::endl;
-        emit paramUpdated(newString.toStdString());
+        emit stringUpdated(newString.toStdString());
     }
     else if (_param.Type() == DspParameter::FilePath)
     {
-        std::cerr << "FilePath" << std::endl;
-        emit paramUpdated(newString.toStdString());
+        emit stringUpdated(newString.toStdString());
     }
 }
 
@@ -284,7 +288,6 @@ void DsprParam::paramChanged()
 {
     if (_param.Type() == DspParameter::Trigger)
     {
-        std::cerr << "Trigger" << std::endl;
-        emit paramUpdated();
+        emit triggerUpdated();
     }
 }
