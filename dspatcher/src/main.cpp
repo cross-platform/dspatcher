@@ -11,9 +11,9 @@ int main(int argv, char* args[])
     QtpMain mainWindow;
     mainWindow.show();
 
-    std::vector<DspPluginLoader> componentLoaders;
+    std::vector<DspPluginLoader> pluginLoaders;
 
-    // Read in DSPatch plugins
+    // Load DSPatch plugins from "dspatchables" folder
     QDir dir(PLUGIN_DIR);
     QFileInfoList files = dir.entryInfoList();
     foreach(const QFileInfo &fi, files)
@@ -28,8 +28,8 @@ int main(int argv, char* args[])
                 DspComponent* x = loader.Create(params);
 
                 QtpComp::CompInfo comp;
-                componentLoaders.push_back(loader);
-                comp.typeId = componentLoaders.size() - 1;
+                pluginLoaders.push_back(loader);
+                comp.typeId = pluginLoaders.size() - 1;
                 comp.typeName = fi.baseName().mid(0, 3) == "lib" ? fi.baseName().mid(3) : fi.baseName();
                 for (int i = 0; i < x->GetInputCount(); ++i)
                 {
