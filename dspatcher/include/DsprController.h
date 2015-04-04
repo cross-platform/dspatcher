@@ -11,7 +11,7 @@ public:
     ~DsprController();
 
 public slots:
-    void compInserted(QtpComp::CompInfo const& compInfo, uint compId);
+    void compInserted(QtpComp* comp);
     void compRemoved(uint compId);
     void wireConnected(uint fromComp, int fromPin, uint toComp, int toPin);
     void wireDisconnected(uint fromComp, int fromPin, uint toComp, int toPin);

@@ -24,7 +24,7 @@ public:
 
 private slots:
     void buttonGroupClicked(int id);
-    void compInserted(QtpComp::CompInfo const& compInfo, uint compId);
+    void compInserted(QtpComp* comp);
     void about();
 
 private:

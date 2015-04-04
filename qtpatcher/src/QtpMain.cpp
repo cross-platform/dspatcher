@@ -71,7 +71,7 @@ void QtpMain::buttonGroupClicked(int id)
     _diagram->setMode(QtpDiag::InsertComp);
 }
 
-void QtpMain::compInserted(QtpComp::CompInfo const&, uint)
+void QtpMain::compInserted(QtpComp*)
 {
     _diagram->setMode(QtpDiag::MoveComp);
 

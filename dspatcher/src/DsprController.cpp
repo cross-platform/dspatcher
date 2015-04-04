@@ -28,13 +28,13 @@ DsprController::~DsprController()
     DSPatch::Finalize();
 }
 
-void DsprController::compInserted(QtpComp::CompInfo const& compInfo, uint compId)
+void DsprController::compInserted(QtpComp* comp)
 {
-    DspPluginLoader loader = _pluginLoaders[compInfo.typeId];
+    DspPluginLoader loader = _pluginLoaders[comp->compInfo().typeId];
     std::map<std::string, DspParameter> params = loader.GetCreateParams();
     DspComponent* x = loader.Create(params);
 
-    _components[compId] = x;
+    _components[comp->id()] = x;
 
     _circuit.AddComponent(x);
 }

@@ -5,8 +5,8 @@
 #include <QPainter>
 
 QtpPin::QtpPin(PinType pinType, QString pinName, int pinIndex, QGraphicsItem* parent)
-    : _pinIndex(pinIndex)
-    , QGraphicsPolygonItem(parent)
+    : QGraphicsPolygonItem(parent)
+    , _pinIndex(pinIndex)
 {
     _pinType = pinType;
 
