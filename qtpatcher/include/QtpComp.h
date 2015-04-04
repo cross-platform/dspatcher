@@ -34,7 +34,8 @@ public:
     void addOutPin(QString pinName);
     void removeInPin();
     void removeOutPin();
-    void removePins();
+    void removeInPins();
+    void removeOutPins();
 
     QMenu* contextMenu();
 

@@ -44,6 +44,7 @@ private slots:
     void browseFiles();
 
 private:
+    bool _settingParam;
     int _compId;
     int _paramId;
     DspParameter _param;

@@ -41,7 +41,8 @@ QtpComp::QtpComp(CompInfo const& compInfo, uint id, QPointF const& position, QGr
 QtpComp::~QtpComp()
 {
     delete _contextMenu;
-    removePins();
+    removeInPins();
+    removeOutPins();
 }
 
 uint QtpComp::id()
@@ -106,7 +107,7 @@ void QtpComp::removeOutPin()
     updatePolygon();
 }
 
-void QtpComp::removePins()
+void QtpComp::removeInPins()
 {
     foreach (QtpPin* pin, _inPins)
     {
@@ -115,6 +116,11 @@ void QtpComp::removePins()
 
     _inPins.clear();
 
+    updatePolygon();
+}
+
+void QtpComp::removeOutPins()
+{
     foreach (QtpPin* pin, _outPins)
     {
         delete pin;

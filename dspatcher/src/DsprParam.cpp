@@ -1,7 +1,8 @@
 #include <DsprParam.h>
 
 DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParameter const& param, QMenu* contextMenu)
-    : _compId(compId)
+    : _settingParam(false)
+    , _compId(compId)
     , _paramId(paramId)
     , _param(param)
     , _contextMenu(contextMenu)
@@ -10,7 +11,6 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
     {
         _checkbox = new QCheckBox(_contextMenu);
         _checkbox->setText(name.c_str());
-        _checkbox->setEnabled(false);
         QWidgetAction* customAction = new QWidgetAction(_contextMenu);
         customAction->setDefaultWidget(_checkbox);
         _action = customAction;
@@ -191,16 +191,19 @@ int DsprParam::paramId()
 
 bool DsprParam::SetBool(bool const& value)
 {
+    _settingParam = true;
     bool result = _param.SetBool(value);
     if (result && _param.Type() == DspParameter::Bool)
     {
-        _checkbox->setEnabled(value);
+        _checkbox->setChecked(value);
     }
+    _settingParam = false;
     return result;
 }
 
 bool DsprParam::SetInt(int const& value)
 {
+    _settingParam = true;
     bool result = _param.SetInt(value);
     if (result && _param.Type() == DspParameter::Int)
     {
@@ -210,41 +213,49 @@ bool DsprParam::SetInt(int const& value)
     {
         _listBox->setCurrentIndex(value);
     }
+    _settingParam = false;
     return result;
 }
 
 bool DsprParam::SetIntRange(std::pair<int, int> const& intRange)
 {
+    _settingParam = true;
     bool result = _param.SetIntRange(intRange);
     if (result && _param.Type() == DspParameter::Int)
     {
         _slider->setRange(intRange.first, intRange.second);
     }
+    _settingParam = false;
     return result;
 }
 
 bool DsprParam::SetFloat(float const& value)
 {
+    _settingParam = true;
     bool result = _param.SetFloat(value);
     if (result && _param.Type() == DspParameter::Float)
     {
         _slider->setValue(value * 100);
     }
+    _settingParam = false;
     return result;
 }
 
 bool DsprParam::SetFloatRange(std::pair<float, float> const& floatRange)
 {
+    _settingParam = true;
     bool result = _param.SetFloatRange(floatRange);
     if (result && _param.Type() == DspParameter::Float)
     {
         _slider->setRange(floatRange.first * 100, floatRange.second * 100);
     }
+    _settingParam = false;
     return result;
 }
 
 bool DsprParam::SetString(std::string const& value)
 {
+    _settingParam = true;
     bool result = _param.SetString(value);
     if (result && _param.Type() == DspParameter::String)
     {
@@ -265,11 +276,13 @@ bool DsprParam::SetString(std::string const& value)
             }
         }
     }
+    _settingParam = false;
     return result;
 }
 
 bool DsprParam::SetList(std::vector<std::string> const& value)
 {
+    _settingParam = true;
     bool result = _param.SetList(value);
     if (result && _param.Type() == DspParameter::List)
     {
@@ -279,11 +292,16 @@ bool DsprParam::SetList(std::vector<std::string> const& value)
             _listBox->addItem(value[i].c_str());
         }
     }
+    _settingParam = false;
     return result;
 }
 
 void DsprParam::paramChanged(int value)
 {
+    if (_settingParam)
+    {
+        return;
+    }
     if (_param.Type() == DspParameter::Bool)
     {
         emit boolUpdated(value != 0);
@@ -304,6 +322,10 @@ void DsprParam::paramChanged(int value)
 
 void DsprParam::paramChanged(QString const& newString)
 {
+    if (_settingParam)
+    {
+        return;
+    }
     if (_param.Type() == DspParameter::String)
     {
         emit stringUpdated(newString.toStdString());
@@ -316,6 +338,10 @@ void DsprParam::paramChanged(QString const& newString)
 
 void DsprParam::paramChanged()
 {
+    if (_settingParam)
+    {
+        return;
+    }
     if (_param.Type() == DspParameter::Trigger)
     {
         emit triggerUpdated();
