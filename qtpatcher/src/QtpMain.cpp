@@ -11,7 +11,7 @@ QtpMain::QtpMain()
     createToolBox();
     createMenus();
 
-    _diagram = new QtpDiag(_compMenu, this);
+    _diagram = new QtpDiag(this);
     _diagram->setSceneRect(QRectF(0, 0, 5000, 5000));
     connect(_diagram, &QtpDiag::compInserted, this, &QtpMain::compInserted);
 
@@ -158,7 +158,7 @@ void QtpMain::createMenus()
 
 QWidget* QtpMain::createCellWidget(QtpComp::CompInfo compInfo)
 {
-    QtpComp comp(compInfo, 0, _compMenu, QPointF());
+    QtpComp comp(compInfo, 0, QPointF());
     QIcon icon(comp.image());
 
     QToolButton* button = new QToolButton;

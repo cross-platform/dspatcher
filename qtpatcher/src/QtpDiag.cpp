@@ -5,11 +5,10 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 
-QtpDiag::QtpDiag(QMenu* compMenu, QObject* parent)
+QtpDiag::QtpDiag(QObject* parent)
     : QGraphicsScene(parent)
 {
     _compId = 0;
-    _compMenu = compMenu;
     _mode = MoveComp;
     _nextComp = QtpComp::CompInfo();
     _line = 0;
@@ -138,7 +137,7 @@ void QtpDiag::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
 
     if (_mode == InsertComp)
     {
-        QtpComp* comp = new QtpComp(_nextComp, _compId++, _compMenu, mouseEvent->scenePos());
+        QtpComp* comp = new QtpComp(_nextComp, _compId++, mouseEvent->scenePos());
 
         comp->setColor(_compColor);
         addItem(comp);

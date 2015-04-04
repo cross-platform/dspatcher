@@ -22,7 +22,7 @@ public:
         QList<QString> outPins;
     };
 
-    QtpComp(CompInfo const& compInfo, uint id, QMenu* contextMenu, QPointF const& position, QGraphicsItem* parent = 0);
+    QtpComp(CompInfo const& compInfo, uint id, QPointF const& position, QGraphicsItem* parent = 0);
     ~QtpComp();
 
     uint id();

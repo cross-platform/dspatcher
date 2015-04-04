@@ -18,7 +18,7 @@ public:
         MoveComp
     };
 
-    explicit QtpDiag(QMenu* compMenu, QObject* parent = 0);
+    explicit QtpDiag(QObject* parent = 0);
 
     void setLineColor(const QColor& color);
     void setCompColor(const QColor& color);
@@ -50,7 +50,6 @@ private:
 
     uint _compId;
     QtpComp::CompInfo _nextComp;
-    QMenu* _compMenu;
     Mode _mode;
     bool _leftButtonDown;
     QPointF _startPoint;
