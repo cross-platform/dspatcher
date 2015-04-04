@@ -13,7 +13,7 @@ class DsprParam : public QObject
     Q_OBJECT
 
 public:
-    DsprParam(DspParameter const& param, QMenu* contextMenu);
+    DsprParam(std::string const& name, DspParameter const& param, QMenu* contextMenu);
     QWidgetAction* action();
     DspParameter& param();
 

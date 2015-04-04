@@ -2,14 +2,14 @@
 
 #include <iostream>
 
-DsprParam::DsprParam(DspParameter const& param, QMenu* contextMenu)
+DsprParam::DsprParam(std::string const& name, DspParameter const& param, QMenu* contextMenu)
     : _param(param)
     , _contextMenu(contextMenu)
 {
     if (_param.Type() == DspParameter::Bool)
     {
         _checkbox = new QCheckBox(_contextMenu);
-        _checkbox->setText("Enable");
+        _checkbox->setText(name.c_str());
         QWidgetAction* customAction = new QWidgetAction(_contextMenu);
         customAction->setDefaultWidget(_checkbox);
         _action = customAction;
@@ -21,7 +21,15 @@ DsprParam::DsprParam(DspParameter const& param, QMenu* contextMenu)
         QWidget* intSlider = new QWidget(_contextMenu);
 
         _slider = new QSlider(Qt::Horizontal, intSlider);
-        _slider->setRange(0, 1000);
+        if (_param.GetIntRange())
+        {
+            _slider->setRange(_param.GetIntRange()->first, _param.GetIntRange()->second);
+        }
+        else
+        {
+            _slider->setRange(0, *_param.GetInt() * 2);
+        }
+        _slider->setValue(*_param.GetInt());
 
         QLabel* label = new QLabel(intSlider);
         label->setNum(_slider->sliderPosition());
@@ -43,7 +51,15 @@ DsprParam::DsprParam(DspParameter const& param, QMenu* contextMenu)
         QWidget* floatSlider = new QWidget(_contextMenu);
 
         _slider = new QSlider(Qt::Horizontal, floatSlider);
-        _slider->setRange(0, 1000);
+        if (_param.GetFloatRange())
+        {
+            _slider->setRange(_param.GetFloatRange()->first, _param.GetFloatRange()->second);
+        }
+        else
+        {
+            _slider->setRange(0, *_param.GetFloat() * 2);
+        }
+        _slider->setValue(*_param.GetFloat());
 
         QLabel* label = new QLabel(floatSlider);
         label->setNum(_slider->sliderPosition());
@@ -63,7 +79,8 @@ DsprParam::DsprParam(DspParameter const& param, QMenu* contextMenu)
     else if (_param.Type() == DspParameter::String)
     {
         _textBox = new QLineEdit(_contextMenu);
-        _textBox->setText("Enable");
+        _textBox->setText(_param.GetString()->c_str());
+
         QWidgetAction* customAction = new QWidgetAction(_contextMenu);
         customAction->setDefaultWidget(_textBox);
         _action = customAction;
@@ -76,6 +93,7 @@ DsprParam::DsprParam(DspParameter const& param, QMenu* contextMenu)
 
         _textBox = new QLineEdit(fileBrowser);
         _textBox->setEnabled(false);
+        _textBox->setText(_param.GetString()->c_str());
 
         QPushButton* btnBrowse = new QPushButton(fileBrowser);
         btnBrowse->setText("Browse");
@@ -97,9 +115,11 @@ DsprParam::DsprParam(DspParameter const& param, QMenu* contextMenu)
     else if (_param.Type() == DspParameter::List)
     {
         _listBox = new QComboBox(_contextMenu);
-        _listBox->addItem("0");
-        _listBox->addItem("1");
-        _listBox->addItem("2");
+        for (int i = 0; i < _param.GetList()->size(); ++i)
+        {
+            _listBox->addItem((*_param.GetList())[i].c_str());
+        }
+
         QWidgetAction* customAction = new QWidgetAction(_contextMenu);
         customAction->setDefaultWidget(_listBox);
         _action = customAction;
@@ -109,7 +129,8 @@ DsprParam::DsprParam(DspParameter const& param, QMenu* contextMenu)
     else if (_param.Type() == DspParameter::Trigger)
     {
         _button = new QPushButton(_contextMenu);
-        _button->setText("Play");
+        _button->setText(name.c_str());
+
         QWidgetAction* customAction = new QWidgetAction(_contextMenu);
         customAction->setDefaultWidget(_button);
         _action = customAction;

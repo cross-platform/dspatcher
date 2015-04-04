@@ -1,6 +1,7 @@
 #include <DsprController.h>
 
 #include <QtpDiag.h>
+#include <DsprParam.h>
 
 DsprController::DsprController(QtpMain* mainWindow, std::vector<DspPluginLoader> const& pluginLoaders)
     : _mainWindow(mainWindow)
@@ -33,6 +34,12 @@ void DsprController::compInserted(QtpComp* comp)
     DspPluginLoader loader = _pluginLoaders[comp->compInfo().typeId];
     std::map<std::string, DspParameter> params = loader.GetCreateParams();
     DspComponent* x = loader.Create(params);
+
+    for (int i = 0; i < x->GetParameterCount(); ++i)
+    {
+        DsprParam* y = new DsprParam(x->GetParameterName(i), *x->GetParameter(i), comp->contextMenu());
+        comp->contextMenu()->addAction(y->action());
+    }
 
     _components[comp->id()] = x;
 
