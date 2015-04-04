@@ -40,6 +40,8 @@ private slots:
     void paramChanged(QString const&);
     void paramChanged();
 
+    void updateFloatSlider(int value);
+
 private:
     int _compId;
     int _paramId;
@@ -52,6 +54,7 @@ private:
     QLineEdit* _textBox;
     QComboBox* _listBox;
     QPushButton* _button;
+    QLabel* _vlabel;
 };
 
 #endif  // QTPPARAM_H

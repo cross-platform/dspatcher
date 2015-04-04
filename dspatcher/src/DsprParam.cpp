@@ -36,6 +36,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
 
         QLabel* vlabel = new QLabel(intSlider);
         vlabel->setNum(_slider->sliderPosition());
+        vlabel->setFixedWidth(45);
 
         connect(_slider, SIGNAL(valueChanged(int)), vlabel, SLOT(setNum(int)));
 
@@ -68,15 +69,16 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         QLabel* label = new QLabel(floatSlider);
         label->setText(name.c_str());
 
-        QLabel* vlabel = new QLabel(floatSlider);
-        vlabel->setNum(_slider->sliderPosition());
+        _vlabel = new QLabel(floatSlider);
+        _vlabel->setNum(_slider->sliderPosition() / 100);
+        _vlabel->setFixedWidth(45);
 
-        connect(_slider, SIGNAL(valueChanged(int)), vlabel, SLOT(setNum(int)));
+        connect(_slider, SIGNAL(valueChanged(int)), this, SLOT(updateFloatSlider(int)));
 
         QHBoxLayout* layout = new QHBoxLayout(floatSlider);
         layout->addWidget(label);
         layout->addWidget(_slider);
-        layout->addWidget(vlabel);
+        layout->addWidget(_vlabel);
 
         QWidgetAction* intSliderAction = new QWidgetAction(_contextMenu);
         intSliderAction->setDefaultWidget(floatSlider);
@@ -320,4 +322,9 @@ void DsprParam::paramChanged()
     {
         emit triggerUpdated();
     }
+}
+
+void DsprParam::updateFloatSlider(int value)
+{
+    _vlabel->setNum((float)value / 100);
 }
