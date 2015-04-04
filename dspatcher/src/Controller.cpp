@@ -7,6 +7,7 @@ Controller::Controller(QtpMain* mainWindow, std::vector<DspPluginLoader> const& 
     , _pluginLoaders(pluginLoaders)
 {
     _circuit.StartAutoTick();
+
     connect(_mainWindow->diagram(), &QtpDiag::compInserted, this, &Controller::compInserted);
     connect(_mainWindow->diagram(), &QtpDiag::compRemoved, this, &Controller::compRemoved);
     connect(_mainWindow->diagram(), &QtpDiag::wireConnected, this, &Controller::wireConnected);
@@ -41,6 +42,7 @@ void Controller::compInserted(QtpComp::CompInfo const& compInfo, uint compId)
 void Controller::compRemoved(uint compId)
 {
     _circuit.RemoveComponent(_components[compId]);
+    delete _components[compId];
     _components.erase(compId);
 }
 
