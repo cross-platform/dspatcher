@@ -32,13 +32,17 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         _slider->setValue(*_param.GetInt());
 
         QLabel* label = new QLabel(intSlider);
-        label->setNum(_slider->sliderPosition());
+        label->setText(name.c_str());
 
-        connect(_slider, SIGNAL(valueChanged(int)), label, SLOT(setNum(int)));
+        QLabel* vlabel = new QLabel(intSlider);
+        vlabel->setNum(_slider->sliderPosition());
+
+        connect(_slider, SIGNAL(valueChanged(int)), vlabel, SLOT(setNum(int)));
 
         QHBoxLayout* layout = new QHBoxLayout(intSlider);
-        layout->addWidget(_slider);
         layout->addWidget(label);
+        layout->addWidget(_slider);
+        layout->addWidget(vlabel);
 
         QWidgetAction* intSliderAction = new QWidgetAction(_contextMenu);
         intSliderAction->setDefaultWidget(intSlider);
@@ -62,13 +66,17 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         _slider->setValue(*_param.GetFloat() * 100);
 
         QLabel* label = new QLabel(floatSlider);
-        label->setNum(_slider->sliderPosition());
+        label->setText(name.c_str());
 
-        connect(_slider, SIGNAL(valueChanged(int)), label, SLOT(setNum(int)));
+        QLabel* vlabel = new QLabel(floatSlider);
+        vlabel->setNum(_slider->sliderPosition());
+
+        connect(_slider, SIGNAL(valueChanged(int)), vlabel, SLOT(setNum(int)));
 
         QHBoxLayout* layout = new QHBoxLayout(floatSlider);
-        layout->addWidget(_slider);
         layout->addWidget(label);
+        layout->addWidget(_slider);
+        layout->addWidget(vlabel);
 
         QWidgetAction* intSliderAction = new QWidgetAction(_contextMenu);
         intSliderAction->setDefaultWidget(floatSlider);
@@ -78,11 +86,20 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
     }
     else if (_param.Type() == DspParameter::String)
     {
-        _textBox = new QLineEdit(_contextMenu);
+        QWidget* textBox = new QWidget(_contextMenu);
+
+        QLabel* label = new QLabel(textBox);
+        label->setText(name.c_str());
+
+        _textBox = new QLineEdit(textBox);
         _textBox->setText(_param.GetString()->c_str());
 
+        QHBoxLayout* layout = new QHBoxLayout(textBox);
+        layout->addWidget(label);
+        layout->addWidget(_textBox);
+
         QWidgetAction* customAction = new QWidgetAction(_contextMenu);
-        customAction->setDefaultWidget(_textBox);
+        customAction->setDefaultWidget(textBox);
         _action = customAction;
 
         connect(_textBox, SIGNAL(textChanged(QString const&)), this, SLOT(paramChanged(QString const&)));
@@ -90,6 +107,9 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
     else if (_param.Type() == DspParameter::FilePath)
     {
         QWidget* fileBrowser = new QWidget(_contextMenu);
+
+        QLabel* label = new QLabel(fileBrowser);
+        label->setText(name.c_str());
 
         _textBox = new QLineEdit(fileBrowser);
         //_textBox->setEnabled(false);
@@ -99,6 +119,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         btnBrowse->setText("Browse");
 
         QHBoxLayout* layout = new QHBoxLayout(fileBrowser);
+        layout->addWidget(label);
         layout->addWidget(_textBox);
         layout->addWidget(btnBrowse);
 
@@ -114,14 +135,23 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
     }
     else if (_param.Type() == DspParameter::List)
     {
-        _listBox = new QComboBox(_contextMenu);
+        QWidget* listBox = new QWidget(_contextMenu);
+
+        QLabel* label = new QLabel(listBox);
+        label->setText(name.c_str());
+
+        _listBox = new QComboBox(listBox);
         for (size_t i = 0; i < _param.GetList()->size(); ++i)
         {
             _listBox->addItem((*_param.GetList())[i].c_str());
         }
 
+        QHBoxLayout* layout = new QHBoxLayout(listBox);
+        layout->addWidget(label);
+        layout->addWidget(_listBox);
+
         QWidgetAction* customAction = new QWidgetAction(_contextMenu);
-        customAction->setDefaultWidget(_listBox);
+        customAction->setDefaultWidget(listBox);
         _action = customAction;
 
         connect(_listBox, SIGNAL(currentIndexChanged(int)), this, SLOT(paramChanged(int)));
