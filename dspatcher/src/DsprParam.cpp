@@ -10,6 +10,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
     {
         _checkbox = new QCheckBox(_contextMenu);
         _checkbox->setText(name.c_str());
+        _checkbox->setEnabled(false);
         QWidgetAction* customAction = new QWidgetAction(_contextMenu);
         customAction->setDefaultWidget(_checkbox);
         _action = customAction;
@@ -114,7 +115,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         label->setText(name.c_str());
 
         _textBox = new QLineEdit(fileBrowser);
-        //_textBox->setEnabled(false);
+        _textBox->setEnabled(false);
         _textBox->setText(_param.GetString()->c_str());
 
         QPushButton* btnBrowse = new QPushButton(fileBrowser);
@@ -129,11 +130,8 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         fileBrowserAction->setDefaultWidget(fileBrowser);
         _action = fileBrowserAction;
 
+        connect(btnBrowse, SIGNAL(released()), this, SLOT(browseFiles()));
         connect(_textBox, SIGNAL(textChanged(QString const&)), this, SLOT(paramChanged(QString const&)));
-//        QFileDialog* custom = new QFileDialog(_contextMenu);
-//        QWidgetAction* customAction = new QWidgetAction(_contextMenu);
-//        customAction->setDefaultWidget(custom);
-//        _contextMenu->addAction(customAction);
     }
     else if (_param.Type() == DspParameter::List)
     {
@@ -327,4 +325,11 @@ void DsprParam::paramChanged()
 void DsprParam::updateFloatSlider(int value)
 {
     _vlabel->setNum((float)value / 100);
+}
+
+void DsprParam::browseFiles()
+{
+    QFileDialog* custom = new QFileDialog();
+    _textBox->setText(custom->getOpenFileName());
+    delete custom;
 }

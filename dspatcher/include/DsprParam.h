@@ -41,6 +41,7 @@ private slots:
     void paramChanged();
 
     void updateFloatSlider(int value);
+    void browseFiles();
 
 private:
     int _compId;
