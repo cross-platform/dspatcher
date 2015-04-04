@@ -41,6 +41,8 @@ int main(int argv, char* args[])
                     comp.outPins.append(x->GetOutputName(i).c_str());
                 }
                 mainWindow.registerComp(comp);
+
+                delete x;
             }
         }
     }

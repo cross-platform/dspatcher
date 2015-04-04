@@ -8,6 +8,7 @@ class Controller : public QObject
 
 public:
     Controller(QtpMain* mainWindow, std::vector<DspPluginLoader> const& pluginLoaders);
+    ~Controller();
 
 public slots:
     void compInserted(QtpComp::CompInfo const& compInfo, uint compId);
@@ -18,4 +19,7 @@ public slots:
 private:
     QtpMain* _mainWindow;
     std::vector<DspPluginLoader> _pluginLoaders;
+
+    std::map<int, DspComponent*> _components;
+    DspCircuit _circuit;
 };
