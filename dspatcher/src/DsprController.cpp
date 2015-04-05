@@ -285,7 +285,7 @@ void DsprController::_parameterUpdated(DspComponent* component, int index)
             _params[qtpComp->id()][index]->SetString(*component->GetParameter(index)->GetString());
             break;
         case DspParameter::List:
-            //_params[comp->id()][index]->SetList(*component->GetParameter(index)->GetList());
+            _params[qtpComp->id()][index]->SetList(*component->GetParameter(index)->GetList());
             break;
         case DspParameter::Trigger:
             break;
