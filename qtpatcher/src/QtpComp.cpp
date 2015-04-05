@@ -8,7 +8,7 @@
 
 #include <QtWidgets>
 
-QtpComp::QtpComp(CompInfo const& compInfo, uint id, QPointF const& position, QGraphicsItem* parent)
+QtpComp::QtpComp(CompInfo const& compInfo, int id, QPointF const& position, QGraphicsItem* parent)
     : QGraphicsPolygonItem(parent)
 {
     setPos(position);
@@ -45,7 +45,7 @@ QtpComp::~QtpComp()
     removeOutPins();
 }
 
-uint QtpComp::id()
+int QtpComp::id()
 {
     return _id;
 }

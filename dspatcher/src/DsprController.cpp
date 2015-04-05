@@ -111,7 +111,7 @@ void DsprController::compInserted(QtpComp* qtpComp)
     _qtpComps[component] = qtpComp;
 }
 
-void DsprController::compRemoved(uint compId)
+void DsprController::compRemoved(int compId)
 {
     _circuit.RemoveComponent(_components[compId]);
 
@@ -127,12 +127,12 @@ void DsprController::compRemoved(uint compId)
     _qtpComps.erase(_components[compId]);
 }
 
-void DsprController::wireConnected(uint fromComp, int fromPin, uint toComp, int toPin)
+void DsprController::wireConnected(int fromComp, int fromPin, int toComp, int toPin)
 {
     _circuit.ConnectOutToIn(_components[fromComp], fromPin, _components[toComp], toPin);
 }
 
-void DsprController::wireDisconnected(uint fromComp, int fromPin, uint toComp, int toPin)
+void DsprController::wireDisconnected(int fromComp, int fromPin, int toComp, int toPin)
 {
     _circuit.DisconnectOutToIn(_components[fromComp], fromPin, _components[toComp], toPin);
 }

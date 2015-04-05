@@ -22,10 +22,10 @@ public:
         QList<QString> outPins;
     };
 
-    QtpComp(CompInfo const& compInfo, uint id, QPointF const& position, QGraphicsItem* parent = 0);
+    QtpComp(CompInfo const& compInfo, int id, QPointF const& position, QGraphicsItem* parent = 0);
     ~QtpComp();
 
-    uint id();
+    int id();
     int type() const;
 
     void setColor(const QColor& color);
@@ -50,7 +50,7 @@ private:
     void updatePolygon();
 
 private:
-    uint _id;
+    int _id;
     QColor _color;
     CompInfo _compInfo;
     QPolygonF _polygon;

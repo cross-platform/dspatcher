@@ -26,9 +26,9 @@ signals:
 
 public slots:
     void compInserted(QtpComp* qtpComp);
-    void compRemoved(uint compId);
-    void wireConnected(uint fromComp, int fromPin, uint toComp, int toPin);
-    void wireDisconnected(uint fromComp, int fromPin, uint toComp, int toPin);
+    void compRemoved(int compId);
+    void wireConnected(int fromComp, int fromPin, int toComp, int toPin);
+    void wireDisconnected(int fromComp, int fromPin, int toComp, int toPin);
 
     void boolUpdated(bool value);
     void intUpdated(int value);

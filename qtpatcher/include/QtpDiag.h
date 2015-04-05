@@ -28,9 +28,9 @@ public:
 
 signals:
     void compInserted(QtpComp* comp);
-    void compRemoved(uint compId);
-    void wireConnected(uint fromComp, int fromPin, uint toComp, int toPin);
-    void wireDisconnected(uint fromComp, int fromPin, uint toComp, int toPin);
+    void compRemoved(int compId);
+    void wireConnected(int fromComp, int fromPin, int toComp, int toPin);
+    void wireDisconnected(int fromComp, int fromPin, int toComp, int toPin);
 
 public slots:
     void setMode(Mode mode);
@@ -48,7 +48,7 @@ protected:
 private:
     bool isItemChange(int type);
 
-    uint _compId;
+    int _compId;
     QtpComp::CompInfo _nextComp;
     Mode _mode;
     bool _leftButtonDown;
