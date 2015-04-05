@@ -7,7 +7,7 @@ DsprController::DsprController(QtpMain* mainWindow, std::vector<DspPluginLoader>
     , _mainWindow(mainWindow)
     , _pluginLoaders(pluginLoaders)
 {
-    _circuit.SetThreadCount(5);
+    _circuit.SetThreadCount(2);
     _circuit.StartAutoTick();
 
     connect(_mainWindow->diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted);
