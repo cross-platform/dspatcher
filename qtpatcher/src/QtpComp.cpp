@@ -194,4 +194,6 @@ void QtpComp::updatePolygon()
 
     _polygon.replace(2, QPointF(15, 15 + (20 * pinsAfterFirst)));
     _polygon.replace(3, QPointF(-15, 15 + (20 * pinsAfterFirst)));
+
+    setPolygon(_polygon);
 }
