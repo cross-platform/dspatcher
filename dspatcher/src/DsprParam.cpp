@@ -35,16 +35,16 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         QLabel* label = new QLabel(intSlider);
         label->setText(name.c_str());
 
-        QLabel* vlabel = new QLabel(intSlider);
-        vlabel->setNum(_slider->sliderPosition());
-        vlabel->setFixedWidth(45);
+        _vlabel = new QLabel(intSlider);
+        _vlabel->setNum(_slider->sliderPosition());
+        _vlabel->setFixedWidth(45);
 
-        connect(_slider, SIGNAL(valueChanged(int)), vlabel, SLOT(setNum(int)));
+        connect(_slider, SIGNAL(valueChanged(int)), _vlabel, SLOT(setNum(int)));
 
         QHBoxLayout* layout = new QHBoxLayout(intSlider);
         layout->addWidget(label);
         layout->addWidget(_slider);
-        layout->addWidget(vlabel);
+        layout->addWidget(_vlabel);
 
         QWidgetAction* intSliderAction = new QWidgetAction(_contextMenu);
         intSliderAction->setDefaultWidget(intSlider);
@@ -130,7 +130,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         fileBrowserAction->setDefaultWidget(fileBrowser);
         _action = fileBrowserAction;
 
-        connect(btnBrowse, SIGNAL(released()), this, SLOT(browseFiles()));
+        connect(btnBrowse, SIGNAL(released()), this, SLOT(browseForFile()));
         connect(_textBox, SIGNAL(textChanged(QString const&)), this, SLOT(paramChanged(QString const&)));
     }
     else if (_param.Type() == DspParameter::List)
@@ -353,7 +353,7 @@ void DsprParam::updateFloatSlider(int value)
     _vlabel->setNum((float)value / 100);
 }
 
-void DsprParam::browseFiles()
+void DsprParam::browseForFile()
 {
     QFileDialog* custom = new QFileDialog();
     _textBox->setText(custom->getOpenFileName());

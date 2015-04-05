@@ -12,7 +12,7 @@ class DsprController : public QObject
     Q_OBJECT
 
 public:
-    DsprController(QtpMain* mainWindow, std::vector<DspPluginLoader> const& pluginLoaders);
+    DsprController(QtpDiag* diagram, std::vector<DspPluginLoader> const& pluginLoaders);
     ~DsprController();
 
 signals:
@@ -47,7 +47,6 @@ private slots:
 
 private:
     bool _settingParam;
-    QtpMain* _mainWindow;
     std::vector<DspPluginLoader> _pluginLoaders;
 
     std::map<DspComponent const*, QtpComp*> _qtpComps;

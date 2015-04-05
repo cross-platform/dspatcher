@@ -41,7 +41,7 @@ private slots:
     void paramChanged();
 
     void updateFloatSlider(int value);
-    void browseFiles();
+    void browseForFile();
 
 private:
     bool _settingParam;

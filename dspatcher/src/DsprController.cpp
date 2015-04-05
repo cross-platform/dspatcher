@@ -2,18 +2,17 @@
 
 #include <QtpDiag.h>
 
-DsprController::DsprController(QtpMain* mainWindow, std::vector<DspPluginLoader> const& pluginLoaders)
+DsprController::DsprController(QtpDiag* diagram, std::vector<DspPluginLoader> const& pluginLoaders)
     : _settingParam(false)
-    , _mainWindow(mainWindow)
     , _pluginLoaders(pluginLoaders)
 {
     _circuit.SetThreadCount(2);
     _circuit.StartAutoTick();
 
-    connect(_mainWindow->diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted);
-    connect(_mainWindow->diagram(), &QtpDiag::compRemoved, this, &DsprController::compRemoved);
-    connect(_mainWindow->diagram(), &QtpDiag::wireConnected, this, &DsprController::wireConnected);
-    connect(_mainWindow->diagram(), &QtpDiag::wireDisconnected, this, &DsprController::wireDisconnected);
+    connect(diagram, &QtpDiag::compInserted, this, &DsprController::compInserted);
+    connect(diagram, &QtpDiag::compRemoved, this, &DsprController::compRemoved);
+    connect(diagram, &QtpDiag::wireConnected, this, &DsprController::wireConnected);
+    connect(diagram, &QtpDiag::wireDisconnected, this, &DsprController::wireDisconnected);
 
     connect(this, &DsprController::inputAdded, this, &DsprController::_inputAdded);
     connect(this, &DsprController::inputRemoved, this, &DsprController::_inputRemoved);

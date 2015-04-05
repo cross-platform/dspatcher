@@ -47,7 +47,7 @@ int main(int argv, char* args[])
         }
     }
 
-    DsprController controller(&mainWindow, pluginLoaders);
+    DsprController controller(mainWindow.diagram(), pluginLoaders);
 
     return app.exec();
 }
