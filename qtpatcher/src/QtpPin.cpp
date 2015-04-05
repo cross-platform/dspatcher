@@ -76,6 +76,11 @@ void QtpPin::removeWires()
     _wires.clear();
 }
 
+QList<QtpWire*> QtpPin::wires()
+{
+    return _wires;
+}
+
 QtpPin::PinType QtpPin::pinType() const
 {
     return _pinType;

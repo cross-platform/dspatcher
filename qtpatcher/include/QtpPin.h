@@ -31,6 +31,8 @@ public:
     void removeWire(QtpWire* wire);
     void removeWires();
 
+    QList<QtpWire*> wires();
+
     PinType pinType() const;
     QPolygonF polygon() const;
 

@@ -227,16 +227,26 @@ void QtpDiag::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
                     std::swap(startPin, endPin);
                 }
 
-                QtpWire* wire = new QtpWire(startPin, endPin);
-                if (startPin->addWire(wire))
+                QtpWire* newWire = new QtpWire(startPin, endPin);
+                if (startPin->addWire(newWire))
                 {
-                    endPin->addWire(wire);
+                    foreach (QtpWire* wire, endPin->wires())
+                    {
+                        emit wireDisconnected(qgraphicsitem_cast<QtpComp*>(wire->startPin()->parentItem())->id(),
+                                              wire->startPin()->index(),
+                                              qgraphicsitem_cast<QtpComp*>(wire->endPin()->parentItem())->id(),
+                                              wire->endPin()->index());
+                        delete wire;
+                    }
+                    endPin->removeWires();
 
-                    wire->setColor(_lineColor);
-                    wire->setZValue(1000.0);
-                    wire->updatePosition();
+                    endPin->addWire(newWire);
 
-                    addItem(wire);
+                    newWire->setColor(_lineColor);
+                    newWire->setZValue(1000.0);
+                    newWire->updatePosition();
+
+                    addItem(newWire);
 
                     emit wireConnected(qgraphicsitem_cast<QtpComp*>(startPin->parentItem())->id(),
                                        startPin->index(),
@@ -245,7 +255,7 @@ void QtpDiag::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
                 }
                 else
                 {
-                    delete wire;
+                    delete newWire;
                 }
             }
         }
