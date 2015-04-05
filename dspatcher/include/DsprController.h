@@ -43,6 +43,7 @@ private slots:
     void _parameterUpdated(DspComponent* component, int index);
 
 private:
+    bool _settingParam;
     QtpMain* _mainWindow;
     std::vector<DspPluginLoader> _pluginLoaders;
 
