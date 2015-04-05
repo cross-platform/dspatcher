@@ -7,6 +7,7 @@ DsprController::DsprController(QtpMain* mainWindow, std::vector<DspPluginLoader>
     , _mainWindow(mainWindow)
     , _pluginLoaders(pluginLoaders)
 {
+    _circuit.SetThreadCount(5);
     _circuit.StartAutoTick();
 
     connect(_mainWindow->diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted);
@@ -25,14 +26,17 @@ DsprController::DsprController(QtpMain* mainWindow, std::vector<DspPluginLoader>
 
 DsprController::~DsprController()
 {
+    _circuit.StopAutoTick();
+
+    _qtpComps.clear();
+
     typedef std::pair<int, DspComponent*> ComponentPair;
     foreach(ComponentPair comp, _components)
     {
         _circuit.RemoveComponent(comp.second);
-        _components.erase(comp.first);
         delete comp.second;
     }
-    _circuit.StopAutoTick();
+    _components.clear();
 
     typedef std::pair< int, std::vector<DsprParam*> > ParamPair;
     foreach(ParamPair paramList, _params)
@@ -77,39 +81,50 @@ void callback(DspComponent* component, DspComponent::CallbackType const& callbac
     }
 }
 
-void DsprController::compInserted(QtpComp* comp)
+void DsprController::compInserted(QtpComp* qtpComp)
 {
-    DspPluginLoader loader = _pluginLoaders[comp->compInfo().typeId];
+    DspPluginLoader loader = _pluginLoaders[qtpComp->compInfo().typeId];
     std::map<std::string, DspParameter> params = loader.GetCreateParams();
-    DspComponent* x = loader.Create(params);
-    _qtpComps[x] = comp;
-    x->SetCallback(callback, this);
+    DspComponent* component = loader.Create(params);
 
-    _params[comp->id()] = std::vector<DsprParam*>();
-    for (int i = 0; i < x->GetParameterCount(); ++i)
+    component->SetCallback(callback, this);
+    _circuit.AddComponent(component);
+
+    _qtpComps[component] = qtpComp;
+
+    _components[qtpComp->id()] = component;
+
+    _params[qtpComp->id()] = std::vector<DsprParam*>();
+    for (int i = 0; i < component->GetParameterCount(); ++i)
     {
-        DsprParam* y = new DsprParam(comp->id(), i, x->GetParameterName(i), *x->GetParameter(i), comp->contextMenu());
-        comp->contextMenu()->addAction(y->action());
+        DsprParam* param = new DsprParam(qtpComp->id(), i, component->GetParameterName(i),
+                                         *component->GetParameter(i), qtpComp->contextMenu());
+        qtpComp->contextMenu()->addAction(param->action());
 
-        connect(y, &DsprParam::boolUpdated, this, &DsprController::boolUpdated);
-        connect(y, &DsprParam::intUpdated, this, &DsprController::intUpdated);
-        connect(y, &DsprParam::floatUpdated, this, &DsprController::floatUpdated);
-        connect(y, &DsprParam::stringUpdated, this, &DsprController::stringUpdated);
-        connect(y, &DsprParam::triggerUpdated, this, &DsprController::triggerUpdated);
+        connect(param, &DsprParam::boolUpdated, this, &DsprController::boolUpdated);
+        connect(param, &DsprParam::intUpdated, this, &DsprController::intUpdated);
+        connect(param, &DsprParam::floatUpdated, this, &DsprController::floatUpdated);
+        connect(param, &DsprParam::stringUpdated, this, &DsprController::stringUpdated);
+        connect(param, &DsprParam::triggerUpdated, this, &DsprController::triggerUpdated);
 
-        _params[comp->id()].push_back(y);
+        _params[qtpComp->id()].push_back(param);
     }
-
-    _components[comp->id()] = x;
-
-    _circuit.AddComponent(x);
 }
 
 void DsprController::compRemoved(uint compId)
 {
     _circuit.RemoveComponent(_components[compId]);
+
+    _qtpComps.erase(_components[compId]);
+
     delete _components[compId];
     _components.erase(compId);
+
+    foreach (DsprParam* param, _params[compId])
+    {
+        delete param;
+    }
+    _params.erase(compId);
 }
 
 void DsprController::wireConnected(uint fromComp, int fromPin, uint toComp, int toPin)
@@ -199,16 +214,18 @@ void DsprController::_outputRemoved(DspComponent* component, int index)
 void DsprController::_parameterAdded(DspComponent* component, int index)
 {
     QtpComp* comp = _qtpComps[component];
-    DsprParam* y = new DsprParam(comp->id(), index, component->GetParameterName(index), *component->GetParameter(index), comp->contextMenu());
-    comp->contextMenu()->addAction(y->action());
 
-    connect(y, &DsprParam::boolUpdated, this, &DsprController::boolUpdated);
-    connect(y, &DsprParam::intUpdated, this, &DsprController::intUpdated);
-    connect(y, &DsprParam::floatUpdated, this, &DsprController::floatUpdated);
-    connect(y, &DsprParam::stringUpdated, this, &DsprController::stringUpdated);
-    connect(y, &DsprParam::triggerUpdated, this, &DsprController::triggerUpdated);
+    DsprParam* param = new DsprParam(comp->id(), index, component->GetParameterName(index),
+                                     *component->GetParameter(index), comp->contextMenu());
+    comp->contextMenu()->addAction(param->action());
 
-    _params[comp->id()].push_back(y);
+    connect(param, &DsprParam::boolUpdated, this, &DsprController::boolUpdated);
+    connect(param, &DsprParam::intUpdated, this, &DsprController::intUpdated);
+    connect(param, &DsprParam::floatUpdated, this, &DsprController::floatUpdated);
+    connect(param, &DsprParam::stringUpdated, this, &DsprController::stringUpdated);
+    connect(param, &DsprParam::triggerUpdated, this, &DsprController::triggerUpdated);
+
+    _params[comp->id()].push_back(param);
 }
 
 void DsprController::_parameterRemoved(DspComponent* component, int index)
@@ -239,33 +256,33 @@ void DsprController::_parameterUpdated(DspComponent* component, int index)
     {
         return;
     }
-    QtpComp* comp = _qtpComps[component];
-    switch (_params[comp->id()][index]->param().Type())
+    QtpComp* qtpComp = _qtpComps[component];
+    switch (_params[qtpComp->id()][index]->param().Type())
     {
         case DspParameter::Null:
             break;
         case DspParameter::Bool:
-            _params[comp->id()][index]->SetBool(*component->GetParameter(index)->GetBool());
+            _params[qtpComp->id()][index]->SetBool(*component->GetParameter(index)->GetBool());
             break;
         case DspParameter::Int:
             if (component->GetParameter(index)->GetIntRange())
             {
-                _params[comp->id()][index]->SetIntRange(*component->GetParameter(index)->GetIntRange());
+                _params[qtpComp->id()][index]->SetIntRange(*component->GetParameter(index)->GetIntRange());
             }
-            _params[comp->id()][index]->SetInt(*component->GetParameter(index)->GetInt());
+            _params[qtpComp->id()][index]->SetInt(*component->GetParameter(index)->GetInt());
             break;
         case DspParameter::Float:
             if (component->GetParameter(index)->GetFloatRange())
             {
-                _params[comp->id()][index]->SetFloatRange(*component->GetParameter(index)->GetFloatRange());
+                _params[qtpComp->id()][index]->SetFloatRange(*component->GetParameter(index)->GetFloatRange());
             }
-            _params[comp->id()][index]->SetFloat(*component->GetParameter(index)->GetFloat());
+            _params[qtpComp->id()][index]->SetFloat(*component->GetParameter(index)->GetFloat());
             break;
         case DspParameter::String:
-            _params[comp->id()][index]->SetString(*component->GetParameter(index)->GetString());
+            _params[qtpComp->id()][index]->SetString(*component->GetParameter(index)->GetString());
             break;
         case DspParameter::FilePath:
-            _params[comp->id()][index]->SetString(*component->GetParameter(index)->GetString());
+            _params[qtpComp->id()][index]->SetString(*component->GetParameter(index)->GetString());
             break;
         case DspParameter::List:
             //_params[comp->id()][index]->SetList(*component->GetParameter(index)->GetList());

@@ -1,3 +1,6 @@
+#ifndef DSPRCONTROLLER_H
+#define DSPRCONTROLLER_H
+
 #include <QtpMain.h>
 #include <QObject>
 
@@ -22,7 +25,7 @@ signals:
     void parameterUpdated(DspComponent* component, int index);
 
 public slots:
-    void compInserted(QtpComp* comp);
+    void compInserted(QtpComp* qtpComp);
     void compRemoved(uint compId);
     void wireConnected(uint fromComp, int fromPin, uint toComp, int toPin);
     void wireDisconnected(uint fromComp, int fromPin, uint toComp, int toPin);
@@ -49,6 +52,8 @@ private:
 
     std::map<DspComponent const*, QtpComp*> _qtpComps;
     std::map<int, DspComponent*> _components;
-    std::map<int, std::vector<DsprParam*> > _params;
+    std::map< int, std::vector<DsprParam*> > _params;
     DspCircuit _circuit;
 };
+
+#endif  // DSPRCONTROLLER_H

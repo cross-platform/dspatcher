@@ -20,7 +20,7 @@ public:
 
     QtpDiag* diagram();
 
-    void registerComp(QtpComp::CompInfo const& compInfo);
+    void registerComponent(QtpComp::CompInfo const& compInfo);
 
 private slots:
     void buttonGroupClicked(int id);

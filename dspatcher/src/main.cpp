@@ -17,32 +17,32 @@ int main(int argv, char* args[])
     // Load DSPatch plugins from "dspatchables" folder
     QDir dir(PLUGIN_DIR);
     QFileInfoList files = dir.entryInfoList();
-    foreach(QFileInfo const& fi, files)
+    foreach(QFileInfo const& file, files)
     {
-        if (fi.isFile())
+        if (file.isFile())
         {
-            QString path = fi.absoluteFilePath();
+            QString path = file.absoluteFilePath();
             DspPluginLoader loader(path.toStdString());
             if (loader.IsLoaded())
             {
-                std::map<std::string, DspParameter> params = loader.GetCreateParams();
-                DspComponent* x = loader.Create(params);
-
-                QtpComp::CompInfo comp;
                 pluginLoaders.push_back(loader);
-                comp.typeId = pluginLoaders.size() - 1;
-                comp.typeName = fi.baseName().mid(0, 3) == "lib" ? fi.baseName().mid(3) : fi.baseName();
-                for (int i = 0; i < x->GetInputCount(); ++i)
-                {
-                    comp.inPins.append(x->GetInputName(i).c_str());
-                }
-                for (int i = 0; i < x->GetOutputCount(); ++i)
-                {
-                    comp.outPins.append(x->GetOutputName(i).c_str());
-                }
-                mainWindow.registerComp(comp);
+                std::map<std::string, DspParameter> params = loader.GetCreateParams();
+                DspComponent* comp = loader.Create(params);
 
-                delete x;
+                QtpComp::CompInfo compInfo;
+                compInfo.typeId = pluginLoaders.size() - 1;
+                compInfo.typeName = file.baseName().mid(0, 3) == "lib" ? file.baseName().mid(3) : file.baseName();
+                for (int i = 0; i < comp->GetInputCount(); ++i)
+                {
+                    compInfo.inPins.append(comp->GetInputName(i).c_str());
+                }
+                for (int i = 0; i < comp->GetOutputCount(); ++i)
+                {
+                    compInfo.outPins.append(comp->GetOutputName(i).c_str());
+                }
+                mainWindow.registerComponent(compInfo);
+
+                delete comp;
             }
         }
     }

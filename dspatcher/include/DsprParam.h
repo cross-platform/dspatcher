@@ -1,5 +1,5 @@
-#ifndef QTPPARAM_H
-#define QTPPARAM_H
+#ifndef DSPRPARAM_H
+#define DSPRPARAM_H
 
 #include <QObject>
 #include <QtWidgets>
@@ -59,4 +59,4 @@ private:
     QLabel* _vlabel;
 };
 
-#endif  // QTPPARAM_H
+#endif  // DSPRPARAM_H

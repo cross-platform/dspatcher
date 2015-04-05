@@ -41,7 +41,7 @@ QtpDiag* QtpMain::diagram()
     return _diagram;
 }
 
-void QtpMain::registerComp(QtpComp::CompInfo const& compInfo)
+void QtpMain::registerComponent(QtpComp::CompInfo const& compInfo)
 {
     _compWidget->layout()->addWidget(createCellWidget(compInfo));
 
