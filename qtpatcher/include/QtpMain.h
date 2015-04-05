@@ -2,6 +2,7 @@
 #define QTPMAIN_H
 
 #include <QtpComp.h>
+
 #include <QMainWindow>
 
 class QtpDiag;

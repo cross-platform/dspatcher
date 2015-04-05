@@ -1,10 +1,10 @@
 #ifndef DSPRPARAM_H
 #define DSPRPARAM_H
 
+#include <DSPatch.h>
+
 #include <QObject>
 #include <QtWidgets>
-
-#include <DSPatch.h>
 
 class QtpWire;
 

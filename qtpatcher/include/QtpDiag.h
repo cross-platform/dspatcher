@@ -2,6 +2,7 @@
 #define QTPDIAG_H
 
 #include <QtpComp.h>
+
 #include <QGraphicsScene>
 
 class QtpPin;

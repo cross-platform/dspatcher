@@ -5,7 +5,6 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
-
 #include <QtWidgets>
 
 QtpComp::QtpComp(CompInfo const& compInfo, int id, QPointF const& position, QGraphicsItem* parent)

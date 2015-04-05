@@ -1,11 +1,11 @@
 #ifndef DSPRCONTROLLER_H
 #define DSPRCONTROLLER_H
 
-#include <QtpMain.h>
-#include <QObject>
-
 #include <DSPatch.h>
 #include <DsprParam.h>
+#include <QtpMain.h>
+
+#include <QObject>
 
 class DsprController : public QObject
 {

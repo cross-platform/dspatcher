@@ -1,10 +1,9 @@
+#include <DSPatch.h>
+#include <DsprController.h>
 #include <QtpMain.h>
 
 #include <QApplication>
 #include <QDir>
-
-#include <DSPatch.h>
-#include <DsprController.h>
 
 int main(int argv, char* args[])
 {
