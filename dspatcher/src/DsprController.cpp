@@ -28,8 +28,6 @@ DsprController::~DsprController()
 {
     _circuit.StopAutoTick();
 
-    _qtpComps.clear();
-
     typedef std::pair<int, DspComponent*> ComponentPair;
     foreach(ComponentPair comp, _components)
     {
@@ -48,6 +46,8 @@ DsprController::~DsprController()
     }
     _params.clear();
     
+    _qtpComps.clear();
+
     DSPatch::Finalize();
 }
 
@@ -90,8 +90,6 @@ void DsprController::compInserted(QtpComp* qtpComp)
     component->SetCallback(callback, this);
     _circuit.AddComponent(component);
 
-    _qtpComps[component] = qtpComp;
-
     _components[qtpComp->id()] = component;
 
     _params[qtpComp->id()] = std::vector<DsprParam*>();
@@ -109,13 +107,13 @@ void DsprController::compInserted(QtpComp* qtpComp)
 
         _params[qtpComp->id()].push_back(param);
     }
+
+    _qtpComps[component] = qtpComp;
 }
 
 void DsprController::compRemoved(uint compId)
 {
     _circuit.RemoveComponent(_components[compId]);
-
-    _qtpComps.erase(_components[compId]);
 
     delete _components[compId];
     _components.erase(compId);
@@ -125,6 +123,8 @@ void DsprController::compRemoved(uint compId)
         delete param;
     }
     _params.erase(compId);
+
+    _qtpComps.erase(_components[compId]);
 }
 
 void DsprController::wireConnected(uint fromComp, int fromPin, uint toComp, int toPin)
