@@ -28,7 +28,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <QApplication>
 #include <QDir>
-#include <QString>
 
 int main(int argv, char* args[])
 {
