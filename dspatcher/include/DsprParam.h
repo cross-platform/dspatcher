@@ -27,8 +27,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <DSPatch.h>
 
+#include <QCheckBox>
+#include <QComboBox>
+#include <QFileDialog>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMenu>
 #include <QObject>
-#include <QtWidgets>
+#include <QPushButton>
+#include <QSlider>
+#include <QWidget>
+#include <QWidgetAction>
 
 class QtpWire;
 

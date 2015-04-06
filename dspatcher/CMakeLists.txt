@@ -22,6 +22,13 @@ target_link_libraries(
 )
 
 if(WIN32)
+  add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/link/DSPatch.dll
+    ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>
+  )
+
   set(
     QT5_DEBUG_DLLS
     icudt51.dll icuin51.dll icuuc51.dll

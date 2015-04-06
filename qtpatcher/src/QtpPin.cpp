@@ -56,7 +56,7 @@ QtpPin::~QtpPin()
 
 std::string QtpPin::name()
 {
-    return _nameText->toPlainText().toStdString();
+    return _nameText->toPlainText().toUtf8().constData();
 }
 
 int QtpPin::index()

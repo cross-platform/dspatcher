@@ -352,11 +352,11 @@ void DsprParam::paramChanged(QString const& newString)
     }
     if (_param.Type() == DspParameter::String)
     {
-        emit stringUpdated(newString.toStdString());
+        emit stringUpdated(newString.toUtf8().constData());
     }
     else if (_param.Type() == DspParameter::FilePath)
     {
-        emit stringUpdated(newString.toStdString());
+        emit stringUpdated(newString.toUtf8().constData());
     }
 }
 

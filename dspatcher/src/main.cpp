@@ -28,6 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <QApplication>
 #include <QDir>
+#include <QString>
 
 int main(int argv, char* args[])
 {
@@ -42,10 +43,14 @@ int main(int argv, char* args[])
     QFileInfoList files = dir.entryInfoList();
     foreach(QFileInfo const& file, files)
     {
+        #ifdef _WIN32
+        if (file.isFile() && file.fileName().endsWith(".dll"))
+        #else
         if (file.isFile())
+        #endif
         {
             QString path = file.absoluteFilePath();
-            DspPluginLoader loader(path.toStdString());
+            DspPluginLoader loader(path.toUtf8().constData());
             if (loader.IsLoaded())
             {
                 pluginLoaders.push_back(loader);
