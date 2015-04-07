@@ -1,8 +1,8 @@
 /************************************************************************
-DSPatcher - Cross-Platform Graphical Patching Tool For DSPatch
+QtPatcher - Cross-Platform Circuit Drawing Library
 Copyright (c) 2014-2015 Marcus Tomlinson
 
-This file is part of DSPatcher.
+This file is part of QtPatcher.
 
 GNU Lesser General Public License Usage
 This file may be used under the terms of the GNU Lesser General Public
