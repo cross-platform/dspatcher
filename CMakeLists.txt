@@ -6,7 +6,7 @@ project(DSPatcher)
 
 if(WIN32)
   # N.B. Edit this path if your Windows Qt path differs
-  set(CMAKE_PREFIX_PATH C:/Qt/Qt5.2.1/5.2.1/msvc2010/)
+  set(CMAKE_PREFIX_PATH C:/Qt/Qt5.2.1/5.2.1/msvc2010)
 endif(WIN32)
 
 if(APPLE)
