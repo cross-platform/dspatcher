@@ -34,6 +34,12 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
     if (_param.Type() == DspParameter::Bool)
     {
         _checkbox = new QCheckBox(_contextMenu);
+
+        if (_param.GetBool())
+        {
+            _checkbox->setChecked(*_param.GetBool());
+        }
+
         _checkbox->setText(name.c_str());
         QWidgetAction* customAction = new QWidgetAction(_contextMenu);
         customAction->setDefaultWidget(_checkbox);
@@ -50,11 +56,23 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         {
             _slider->setRange(_param.GetIntRange()->first, _param.GetIntRange()->second);
         }
-        else
+        else if (_param.GetInt())
         {
             _slider->setRange(0, *_param.GetInt() * 2);
         }
-        _slider->setValue(*_param.GetInt());
+        else
+        {
+            _slider->setRange(0, 100);
+        }
+
+        if (_param.GetInt())
+        {
+            _slider->setValue(*_param.GetInt());
+        }
+        else
+        {
+            _slider->setValue(50);
+        }
 
         QLabel* label = new QLabel(intSlider);
         label->setText(name.c_str());
@@ -85,11 +103,23 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         {
             _slider->setRange(_param.GetFloatRange()->first * 100, _param.GetFloatRange()->second * 100);
         }
-        else
+        else if (_param.GetFloat())
         {
             _slider->setRange(0, *_param.GetFloat() * 200);
         }
-        _slider->setValue(*_param.GetFloat() * 100);
+        else
+        {
+            _slider->setRange(0, 100 * 100);
+        }
+
+        if (_param.GetFloat())
+        {
+            _slider->setValue(*_param.GetFloat() * 100);
+        }
+        else
+        {
+            _slider->setValue(50 * 100);
+        }
 
         QLabel* label = new QLabel(floatSlider);
         label->setText(name.c_str());
@@ -119,7 +149,11 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         label->setText(name.c_str());
 
         _textBox = new QLineEdit(textBox);
-        _textBox->setText(_param.GetString()->c_str());
+
+        if (_param.GetString())
+        {
+            _textBox->setText(_param.GetString()->c_str());
+        }
 
         QHBoxLayout* layout = new QHBoxLayout(textBox);
         layout->addWidget(label);
@@ -140,7 +174,11 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
 
         _textBox = new QLineEdit(fileBrowser);
         _textBox->setEnabled(false);
-        _textBox->setText(_param.GetString()->c_str());
+
+        if (_param.GetString())
+        {
+            _textBox->setText(_param.GetString()->c_str());
+        }
 
         QPushButton* btnBrowse = new QPushButton(fileBrowser);
         btnBrowse->setText("Browse");
@@ -165,9 +203,13 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         label->setText(name.c_str());
 
         _listBox = new QComboBox(listBox);
-        for (size_t i = 0; i < _param.GetList()->size(); ++i)
+
+        if (_param.GetList())
         {
-            _listBox->addItem((*_param.GetList())[i].c_str());
+            for (size_t i = 0; i < _param.GetList()->size(); ++i)
+            {
+                _listBox->addItem((*_param.GetList())[i].c_str());
+            }
         }
 
         QHBoxLayout* layout = new QHBoxLayout(listBox);
