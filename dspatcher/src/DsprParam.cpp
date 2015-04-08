@@ -399,7 +399,8 @@ void DsprParam::paramChanged(QString const& newString)
         _slider->setValue(value);
         if (value < _slider->minimum() || value > _slider->maximum())
         {
-            _textBox->setText(QString::number(_slider->sliderPosition()));
+            value = _slider->sliderPosition();
+            _textBox->setText(QString::number(value));
         }
         _settingParam = false;
 
@@ -414,7 +415,8 @@ void DsprParam::paramChanged(QString const& newString)
         _slider->setValue(value * 100);
         if (value * 100 < _slider->minimum() || value * 100 > _slider->maximum())
         {
-            _textBox->setText(QString::number((float)_slider->sliderPosition() / 100));
+            value = (float)_slider->sliderPosition() / 100;
+            _textBox->setText(QString::number(value));
         }
         _settingParam = false;
 
