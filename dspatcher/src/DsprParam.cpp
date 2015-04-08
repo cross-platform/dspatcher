@@ -28,6 +28,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
     : _settingParam(false)
     , _compId(compId)
     , _paramId(paramId)
+    , _name(name)
     , _param(param)
     , _contextMenu(contextMenu)
 {
@@ -62,7 +63,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         }
         else
         {
-            _slider->setRange(0, 100);
+            _slider->setRange(0, 10000);
         }
 
         if (_param.GetInt())
@@ -71,7 +72,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         }
         else
         {
-            _slider->setValue(50);
+            _slider->setValue(5000);
         }
 
         QLabel* label = new QLabel(intSlider);
@@ -79,7 +80,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
 
         _vlabel = new QLabel(intSlider);
         _vlabel->setNum(_slider->sliderPosition());
-        _vlabel->setFixedWidth(45);
+        _vlabel->setFixedWidth(55);
 
         connect(_slider, SIGNAL(valueChanged(int)), _vlabel, SLOT(setNum(int)));
 
@@ -109,7 +110,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         }
         else
         {
-            _slider->setRange(0, 100 * 100);
+            _slider->setRange(0, 10000 * 100);
         }
 
         if (_param.GetFloat())
@@ -118,15 +119,15 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         }
         else
         {
-            _slider->setValue(50 * 100);
+            _slider->setValue(5000 * 100);
         }
 
         QLabel* label = new QLabel(floatSlider);
         label->setText(name.c_str());
 
         _vlabel = new QLabel(floatSlider);
-        _vlabel->setNum(_slider->sliderPosition() / 100);
-        _vlabel->setFixedWidth(45);
+        _vlabel->setNum((float)_slider->sliderPosition() / 100);
+        _vlabel->setFixedWidth(55);
 
         connect(_slider, SIGNAL(valueChanged(int)), this, SLOT(updateFloatSlider(int)));
 
@@ -240,19 +241,24 @@ QWidgetAction* DsprParam::action()
     return _action;
 }
 
-DspParameter& DsprParam::param()
+DspParameter const& DsprParam::param()
 {
     return _param;
 }
 
-int DsprParam::compId()
+int DsprParam::compId() const
 {
     return _compId;
 }
 
-int DsprParam::paramId()
+int DsprParam::paramId() const
 {
     return _paramId;
+}
+
+std::string DsprParam::name() const
+{
+    return _name;
 }
 
 bool DsprParam::SetBool(bool const& value)
@@ -370,18 +376,22 @@ void DsprParam::paramChanged(int value)
     }
     if (_param.Type() == DspParameter::Bool)
     {
+        _param.SetBool(value != 0);
         emit boolUpdated(value != 0);
     }
     else if (_param.Type() == DspParameter::Int)
     {
+        _param.SetInt(value);
         emit intUpdated(value);
     }
     else if (_param.Type() == DspParameter::Float)
     {
+        _param.SetFloat((float)value / 100.f);
         emit floatUpdated((float)value / 100.f);
     }
     else if (_param.Type() == DspParameter::List)
     {
+        _param.SetInt(value);
         emit intUpdated(value);
     }
 }
@@ -394,10 +404,12 @@ void DsprParam::paramChanged(QString const& newString)
     }
     if (_param.Type() == DspParameter::String)
     {
+        _param.SetString(newString.toUtf8().constData());
         emit stringUpdated(newString.toUtf8().constData());
     }
     else if (_param.Type() == DspParameter::FilePath)
     {
+        _param.SetString(newString.toUtf8().constData());
         emit stringUpdated(newString.toUtf8().constData());
     }
 }

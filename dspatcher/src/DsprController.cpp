@@ -108,6 +108,27 @@ void DsprController::compInserted(QtpComp* qtpComp)
 {
     DspPluginLoader loader = _pluginLoaders[qtpComp->compInfo().typeId];
     std::map<std::string, DspParameter> params = loader.GetCreateParams();
+
+    // Show construction menu
+    std::vector<DsprParam*> dsprParams;
+    typedef std::map<std::string, DspParameter>::iterator it_type;
+    for (it_type iterator = params.begin(); iterator != params.end(); iterator++)
+    {
+        DsprParam* param = new DsprParam(qtpComp->id(), 0, iterator->first,
+                                         iterator->second, qtpComp->contextMenu());
+        qtpComp->contextMenu()->addAction(param->action());
+        dsprParams.push_back(param);
+    }
+    qtpComp->contextMenu()->exec(QCursor::pos());
+
+    // Construct component with values from menu
+    foreach (DsprParam* dsprParam, dsprParams)
+    {
+        params[dsprParam->name()] = dsprParam->param();
+        delete dsprParam;
+    }
+    qtpComp->contextMenu()->clear();
+
     DspComponent* component = loader.Create(params);
 
     component->SetCallback(callback, this);

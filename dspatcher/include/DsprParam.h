@@ -49,10 +49,11 @@ class DsprParam : public QObject
 public:
     DsprParam(int compId, int paramId, std::string const& name, DspParameter const& param, QMenu* contextMenu);
     QWidgetAction* action();
-    DspParameter& param();
+    DspParameter const& param();
 
-    int compId();
-    int paramId();
+    int compId() const;
+    int paramId() const;
+    std::string name() const;
 
     bool SetBool(bool const& value);
     bool SetInt(int const& value);
@@ -81,6 +82,7 @@ private:
     bool _settingParam;
     int _compId;
     int _paramId;
+    std::string _name;
     DspParameter _param;
     QMenu* _contextMenu;
     QWidgetAction* _action;
