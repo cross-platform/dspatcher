@@ -75,7 +75,7 @@ private slots:
     void paramChanged(QString const&);
     void paramChanged();
 
-    void updateFloatSlider(int value);
+    void updateSlider(int value);
     void browseForFile();
 
 private:
@@ -92,7 +92,6 @@ private:
     QLineEdit* _textBox;
     QComboBox* _listBox;
     QPushButton* _button;
-    QLabel* _vlabel;
 };
 
 #endif  // DSPRPARAM_H

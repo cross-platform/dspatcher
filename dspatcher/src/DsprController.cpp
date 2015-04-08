@@ -27,8 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <QtpDiag.h>
 
 DsprController::DsprController(QtpDiag* diagram, std::vector<DspPluginLoader> const& pluginLoaders)
-    : _settingParam(false)
-    , _pluginLoaders(pluginLoaders)
+    : _pluginLoaders(pluginLoaders)
 {
     _circuit.SetThreadCount(2);
     _circuit.StartAutoTick();
@@ -119,7 +118,10 @@ void DsprController::compInserted(QtpComp* qtpComp)
         qtpComp->contextMenu()->addAction(param->action());
         dsprParams.push_back(param);
     }
-    qtpComp->contextMenu()->exec(QCursor::pos());
+    if (params.size() > 0)
+    {
+        qtpComp->contextMenu()->exec(QCursor::pos());
+    }
 
     // Construct component with values from menu
     foreach (DsprParam* dsprParam, dsprParams)
@@ -130,6 +132,21 @@ void DsprController::compInserted(QtpComp* qtpComp)
     qtpComp->contextMenu()->clear();
 
     DspComponent* component = loader.Create(params);
+    if (component == NULL)
+    {
+        return;
+    }
+
+    qtpComp->removeInPins();
+    qtpComp->removeOutPins();
+    for (int i = 0; i < component->GetInputCount(); ++i)
+    {
+        qtpComp->addInPin(component->GetInputName(i).c_str());
+    }
+    for (int i = 0; i < component->GetOutputCount(); ++i)
+    {
+        qtpComp->addOutPin(component->GetOutputName(i).c_str());
+    }
 
     component->SetCallback(callback, this);
     _circuit.AddComponent(component);
@@ -183,42 +200,42 @@ void DsprController::wireDisconnected(int fromComp, int fromPin, int toComp, int
 
 void DsprController::boolUpdated(bool value)
 {
-    _settingParam = true;
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
+    _settingParams.insert(param->paramId());
     _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Bool, value));
-    _settingParam = false;
+    _settingParams.erase(param->paramId());
 }
 
 void DsprController::intUpdated(int value)
 {
-    _settingParam = true;
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
+    _settingParams.insert(param->paramId());
     _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Int, value));
-    _settingParam = false;
+    _settingParams.erase(param->paramId());
 }
 
 void DsprController::floatUpdated(float value)
 {
-    _settingParam = true;
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
+    _settingParams.insert(param->paramId());
     _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Float, value));
-    _settingParam = false;
+    _settingParams.erase(param->paramId());
 }
 
 void DsprController::stringUpdated(std::string const& value)
 {
-    _settingParam = true;
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
+    _settingParams.insert(param->paramId());
     _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::String, value));
-    _settingParam = false;
+    _settingParams.erase(param->paramId());
 }
 
 void DsprController::triggerUpdated()
 {
-    _settingParam = true;
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
+    _settingParams.insert(param->paramId());
     _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Trigger));
-    _settingParam = false;
+    _settingParams.erase(param->paramId());
 }
 
 void DsprController::_inputAdded(DspComponent* component, int index)
@@ -296,7 +313,8 @@ void DsprController::_parameterRemoved(DspComponent* component, int index)
 
 void DsprController::_parameterUpdated(DspComponent* component, int index)
 {
-    if (_settingParam)
+    // don't react if we are the one setting the parameter
+    if (_settingParams.find(index) != _settingParams.end())
     {
         return;
     }

@@ -78,22 +78,22 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         QLabel* label = new QLabel(intSlider);
         label->setText(name.c_str());
 
-        _vlabel = new QLabel(intSlider);
-        _vlabel->setNum(_slider->sliderPosition());
-        _vlabel->setFixedWidth(55);
+        _textBox = new QLineEdit(intSlider);
+        _textBox->setText(QString::number(_slider->sliderPosition()));
+        _textBox->setFixedWidth(65);
 
-        connect(_slider, SIGNAL(valueChanged(int)), _vlabel, SLOT(setNum(int)));
+        connect(_slider, SIGNAL(valueChanged(int)), this, SLOT(updateSlider(int)));
 
         QHBoxLayout* layout = new QHBoxLayout(intSlider);
         layout->addWidget(label);
         layout->addWidget(_slider);
-        layout->addWidget(_vlabel);
+        layout->addWidget(_textBox);
 
         QWidgetAction* intSliderAction = new QWidgetAction(_contextMenu);
         intSliderAction->setDefaultWidget(intSlider);
         _action = intSliderAction;
 
-        connect(_slider, SIGNAL(valueChanged(int)), this, SLOT(paramChanged(int)));
+        connect(_textBox, SIGNAL(textChanged(QString const&)), this, SLOT(paramChanged(QString const&)));
     }
     else if (_param.Type() == DspParameter::Float)
     {
@@ -125,22 +125,22 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         QLabel* label = new QLabel(floatSlider);
         label->setText(name.c_str());
 
-        _vlabel = new QLabel(floatSlider);
-        _vlabel->setNum((float)_slider->sliderPosition() / 100);
-        _vlabel->setFixedWidth(55);
+        _textBox = new QLineEdit(floatSlider);
+        _textBox->setText(QString::number((float)_slider->sliderPosition() / 100));
+        _textBox->setFixedWidth(65);
 
-        connect(_slider, SIGNAL(valueChanged(int)), this, SLOT(updateFloatSlider(int)));
+        connect(_slider, SIGNAL(valueChanged(int)), this, SLOT(updateSlider(int)));
 
         QHBoxLayout* layout = new QHBoxLayout(floatSlider);
         layout->addWidget(label);
         layout->addWidget(_slider);
-        layout->addWidget(_vlabel);
+        layout->addWidget(_textBox);
 
         QWidgetAction* intSliderAction = new QWidgetAction(_contextMenu);
         intSliderAction->setDefaultWidget(floatSlider);
         _action = intSliderAction;
 
-        connect(_slider, SIGNAL(valueChanged(int)), this, SLOT(paramChanged(int)));
+        connect(_textBox, SIGNAL(textChanged(QString const&)), this, SLOT(paramChanged(QString const&)));
     }
     else if (_param.Type() == DspParameter::String)
     {
@@ -174,7 +174,6 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         label->setText(name.c_str());
 
         _textBox = new QLineEdit(fileBrowser);
-        _textBox->setEnabled(false);
 
         if (_param.GetString())
         {
@@ -379,16 +378,6 @@ void DsprParam::paramChanged(int value)
         _param.SetBool(value != 0);
         emit boolUpdated(value != 0);
     }
-    else if (_param.Type() == DspParameter::Int)
-    {
-        _param.SetInt(value);
-        emit intUpdated(value);
-    }
-    else if (_param.Type() == DspParameter::Float)
-    {
-        _param.SetFloat((float)value / 100.f);
-        emit floatUpdated((float)value / 100.f);
-    }
     else if (_param.Type() == DspParameter::List)
     {
         _param.SetInt(value);
@@ -402,7 +391,37 @@ void DsprParam::paramChanged(QString const& newString)
     {
         return;
     }
-    if (_param.Type() == DspParameter::String)
+    if (_param.Type() == DspParameter::Int)
+    {
+        int value = newString.toInt();
+
+        _settingParam = true;
+        _slider->setValue(value);
+        if (value < _slider->minimum() || value > _slider->maximum())
+        {
+            _textBox->setText(QString::number(_slider->sliderPosition()));
+        }
+        _settingParam = false;
+
+        _param.SetInt(value);
+        emit intUpdated(value);
+    }
+    else if (_param.Type() == DspParameter::Float)
+    {
+        float value = newString.toFloat();
+
+        _settingParam = true;
+        _slider->setValue(value * 100);
+        if (value * 100 < _slider->minimum() || value * 100 > _slider->maximum())
+        {
+            _textBox->setText(QString::number((float)_slider->sliderPosition() / 100));
+        }
+        _settingParam = false;
+
+        _param.SetFloat(value);
+        emit floatUpdated(value);
+    }
+    else if (_param.Type() == DspParameter::String)
     {
         _param.SetString(newString.toUtf8().constData());
         emit stringUpdated(newString.toUtf8().constData());
@@ -426,9 +445,16 @@ void DsprParam::paramChanged()
     }
 }
 
-void DsprParam::updateFloatSlider(int value)
+void DsprParam::updateSlider(int value)
 {
-    _vlabel->setNum((float)value / 100);
+    if (_param.Type() == DspParameter::Int)
+    {
+        _textBox->setText(QString::number(value));
+    }
+    else if (_param.Type() == DspParameter::Float)
+    {
+        _textBox->setText(QString::number((float)value / 100));
+    }
 }
 
 void DsprParam::browseForFile()

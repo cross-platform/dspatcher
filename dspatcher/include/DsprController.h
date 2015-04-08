@@ -31,6 +31,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <QObject>
 
+#include <set>
+
 class DsprController : public QObject
 {
     Q_OBJECT
@@ -70,7 +72,7 @@ private slots:
     void _parameterUpdated(DspComponent* component, int index);
 
 private:
-    bool _settingParam;
+    std::set<int> _settingParams;
     std::vector<DspPluginLoader> _pluginLoaders;
 
     std::map<DspComponent const*, QtpComp*> _qtpComps;

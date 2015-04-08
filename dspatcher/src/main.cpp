@@ -59,16 +59,20 @@ int main(int argv, char* args[])
                 QtpComp::CompInfo compInfo;
                 compInfo.typeId = pluginLoaders.size() - 1;
                 compInfo.typeName = file.baseName().mid(0, 3) == "lib" ? file.baseName().mid(3) : file.baseName();
-                for (int i = 0; i < comp->GetInputCount(); ++i)
-                {
-                    compInfo.inPins.append(comp->GetInputName(i).c_str());
-                }
-                for (int i = 0; i < comp->GetOutputCount(); ++i)
-                {
-                    compInfo.outPins.append(comp->GetOutputName(i).c_str());
-                }
-                mainWindow.registerComponent(compInfo);
 
+                if (comp)
+                {
+                    for (int i = 0; i < comp->GetInputCount(); ++i)
+                    {
+                        compInfo.inPins.append(comp->GetInputName(i).c_str());
+                    }
+                    for (int i = 0; i < comp->GetOutputCount(); ++i)
+                    {
+                        compInfo.outPins.append(comp->GetOutputName(i).c_str());
+                    }
+                }
+
+                mainWindow.registerComponent(compInfo);
                 delete comp;
             }
         }
