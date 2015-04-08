@@ -202,7 +202,10 @@ void DsprController::boolUpdated(bool value)
 {
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
     _settingParams.insert(param->paramId());
-    _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Bool, value));
+    if (!_components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Bool, value)))
+    {
+        param->SetBool(*(_components[param->compId()]->GetParameter(param->paramId())->GetBool()));
+    }
     _settingParams.erase(param->paramId());
 }
 
@@ -210,7 +213,10 @@ void DsprController::intUpdated(int value)
 {
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
     _settingParams.insert(param->paramId());
-    _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Int, value));
+    if (!_components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Int, value)))
+    {
+        param->SetInt(*(_components[param->compId()]->GetParameter(param->paramId())->GetInt()));
+    }
     _settingParams.erase(param->paramId());
 }
 
@@ -218,7 +224,10 @@ void DsprController::floatUpdated(float value)
 {
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
     _settingParams.insert(param->paramId());
-    _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Float, value));
+    if (!_components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Float, value)))
+    {
+        param->SetFloat(*(_components[param->compId()]->GetParameter(param->paramId())->GetFloat()));
+    }
     _settingParams.erase(param->paramId());
 }
 
@@ -226,7 +235,10 @@ void DsprController::stringUpdated(std::string const& value)
 {
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
     _settingParams.insert(param->paramId());
-    _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::String, value));
+    if (!_components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::String, value)))
+    {
+        param->SetString(*(_components[param->compId()]->GetParameter(param->paramId())->GetString()));
+    }
     _settingParams.erase(param->paramId());
 }
 

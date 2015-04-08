@@ -46,7 +46,7 @@ DsprParam::DsprParam(int compId, int paramId, std::string const& name, DspParame
         customAction->setDefaultWidget(_checkbox);
         _action = customAction;
 
-        connect(_checkbox, SIGNAL(stateChanged(int)), this, SLOT(paramChanged(int)));
+        connect(_checkbox, SIGNAL(toggled(bool)), this, SLOT(paramChanged(bool)));
     }
     else if (_param.Type() == DspParameter::Int)
     {
@@ -367,7 +367,7 @@ bool DsprParam::SetList(std::vector<std::string> const& value)
     return result;
 }
 
-void DsprParam::paramChanged(int value)
+void DsprParam::paramChanged(bool value)
 {
     if (_settingParam)
     {
@@ -378,7 +378,15 @@ void DsprParam::paramChanged(int value)
         _param.SetBool(value != 0);
         emit boolUpdated(value != 0);
     }
-    else if (_param.Type() == DspParameter::List)
+}
+
+void DsprParam::paramChanged(int value)
+{
+    if (_settingParam)
+    {
+        return;
+    }
+    if (_param.Type() == DspParameter::List)
     {
         _param.SetInt(value);
         emit intUpdated(value);

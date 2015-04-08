@@ -71,6 +71,7 @@ signals:
     void triggerUpdated();
 
 private slots:
+    void paramChanged(bool value);
     void paramChanged(int value);
     void paramChanged(QString const&);
     void paramChanged();
