@@ -24,18 +24,26 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <DsprController.h>
 
+#include <DSPatch.h>
 #include <QtpDiag.h>
 
-DsprController::DsprController(QtpDiag* diagram, std::vector<DspPluginLoader> const& pluginLoaders)
-    : _pluginLoaders(pluginLoaders)
+#include <QDir>
+
+DsprController::DsprController(QtpMain& mainWindow)
+    : _mainWindow(mainWindow)
 {
+    _fileWatcher.addPath(PLUGIN_DIR);
+    connect(&_fileWatcher, SIGNAL(directoryChanged(QString const&)), this, SLOT(_loadPlugins()));
+
+    _loadPlugins();
+
     _circuit.SetThreadCount(2);
     _circuit.StartAutoTick();
 
-    connect(diagram, &QtpDiag::compInserted, this, &DsprController::compInserted);
-    connect(diagram, &QtpDiag::compRemoved, this, &DsprController::compRemoved);
-    connect(diagram, &QtpDiag::wireConnected, this, &DsprController::wireConnected);
-    connect(diagram, &QtpDiag::wireDisconnected, this, &DsprController::wireDisconnected);
+    connect(_mainWindow.diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted);
+    connect(_mainWindow.diagram(), &QtpDiag::compRemoved, this, &DsprController::compRemoved);
+    connect(_mainWindow.diagram(), &QtpDiag::wireConnected, this, &DsprController::wireConnected);
+    connect(_mainWindow.diagram(), &QtpDiag::wireDisconnected, this, &DsprController::wireDisconnected);
 
     connect(this, &DsprController::inputAdded, this, &DsprController::_inputAdded);
     connect(this, &DsprController::inputRemoved, this, &DsprController::_inputRemoved);
@@ -363,5 +371,51 @@ void DsprController::_parameterUpdated(DspComponent* component, int index)
             break;
         case DspParameter::Trigger:
             break;
+    }
+}
+
+void DsprController::_loadPlugins()
+{
+    _mainWindow.unregisterComponents();
+
+    // Load DSPatch plugins from "dspatchables" folder
+    QDir dir(PLUGIN_DIR);
+    QFileInfoList files = dir.entryInfoList();
+    foreach(QFileInfo const& file, files)
+    {
+        #ifdef _WIN32
+        if (file.isFile() && file.fileName().endsWith(".dll"))
+        #else
+        if (file.isFile())
+        #endif
+        {
+            QString path = file.absoluteFilePath();
+            DspPluginLoader loader(path.toUtf8().constData());
+            if (loader.IsLoaded())
+            {
+                _pluginLoaders.push_back(loader);
+                std::map<std::string, DspParameter> params = loader.GetCreateParams();
+                DspComponent* comp = loader.Create(params);
+
+                QtpComp::CompInfo compInfo;
+                compInfo.typeId = _pluginLoaders.size() - 1;
+                compInfo.typeName = file.baseName().mid(0, 3) == "lib" ? file.baseName().mid(3) : file.baseName();
+
+                if (comp)
+                {
+                    for (int i = 0; i < comp->GetInputCount(); ++i)
+                    {
+                        compInfo.inPins.append(comp->GetInputName(i).c_str());
+                    }
+                    for (int i = 0; i < comp->GetOutputCount(); ++i)
+                    {
+                        compInfo.outPins.append(comp->GetOutputName(i).c_str());
+                    }
+                }
+
+                _mainWindow.registerComponent(compInfo);
+                delete comp;
+            }
+        }
     }
 }

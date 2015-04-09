@@ -46,6 +46,7 @@ public:
     QtpDiag* diagram();
 
     void registerComponent(QtpComp::CompInfo const& compInfo);
+    void unregisterComponents();
 
 private slots:
     void buttonGroupClicked(int id);

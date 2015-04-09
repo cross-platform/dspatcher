@@ -79,6 +79,19 @@ void QtpMain::registerComponent(QtpComp::CompInfo const& compInfo)
     centralWidget()->layout()->addWidget(_view);
 }
 
+void QtpMain::unregisterComponents()
+{
+    _buttonGroup->deleteLater();
+    _compWidget->deleteLater();
+    _toolBox->deleteLater();
+
+    createToolBox();
+
+    centralWidget()->layout()->removeWidget(_view);
+    centralWidget()->layout()->addWidget(_toolBox);
+    centralWidget()->layout()->addWidget(_view);
+}
+
 void QtpMain::buttonGroupClicked(int id)
 {
     QList<QAbstractButton*> buttons = _buttonGroup->buttons();

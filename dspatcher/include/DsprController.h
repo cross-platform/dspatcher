@@ -29,6 +29,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <DsprParam.h>
 #include <QtpMain.h>
 
+#include <QFileSystemWatcher>
 #include <QObject>
 
 #include <set>
@@ -38,7 +39,7 @@ class DsprController : public QObject
     Q_OBJECT
 
 public:
-    DsprController(QtpDiag* diagram, std::vector<DspPluginLoader> const& pluginLoaders);
+    DsprController(QtpMain& mainWindow);
     ~DsprController();
 
 signals:
@@ -63,6 +64,8 @@ public slots:
     void triggerUpdated();
 
 private slots:
+    void _loadPlugins();
+
     void _inputAdded(DspComponent* component, int index);
     void _inputRemoved(DspComponent* component, int index);
     void _outputAdded(DspComponent* component, int index);
@@ -72,6 +75,8 @@ private slots:
     void _parameterUpdated(DspComponent* component, int index);
 
 private:
+    QFileSystemWatcher _fileWatcher;
+    QtpMain& _mainWindow;
     std::set<int> _settingParams;
     std::vector<DspPluginLoader> _pluginLoaders;
 
