@@ -21,6 +21,10 @@ target_link_libraries(
   QtPatcher
 )
 
+if(APPLE)
+  execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/update_install_names.sh)
+endif(APPLE)
+
 if(WIN32)
   add_custom_command(
     TARGET ${PROJECT_NAME} POST_BUILD

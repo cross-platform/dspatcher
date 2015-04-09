@@ -71,9 +71,21 @@ void QtpMain::registerComponent(QtpComp::CompInfo const& compInfo)
 
     _toolBox->deleteLater();
     _toolBox = new QToolBox;
-    _toolBox->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
-    _toolBox->setMinimumWidth(_compWidget->sizeHint().width() + 15);
+    _toolBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Ignored);
     _toolBox->addItem(_compWidget, tr("Components"));
+
+    centralWidget()->layout()->removeWidget(_view);
+    centralWidget()->layout()->addWidget(_toolBox);
+    centralWidget()->layout()->addWidget(_view);
+}
+
+void QtpMain::unregisterComponents()
+{
+    _buttonGroup->deleteLater();
+    _compWidget->deleteLater();
+    _toolBox->deleteLater();
+
+    createToolBox();
 
     centralWidget()->layout()->removeWidget(_view);
     centralWidget()->layout()->addWidget(_toolBox);
@@ -128,8 +140,7 @@ void QtpMain::createToolBox()
     _compWidget->setLayout(compLayout);
 
     _toolBox = new QToolBox;
-    _toolBox->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
-    _toolBox->setMinimumWidth(150);
+    _toolBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Ignored);
     _toolBox->addItem(_compWidget, tr("Components"));
 }
 

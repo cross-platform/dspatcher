@@ -49,10 +49,11 @@ class DsprParam : public QObject
 public:
     DsprParam(int compId, int paramId, std::string const& name, DspParameter const& param, QMenu* contextMenu);
     QWidgetAction* action();
-    DspParameter& param();
+    DspParameter const& param();
 
-    int compId();
-    int paramId();
+    int compId() const;
+    int paramId() const;
+    std::string name() const;
 
     bool SetBool(bool const& value);
     bool SetInt(int const& value);
@@ -70,17 +71,19 @@ signals:
     void triggerUpdated();
 
 private slots:
+    void paramChanged(bool value);
     void paramChanged(int value);
     void paramChanged(QString const&);
     void paramChanged();
 
-    void updateFloatSlider(int value);
+    void updateSlider(int value);
     void browseForFile();
 
 private:
     bool _settingParam;
     int _compId;
     int _paramId;
+    std::string _name;
     DspParameter _param;
     QMenu* _contextMenu;
     QWidgetAction* _action;
@@ -90,7 +93,6 @@ private:
     QLineEdit* _textBox;
     QComboBox* _listBox;
     QPushButton* _button;
-    QLabel* _vlabel;
 };
 
 #endif  // DSPRPARAM_H

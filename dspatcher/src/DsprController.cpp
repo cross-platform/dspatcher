@@ -24,19 +24,26 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <DsprController.h>
 
+#include <DSPatch.h>
 #include <QtpDiag.h>
 
-DsprController::DsprController(QtpDiag* diagram, std::vector<DspPluginLoader> const& pluginLoaders)
-    : _settingParam(false)
-    , _pluginLoaders(pluginLoaders)
+#include <QDir>
+
+DsprController::DsprController(QtpMain& mainWindow)
+    : _mainWindow(mainWindow)
 {
+    _fileWatcher.addPath(PLUGIN_DIR);
+    ///!connect(&_fileWatcher, SIGNAL(directoryChanged(QString const&)), this, SLOT(_loadPlugins()));
+
+    _loadPlugins();
+
     _circuit.SetThreadCount(2);
     _circuit.StartAutoTick();
 
-    connect(diagram, &QtpDiag::compInserted, this, &DsprController::compInserted);
-    connect(diagram, &QtpDiag::compRemoved, this, &DsprController::compRemoved);
-    connect(diagram, &QtpDiag::wireConnected, this, &DsprController::wireConnected);
-    connect(diagram, &QtpDiag::wireDisconnected, this, &DsprController::wireDisconnected);
+    connect(_mainWindow.diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted);
+    connect(_mainWindow.diagram(), &QtpDiag::compRemoved, this, &DsprController::compRemoved);
+    connect(_mainWindow.diagram(), &QtpDiag::wireConnected, this, &DsprController::wireConnected);
+    connect(_mainWindow.diagram(), &QtpDiag::wireDisconnected, this, &DsprController::wireDisconnected);
 
     connect(this, &DsprController::inputAdded, this, &DsprController::_inputAdded);
     connect(this, &DsprController::inputRemoved, this, &DsprController::_inputRemoved);
@@ -108,7 +115,46 @@ void DsprController::compInserted(QtpComp* qtpComp)
 {
     DspPluginLoader loader = _pluginLoaders[qtpComp->compInfo().typeId];
     std::map<std::string, DspParameter> params = loader.GetCreateParams();
+
+    // Show construction menu
+    std::vector<DsprParam*> dsprParams;
+    typedef std::map<std::string, DspParameter>::iterator it_type;
+    for (it_type iterator = params.begin(); iterator != params.end(); iterator++)
+    {
+        DsprParam* param = new DsprParam(qtpComp->id(), 0, iterator->first,
+                                         iterator->second, qtpComp->contextMenu());
+        qtpComp->contextMenu()->addAction(param->action());
+        dsprParams.push_back(param);
+    }
+    if (params.size() > 0)
+    {
+        qtpComp->contextMenu()->exec(QCursor::pos());
+    }
+
+    // Construct component with values from menu
+    foreach (DsprParam* dsprParam, dsprParams)
+    {
+        params[dsprParam->name()] = dsprParam->param();
+        delete dsprParam;
+    }
+    qtpComp->contextMenu()->clear();
+
     DspComponent* component = loader.Create(params);
+    if (component == NULL)
+    {
+        return;
+    }
+
+    qtpComp->removeInPins();
+    qtpComp->removeOutPins();
+    for (int i = 0; i < component->GetInputCount(); ++i)
+    {
+        qtpComp->addInPin(component->GetInputName(i).c_str());
+    }
+    for (int i = 0; i < component->GetOutputCount(); ++i)
+    {
+        qtpComp->addOutPin(component->GetOutputName(i).c_str());
+    }
 
     component->SetCallback(callback, this);
     _circuit.AddComponent(component);
@@ -162,42 +208,54 @@ void DsprController::wireDisconnected(int fromComp, int fromPin, int toComp, int
 
 void DsprController::boolUpdated(bool value)
 {
-    _settingParam = true;
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
-    _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Bool, value));
-    _settingParam = false;
+    _settingParams.insert(param->paramId());
+    if (!_components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Bool, value)))
+    {
+        param->SetBool(*(_components[param->compId()]->GetParameter(param->paramId())->GetBool()));
+    }
+    _settingParams.erase(param->paramId());
 }
 
 void DsprController::intUpdated(int value)
 {
-    _settingParam = true;
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
-    _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Int, value));
-    _settingParam = false;
+    _settingParams.insert(param->paramId());
+    if (!_components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Int, value)))
+    {
+        param->SetInt(*(_components[param->compId()]->GetParameter(param->paramId())->GetInt()));
+    }
+    _settingParams.erase(param->paramId());
 }
 
 void DsprController::floatUpdated(float value)
 {
-    _settingParam = true;
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
-    _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Float, value));
-    _settingParam = false;
+    _settingParams.insert(param->paramId());
+    if (!_components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Float, value)))
+    {
+        param->SetFloat(*(_components[param->compId()]->GetParameter(param->paramId())->GetFloat()));
+    }
+    _settingParams.erase(param->paramId());
 }
 
 void DsprController::stringUpdated(std::string const& value)
 {
-    _settingParam = true;
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
-    _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::String, value));
-    _settingParam = false;
+    _settingParams.insert(param->paramId());
+    if (!_components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::String, value)))
+    {
+        param->SetString(*(_components[param->compId()]->GetParameter(param->paramId())->GetString()));
+    }
+    _settingParams.erase(param->paramId());
 }
 
 void DsprController::triggerUpdated()
 {
-    _settingParam = true;
     DsprParam* param = dynamic_cast<DsprParam*>(sender());
+    _settingParams.insert(param->paramId());
     _components[param->compId()]->SetParameter(param->paramId(), DspParameter(DspParameter::Trigger));
-    _settingParam = false;
+    _settingParams.erase(param->paramId());
 }
 
 void DsprController::_inputAdded(DspComponent* component, int index)
@@ -275,7 +333,8 @@ void DsprController::_parameterRemoved(DspComponent* component, int index)
 
 void DsprController::_parameterUpdated(DspComponent* component, int index)
 {
-    if (_settingParam)
+    // don't react if we are the one setting the parameter
+    if (_settingParams.find(index) != _settingParams.end())
     {
         return;
     }
@@ -312,5 +371,51 @@ void DsprController::_parameterUpdated(DspComponent* component, int index)
             break;
         case DspParameter::Trigger:
             break;
+    }
+}
+
+void DsprController::_loadPlugins()
+{
+    _mainWindow.unregisterComponents();
+
+    // Load DSPatch plugins from "dspatchables" folder
+    QDir dir(PLUGIN_DIR);
+    QFileInfoList files = dir.entryInfoList();
+    foreach(QFileInfo const& file, files)
+    {
+        #ifdef _WIN32
+        if (file.isFile() && file.fileName().endsWith(".dll"))
+        #else
+        if (file.isFile())
+        #endif
+        {
+            QString path = file.absoluteFilePath();
+            DspPluginLoader loader(path.toUtf8().constData());
+            if (loader.IsLoaded())
+            {
+                _pluginLoaders.push_back(loader);
+                std::map<std::string, DspParameter> params = loader.GetCreateParams();
+                DspComponent* comp = loader.Create(params);
+
+                QtpComp::CompInfo compInfo;
+                compInfo.typeId = _pluginLoaders.size() - 1;
+                compInfo.typeName = file.baseName().mid(0, 3) == "lib" ? file.baseName().mid(3) : file.baseName();
+
+                if (comp)
+                {
+                    for (int i = 0; i < comp->GetInputCount(); ++i)
+                    {
+                        compInfo.inPins.append(comp->GetInputName(i).c_str());
+                    }
+                    for (int i = 0; i < comp->GetOutputCount(); ++i)
+                    {
+                        compInfo.outPins.append(comp->GetOutputName(i).c_str());
+                    }
+                }
+
+                _mainWindow.registerComponent(compInfo);
+                delete comp;
+            }
+        }
     }
 }
