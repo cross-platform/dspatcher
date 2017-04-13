@@ -8,6 +8,6 @@ DSPatch - An object-oriented, flow-based programming library written in C++.
 QtPatcher - A generic circuit drawing library using the Qt framework.
 DSPatcher - A graphical tool for loading and routing DSPatch plugins.
 
-DSPatch (http://sourceforge.net/p/dspatch) is a powerful C++ flow-based programming library that allows you to create and route high performance data processing circuits.
+DSPatch (https://github.com/MarcusTomlinson/DSPatch) is a powerful C++ flow-based programming library that allows you to create and route high performance data processing circuits.
 
-DSPatchables (http://launchpad.net/dspatchables ) is a repository for DSPatch component plugins.
+DSPatchables (https://github.com/MarcusTomlinson/DSPatchables) is a repository for DSPatch component plugins.
