@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <DSPatch.h>
 #include <QtpDiag.h>
 
-#include <QDir>
+#include <QDirIterator>
 
 DsprController::DsprController(QtpMain& mainWindow)
     : _mainWindow(mainWindow)
@@ -378,9 +378,13 @@ void DsprController::_loadPlugins()
 {
     _mainWindow.unregisterComponents();
 
-    // Load DSPatch plugins from "dspatchables" folder
-    QDir dir(PLUGIN_DIR);
-    QFileInfoList files = dir.entryInfoList();
+    // Load DSPatch plugins from "DSPatchables" folder
+    QFileInfoList files;
+
+    QDirIterator it(PLUGIN_DIR, QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext())
+        files += QFileInfo(it.next());
+
     foreach(QFileInfo const& file, files)
     {
         #ifdef _WIN32

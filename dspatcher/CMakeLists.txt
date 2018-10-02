@@ -1,13 +1,13 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/qtpatcher/include
+    ${CMAKE_SOURCE_DIR}/DSPatchables/DSPatch/include
+    ${CMAKE_SOURCE_DIR}/QtPatcher/include
 )
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/link)
 
 file(GLOB srcs src/*.cpp)
 file(GLOB hdrs include/*.h)
 
-add_definitions(-DPLUGIN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/dspatchables")
+add_definitions(-DPLUGIN_DIR="${CMAKE_BINARY_DIR}/DSPatchables/DSPatchables")
 
 add_executable(
   ${PROJECT_NAME}
