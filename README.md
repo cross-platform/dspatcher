@@ -1,13 +1,14 @@
 # DSPatcher
-Cross-platform graphical patching tool for DSPatch
+Cross-Platform Graphical Test Tool for DSPatch
 
-DSPatcher is a cross-platform graphical patching tool for creating complex DSPatch circuits via a simple, intuitive user interface.
+DSPatcher is a cross-platform graphical tool for testing DSPatch components.
 
-The DSPatcher project is made up of 3 parts:
-* DSPatch - An object-oriented, flow-based programming library written in C++.
-* QtPatcher - A generic circuit drawing library using the Qt framework.
-* DSPatcher - A graphical tool for loading and routing DSPatch plugins.
+The DSPatcher project is made up of 2 parts:
+* QtPatcher - A cross-platform circuit drawing library.
+* DSPatcher - A graphical tool for building DSPatch circuits.
 
-DSPatch (https://github.com/MarcusTomlinson/DSPatch) is a powerful C++ flow-based programming library that allows you to create and route high performance data processing circuits.
+*Related projects:*
 
-DSPatchables (https://github.com/MarcusTomlinson/DSPatchables) is a repository for DSPatch component plugins.
+DSPatch (https://github.com/MarcusTomlinson/DSPatch) is a powerful C++ flow-based programming framework.
+
+DSPatchables (https://github.com/MarcusTomlinson/DSPatchables) is a DSPatch component repository.
