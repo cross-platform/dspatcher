@@ -94,9 +94,9 @@ void DsprController::compRemoved( int compId )
 {
     _circuit->RemoveComponent( _components[compId] );
 
-    _components.erase( compId );
-
     _qtpComps.erase( _components[compId] );
+
+    _components.erase( compId );
 }
 
 void DsprController::wireConnected( int fromComp, int fromPin, int toComp, int toPin )

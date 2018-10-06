@@ -7,7 +7,7 @@ include_directories(
 file(GLOB srcs src/*.cpp)
 file(GLOB hdrs include/*.h)
 
-add_definitions(-DPLUGIN_DIR="${CMAKE_BINARY_DIR}/DSPatchables/DSPatchables")
+add_definitions(-DPLUGIN_DIR="${CMAKE_BINARY_DIR}/DSPatchables/Components")
 
 add_executable(
   ${PROJECT_NAME}

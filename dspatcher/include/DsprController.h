@@ -69,7 +69,7 @@ private:
     std::set<int> _settingParams;
     std::vector<Plugin::SPtr> _pluginLoaders;
 
-    std::map<Component::SCPtr, QtpComp*> _qtpComps;
+    std::map<Component::SPtr, QtpComp*> _qtpComps;
     std::map<int, Component::SPtr> _components;
     Circuit::SPtr _circuit = std::make_shared<Circuit>();
 };
