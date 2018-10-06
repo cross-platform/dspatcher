@@ -36,7 +36,7 @@ DsprController::DsprController( QtpMain& mainWindow )
     : _mainWindow( mainWindow )
 {
     _fileWatcher.addPath( PLUGIN_DIR );
-    ///!connect(&_fileWatcher, SIGNAL(directoryChanged(QString const&)), this, SLOT(_loadPlugins()));
+    connect( &_fileWatcher, SIGNAL( directoryChanged( QString const& ) ), this, SLOT( _loadPlugins() ) );
 
     _loadPlugins();
 
