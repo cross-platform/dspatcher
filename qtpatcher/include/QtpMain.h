@@ -1,6 +1,6 @@
 /************************************************************************
 QtPatcher - Cross-Platform Circuit Drawing Library
-Copyright (c) 2014-2015 Marcus Tomlinson
+Copyright (c) 2014-2018 Marcus Tomlinson
 
 This file is part of QtPatcher.
 
@@ -45,12 +45,12 @@ public:
 
     QtpDiag* diagram();
 
-    void registerComponent(QtpComp::CompInfo const& compInfo);
+    void registerComponent( QtpComp::CompInfo const& compInfo );
     void unregisterComponents();
 
 private slots:
-    void buttonGroupClicked(int id);
-    void compInserted(QtpComp* comp);
+    void buttonGroupClicked( int id );
+    void compInserted( QtpComp* comp );
     void about();
 
 private:
@@ -58,9 +58,9 @@ private:
     void createActions();
     void createMenus();
 
-    QWidget* createCellWidget(QtpComp::CompInfo compInfo);
+    QWidget* createCellWidget( QtpComp::CompInfo compInfo );
 
-    bool eventFilter(QObject* object, QEvent* event);
+    bool eventFilter( QObject* object, QEvent* event );
 
     QtpDiag* _diagram;
     QGraphicsView* _view;

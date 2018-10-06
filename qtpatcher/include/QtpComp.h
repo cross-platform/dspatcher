@@ -1,6 +1,6 @@
 /************************************************************************
 QtPatcher - Cross-Platform Circuit Drawing Library
-Copyright (c) 2014-2015 Marcus Tomlinson
+Copyright (c) 2014-2018 Marcus Tomlinson
 
 This file is part of QtPatcher.
 
@@ -46,16 +46,16 @@ public:
         QList<QString> outPins;
     };
 
-    QtpComp(CompInfo const& compInfo, int id, QPointF const& position, QGraphicsItem* parent = 0);
+    QtpComp( CompInfo const& compInfo, int id, QPointF const& position, QGraphicsItem* parent = 0 );
     ~QtpComp();
 
     int id();
     int type() const;
 
-    void setColor(const QColor& color);
+    void setColor( const QColor& color );
 
-    void addInPin(QString pinName);
-    void addOutPin(QString pinName);
+    void addInPin( QString pinName );
+    void addOutPin( QString pinName );
     void removeInPin();
     void removeOutPin();
     void removeInPins();
@@ -67,10 +67,10 @@ public:
     CompInfo compInfo() const;
 
 protected:
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event);
+    void contextMenuEvent( QGraphicsSceneContextMenuEvent* event );
 
 private:
-    void setName(QString name);
+    void setName( QString name );
     void updatePolygon();
 
 private:

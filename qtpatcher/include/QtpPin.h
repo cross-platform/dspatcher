@@ -1,6 +1,6 @@
 /************************************************************************
 QtPatcher - Cross-Platform Circuit Drawing Library
-Copyright (c) 2014-2015 Marcus Tomlinson
+Copyright (c) 2014-2018 Marcus Tomlinson
 
 This file is part of QtPatcher.
 
@@ -44,15 +44,15 @@ public:
         OutPin
     };
 
-    QtpPin(PinType pinType, QString pinName, int pinIndex, QGraphicsItem* parent = 0);
+    QtpPin( PinType pinType, QString pinName, int pinIndex, QGraphicsItem* parent = 0 );
     ~QtpPin();
 
     std::string name();
     int index();
     int type() const;
 
-    bool addWire(QtpWire* newWire);
-    void removeWire(QtpWire* wire);
+    bool addWire( QtpWire* newWire );
+    void removeWire( QtpWire* wire );
     void removeWires();
 
     QList<QtpWire*> wires();
@@ -60,13 +60,13 @@ public:
     PinType pinType() const;
     QPolygonF polygon() const;
 
-    void hover(bool hover);
+    void hover( bool hover );
 
 protected:
-    QVariant itemChange(GraphicsItemChange change, const QVariant& value);
+    QVariant itemChange( GraphicsItemChange change, const QVariant& value );
 
 private:
-    void setName(QString name);
+    void setName( QString name );
 
 private:
     PinType _pinType;

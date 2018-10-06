@@ -1,6 +1,6 @@
 /************************************************************************
 QtPatcher - Cross-Platform Circuit Drawing Library
-Copyright (c) 2014-2015 Marcus Tomlinson
+Copyright (c) 2014-2018 Marcus Tomlinson
 
 This file is part of QtPatcher.
 
@@ -37,12 +37,12 @@ public:
         Type = UserType + 3
     };
 
-    QtpWire(QtpPin* startPin, QtpPin* endPin, QGraphicsItem* parent = 0);
+    QtpWire( QtpPin* startPin, QtpPin* endPin, QGraphicsItem* parent = 0 );
     ~QtpWire();
 
     int type() const;
 
-    void setColor(const QColor& color);
+    void setColor( const QColor& color );
 
     QtpPin* startPin() const;
     QtpPin* endPin() const;
@@ -50,7 +50,7 @@ public:
     void updatePosition();
 
 protected:
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    void paint( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0 );
 
 private:
     QtpPin* _startPin;

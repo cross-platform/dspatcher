@@ -22,7 +22,7 @@ target_link_libraries(
 )
 
 if(APPLE)
-  execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/update_install_names.sh)
+  #execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/update_install_names.sh)
 endif(APPLE)
 
 if(WIN32)

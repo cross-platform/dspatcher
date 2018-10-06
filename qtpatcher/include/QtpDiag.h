@@ -1,6 +1,6 @@
 /************************************************************************
 QtPatcher - Cross-Platform Circuit Drawing Library
-Copyright (c) 2014-2015 Marcus Tomlinson
+Copyright (c) 2014-2018 Marcus Tomlinson
 
 This file is part of QtPatcher.
 
@@ -43,35 +43,35 @@ public:
         MoveComp
     };
 
-    explicit QtpDiag(QObject* parent = 0);
+    explicit QtpDiag( QObject* parent = 0 );
 
-    void setLineColor(const QColor& color);
-    void setCompColor(const QColor& color);
+    void setLineColor( const QColor& color );
+    void setCompColor( const QColor& color );
 
     QColor compColor() const;
     QColor lineColor() const;
 
 signals:
-    void compInserted(QtpComp* comp);
-    void compRemoved(int compId);
-    void wireConnected(int fromComp, int fromPin, int toComp, int toPin);
-    void wireDisconnected(int fromComp, int fromPin, int toComp, int toPin);
+    void compInserted( QtpComp* comp );
+    void compRemoved( int compId );
+    void wireConnected( int fromComp, int fromPin, int toComp, int toPin );
+    void wireDisconnected( int toComp, int toPin );
 
 public slots:
-    void setMode(Mode mode);
-    void setNextComp(QtpComp::CompInfo const& compInfo);
+    void setMode( Mode mode );
+    void setNextComp( QtpComp::CompInfo const& compInfo );
 
     void bringToFront();
     void sendToBack();
     void deleteItem();
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent);
+    void mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent );
+    void mouseMoveEvent( QGraphicsSceneMouseEvent* mouseEvent );
+    void mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent );
 
 private:
-    bool isItemChange(int type);
+    bool isItemChange( int type );
 
     int _compId;
     QtpComp::CompInfo _nextComp;

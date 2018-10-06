@@ -1,6 +1,6 @@
 /************************************************************************
 DSPatcher - Cross-Platform Graphical Patching Tool For DSPatch
-Copyright (c) 2014-2015 Marcus Tomlinson
+Copyright (c) 2014-2018 Marcus Tomlinson
 
 This file is part of DSPatcher.
 
@@ -27,13 +27,16 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <QApplication>
 
-int main(int argv, char* args[])
+using namespace DSPatch;
+using namespace DSPatcher;
+
+int main( int argv, char* args[] )
 {
-    QApplication app(argv, args);
+    QApplication app( argv, args );
     QtpMain mainWindow;
     mainWindow.show();
 
-    DsprController controller(mainWindow);
+    DsprController controller( mainWindow );
 
     return app.exec();
 }

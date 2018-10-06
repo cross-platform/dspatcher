@@ -1,6 +1,6 @@
 /************************************************************************
 DSPatcher - Cross-Platform Graphical Patching Tool For DSPatch
-Copyright (c) 2014-2015 Marcus Tomlinson
+Copyright (c) 2014-2018 Marcus Tomlinson
 
 This file is part of DSPatcher.
 
@@ -22,11 +22,9 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ************************************************************************/
 
-#ifndef DSPRCONTROLLER_H
-#define DSPRCONTROLLER_H
+#pragma once
 
 #include <DSPatch.h>
-#include <DsprParam.h>
 #include <QtpMain.h>
 
 #include <QFileSystemWatcher>
@@ -34,56 +32,47 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <set>
 
+namespace DSPatch
+{
+namespace DSPatcher
+{
+
 class DsprController : public QObject
 {
     Q_OBJECT
 
 public:
-    DsprController(QtpMain& mainWindow);
+    DsprController( QtpMain& mainWindow );
     ~DsprController();
 
 signals:
-    void inputAdded(DspComponent* component, int index);
-    void inputRemoved(DspComponent* component, int index);
-    void outputAdded(DspComponent* component, int index);
-    void outputRemoved(DspComponent* component, int index);
-    void parameterAdded(DspComponent* component, int index);
-    void parameterRemoved(DspComponent* component, int index);
-    void parameterUpdated(DspComponent* component, int index);
+    void inputAdded( Component::SPtr component, int index );
+    void inputRemoved( Component::SPtr component, int index );
+    void outputAdded( Component::SPtr component, int index );
+    void outputRemoved( Component::SPtr component, int index );
+    void parameterAdded( Component::SPtr component, int index );
+    void parameterRemoved( Component::SPtr component, int index );
+    void parameterUpdated( Component::SPtr component, int index );
 
 public slots:
-    void compInserted(QtpComp* qtpComp);
-    void compRemoved(int compId);
-    void wireConnected(int fromComp, int fromPin, int toComp, int toPin);
-    void wireDisconnected(int fromComp, int fromPin, int toComp, int toPin);
-
-    void boolUpdated(bool value);
-    void intUpdated(int value);
-    void floatUpdated(float value);
-    void stringUpdated(std::string const& value);
-    void triggerUpdated();
+    void compInserted( QtpComp* qtpComp );
+    void compRemoved( int compId );
+    void wireConnected( int fromComp, int fromPin, int toComp, int toPin );
+    void wireDisconnected( int toComp, int toPin );
 
 private slots:
     void _loadPlugins();
-
-    void _inputAdded(DspComponent* component, int index);
-    void _inputRemoved(DspComponent* component, int index);
-    void _outputAdded(DspComponent* component, int index);
-    void _outputRemoved(DspComponent* component, int index);
-    void _parameterAdded(DspComponent* component, int index);
-    void _parameterRemoved(DspComponent* component, int index);
-    void _parameterUpdated(DspComponent* component, int index);
 
 private:
     QFileSystemWatcher _fileWatcher;
     QtpMain& _mainWindow;
     std::set<int> _settingParams;
-    std::vector<DspPluginLoader> _pluginLoaders;
+    std::vector<Plugin::SPtr> _pluginLoaders;
 
-    std::map<DspComponent const*, QtpComp*> _qtpComps;
-    std::map<int, DspComponent*> _components;
-    std::map< int, std::vector<DsprParam*> > _params;
-    DspCircuit _circuit;
+    std::map<Component::SCPtr, QtpComp*> _qtpComps;
+    std::map<int, Component::SPtr> _components;
+    Circuit::SPtr _circuit = std::make_shared<Circuit>();
 };
 
-#endif  // DSPRCONTROLLER_H
+}  // namespace DSPatcher
+}  // namespace DSPatch
