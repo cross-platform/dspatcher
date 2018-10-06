@@ -1,6 +1,16 @@
 # DSPatcher
 Cross-Platform Graphical Test Tool for DSPatch
 
+```
+git clone https://github.com/MarcusTomlinson/DSPatcher.git
+cd DSPatcher
+git submodule update --init --recursive
+mkdir build
+cd build
+cmake ..
+make
+```
+
 DSPatcher is a cross-platform graphical tool for testing DSPatch components.
 
 The DSPatcher project is made up of 2 parts:
