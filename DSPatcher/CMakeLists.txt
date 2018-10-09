@@ -75,7 +75,7 @@ if(WIN32)
     add_custom_command(
       TARGET ${PROJECT_NAME} POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      ${CMAKE_CURRENT_BINARY_DIR}/../libDSPatch.dll
+      ${CMAKE_CURRENT_BINARY_DIR}/../DSPatchables/DSPatch/libDSPatch.dll
       ${CMAKE_CURRENT_BINARY_DIR}
     )
 
