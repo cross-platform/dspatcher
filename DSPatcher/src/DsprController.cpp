@@ -41,7 +41,6 @@ DsprController::DsprController( QtpMain& mainWindow )
     _loadPlugins();
 
     _circuit->SetThreadCount( 2 );
-    _circuit->StartAutoTick();
 
     connect( _mainWindow.diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted );
     connect( _mainWindow.diagram(), &QtpDiag::compRemoved, this, &DsprController::compRemoved );
@@ -101,6 +100,7 @@ void DsprController::compRemoved( int compId )
 
 void DsprController::wireConnected( int fromComp, int fromPin, int toComp, int toPin )
 {
+    _circuit->StartAutoTick();
     _circuit->ConnectOutToIn( _components[fromComp], fromPin, _components[toComp], toPin );
 }
 
