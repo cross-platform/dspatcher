@@ -1,5 +1,5 @@
 /************************************************************************
-DSPatcher - Cross-Platform Graphical Test Tool for DSPatch
+DSPatcher - Cross-Platform Graphical Tool for DSPatch
 Copyright (c) 2014-2018 Marcus Tomlinson
 
 This file is part of DSPatcher.
