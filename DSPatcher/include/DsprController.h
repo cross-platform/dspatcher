@@ -45,15 +45,6 @@ public:
     DsprController( QtpMain& mainWindow );
     ~DsprController();
 
-signals:
-    void inputAdded( Component::SPtr component, int index );
-    void inputRemoved( Component::SPtr component, int index );
-    void outputAdded( Component::SPtr component, int index );
-    void outputRemoved( Component::SPtr component, int index );
-    void parameterAdded( Component::SPtr component, int index );
-    void parameterRemoved( Component::SPtr component, int index );
-    void parameterUpdated( Component::SPtr component, int index );
-
 public slots:
     void compInserted( QtpComp* qtpComp );
     void compRemoved( int compId );
