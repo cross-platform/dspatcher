@@ -253,8 +253,6 @@ void QtpDiag::mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent )
                 {
                     foreach ( QtpWire* wire, endPin->wires() )
                     {
-                        emit wireDisconnected( qgraphicsitem_cast<QtpComp*>( wire->endPin()->parentItem() )->id(),
-                                               wire->endPin()->index() );
                         delete wire;
                     }
                     endPin->removeWires();
