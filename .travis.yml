@@ -1,0 +1,45 @@
+language: cpp
+
+matrix:
+  include:
+  - os: linux
+    env: PLATFORM="linux-gcc" CMakeArgs=""
+    compiler: gcc
+  - os: linux
+    env: PLATFORM="linux-clang" CMakeArgs=""
+    compiler: clang
+  - os: osx
+    env: PLATFORM="osx-gcc" CMakeArgs=""
+    compiler: gcc
+  - os: osx
+    env: PLATFORM="osx-clang" CMakeArgs=""
+    compiler: clang
+  - os: linux
+    env: PLATFORM="win-mingw-x86" CMakeArgs="-D CMAKE_SYSTEM_NAME=Windows -D CMAKE_C_COMPILER=x86_64-w64-mingw32-gcc -D CMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++"
+    compiler: gcc
+  - os: linux
+    env: PLATFORM="win-mingw-x64" CMakeArgs="-D CMAKE_SYSTEM_NAME=Windows -D CMAKE_C_COMPILER=i686-w64-mingw32-gcc -D CMAKE_CXX_COMPILER=i686-w64-mingw32-g++"
+    compiler: gcc
+
+install:
+- if [ $TRAVIS_OS_NAME = linux ]; then sudo apt install git cmake qt5-default libasound2-dev; fi
+- if [ $TRAVIS_OS_NAME = osx ]; then brew install qt5 || (brew update && brew install qt5); fi
+- if [ $TRAVIS_OS_NAME = linux ] && [ -n "$CMakeArgs" ]; then unset CXX; unset CC; sudo apt-get install gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 g++-mingw-w64-i686 g++-mingw-w64-x86-64; fi
+
+before_script:
+    - mkdir debug
+    - cd debug
+    - cmake $CMakeArgs -D CMAKE_BUILD_TYPE=Debug ..
+    - cd ..
+    - mkdir release
+    - cd release
+    - cmake $CMakeArgs -D CMAKE_BUILD_TYPE=Release ..
+    - cd ..
+
+script:
+    - cd debug
+    - make all
+    - cd ..
+    - cd release
+    - make all
+    - cd ..
