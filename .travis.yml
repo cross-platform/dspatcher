@@ -1,0 +1,35 @@
+language: cpp
+
+matrix:
+  include:
+  - os: linux
+    compiler: gcc
+  - os: linux
+    compiler: clang
+  - os: osx
+    compiler: gcc
+  - os: osx
+    compiler: clang
+
+install:
+- if [ $TRAVIS_OS_NAME = linux ]; then sudo apt install git cmake qt5-default libasound2-dev; fi
+- if [ $TRAVIS_OS_NAME = osx ]; then brew install qt5 || (brew update && brew install qt5); fi
+
+before_script:
+    - git submodule update --init --recursive --remote
+    - mkdir debug
+    - cd debug
+    - cmake -D CMAKE_BUILD_TYPE=Debug ..
+    - cd ..
+    - mkdir release
+    - cd release
+    - cmake -D CMAKE_BUILD_TYPE=Release ..
+    - cd ..
+
+script:
+    - cd debug
+    - make all
+    - cd ..
+    - cd release
+    - make all
+    - cd ..
