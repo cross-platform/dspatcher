@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/MarcusTomlinson/DSPatcher.svg?branch=master)](https://travis-ci.org/MarcusTomlinson/DSPatcher)
+
 # DSPatcher
 Cross-Platform Graphical Tool for DSPatch
 
