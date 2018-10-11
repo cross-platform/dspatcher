@@ -3,6 +3,8 @@
 # DSPatcher
 Cross-Platform Graphical Tool for DSPatch
 
+This project requires Qt: https://www.qt.io/download
+
 ```
 git clone https://github.com/MarcusTomlinson/DSPatcher.git
 cd DSPatcher
