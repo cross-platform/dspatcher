@@ -16,6 +16,7 @@ install:
 - if [ $TRAVIS_OS_NAME = osx ]; then brew install qt5 || (brew update && brew install qt5); fi
 
 before_script:
+    - git submodule update --init --recursive --remote
     - mkdir debug
     - cd debug
     - cmake -D CMAKE_BUILD_TYPE=Debug ..
