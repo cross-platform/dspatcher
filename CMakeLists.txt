@@ -17,19 +17,58 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-return-type-c-linkage -Wno-gnu-zero-variadic-macro-arguments -Wno-vla-extension")
 endif()
 
-if(WIN32)
-  # N.B. Edit this if your Windows Qt path differs
-  if(MSVC)
-    set(CMAKE_PREFIX_PATH C:/Qt/5.11.2/msvc2015)
-  else()
-    set(CMAKE_PREFIX_PATH C:/Qt/5.9.6/mingw53_32)
-  endif()
-endif(WIN32)
-
 if(APPLE)
-  # N.B. Edit this if your Mac Qt path differs
-  set(CMAKE_PREFIX_PATH ~/Qt/5.9.6/clang_64)
-endif(APPLE)
+
+  if(IS_DIRECTORY "/usr/local/opt/qt")
+    set(CMAKE_PREFIX_PATH "/usr/local/opt/qt")
+  else()
+    file(GLOB QT_VERSIONS "$ENV{HOME}/Qt/5.*")
+  endif()
+
+elseif(WIN32)
+
+  file(GLOB QT_VERSIONS "C:/Qt/5.*")
+  file(GLOB QT_VERSIONS "D:/Qt/5.*")
+  file(GLOB QT_VERSIONS "E:/Qt/5.*")
+  file(GLOB QT_VERSIONS "F:/Qt/5.*")
+  file(GLOB QT_VERSIONS "G:/Qt/5.*")
+
+endif()
+
+if(QT_VERSIONS)
+
+  list(SORT QT_VERSIONS)
+  list(REVERSE QT_VERSIONS)
+  list(GET QT_VERSIONS 0 QT_VERSION_PATH)
+
+  file(GLOB QT_COMPILERS RELATIVE ${QT_VERSION_PATH} ${QT_VERSION_PATH}/*)
+
+  if(MSVC)
+
+    foreach(QT_COMPILER ${QT_COMPILERS})
+      if(${QT_COMPILER} MATCHES "msvc")
+        set(CMAKE_PREFIX_PATH "${QT_VERSION_PATH}/${QT_COMPILER}")
+        break()
+      endif()
+    endforeach()
+
+  elseif(MINGW)
+
+    foreach(QT_COMPILER ${QT_COMPILERS})
+      if(${QT_COMPILER} MATCHES "mingw")
+        set(CMAKE_PREFIX_PATH "${QT_VERSION_PATH}/${QT_COMPILER}")
+        break()
+      endif()
+    endforeach()
+
+  else()
+
+    list(GET QT_COMPILERS 0 QT_COMPILER)
+    set(CMAKE_PREFIX_PATH "${QT_VERSION_PATH}/${QT_COMPILER}")
+
+  endif()
+
+endif(QT_VERSIONS)
 
 find_package(Qt5Widgets REQUIRED)
 
