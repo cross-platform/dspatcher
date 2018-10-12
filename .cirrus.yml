@@ -1,10 +1,10 @@
-install_task:
+linux_install_task:
   container:
       image: gcc:latest
   script:
     - sudo apt-get install qt5-default libasound2-dev
     
-install_task:
+mac_install_task:
   osx_instance:
       image: high-sierra-xcode-9.4.1
   script:
