@@ -2,8 +2,8 @@ linux_build_task:
   container:
     image: gcc:latest
   install_script:
-    - apt-get update
-    - apt-get upgrade
+    - apt-get -y update
+    - apt-get -y upgrade
     - apt-get install qt5-default libasound2-dev
   config_script:
     - git submodule update --init --recursive --remote
