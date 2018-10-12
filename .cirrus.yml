@@ -1,16 +1,20 @@
-linux_install_task:
+install_task:
   container:
       image: gcc:latest
   script:
     - sudo apt-get install qt5-default libasound2-dev
     
-mac_install_task:
+install_task:
   osx_instance:
       image: high-sierra-xcode-9.4.1
   script:
     - brew install qt5 || (brew update && brew install qt5)
 
 configure_task:
+  container:
+    matrix:
+      image: gcc:latest
+      image: high-sierra-xcode-9.4.1
   script:
     - git submodule update --init --recursive --remote
     - mkdir debug
@@ -23,6 +27,10 @@ configure_task:
     - cd ..
 
 build_task:
+  container:
+    matrix:
+      image: gcc:latest
+      image: high-sierra-xcode-9.4.1
   script:
     - cd debug
     - make all
