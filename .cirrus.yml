@@ -1,20 +1,24 @@
-install_task:
-  container:
-      image: gcc:latest
-  script:
-    - sudo apt-get install qt5-default libasound2-dev
-    
-install_task:
-  osx_instance:
-      image: high-sierra-xcode-9.4.1
+container:
+  matrix:
+    image: gcc:latest
+    image: high-sierra-xcode-9.4.1
+
+install:
+  only_if: $CIRRUS_OS == linux
   script:
     - brew install qt5 || (brew update && brew install qt5)
 
-configure_task:
-  container:
-    matrix:
-      image: gcc:latest
-      image: high-sierra-xcode-9.4.1
+install:
+  only_if: $CIRRUS_OS == darwin
+  script:
+    - sudo apt-get install qt5-default libasound2-dev
+
+install:
+  only_if: $CIRRUS_OS == windows
+  script:
+    - sudo apt-get install qt5-default libasound2-dev
+
+configure:
   script:
     - git submodule update --init --recursive --remote
     - mkdir debug
@@ -26,11 +30,7 @@ configure_task:
     - cmake -D CMAKE_BUILD_TYPE=Release ..
     - cd ..
 
-build_task:
-  container:
-    matrix:
-      image: gcc:latest
-      image: high-sierra-xcode-9.4.1
+build:
   script:
     - cd debug
     - make all
@@ -38,4 +38,4 @@ build_task:
     - cd release
     - make all
     - cd ..
-  
+    
