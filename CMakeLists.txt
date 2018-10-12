@@ -17,52 +17,56 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-return-type-c-linkage -Wno-gnu-zero-variadic-macro-arguments -Wno-vla-extension")
 endif()
 
-if(APPLE)
+if(NOT CMAKE_PREFIX_PATH)
 
-  if(IS_DIRECTORY "/usr/local/opt/qt")
-    set(CMAKE_PREFIX_PATH "/usr/local/opt/qt")
-  else()
-    file(GLOB QT_VERSIONS "$ENV{HOME}/Qt/5.*")
-  endif()
+  if(APPLE)
 
-elseif(WIN32)
+    if(IS_DIRECTORY "/usr/local/opt/qt")
+      set(CMAKE_PREFIX_PATH "/usr/local/opt/qt")
+    else()
+      file(GLOB QT_VERSIONS "$ENV{HOME}/Qt/5.*")
+    endif()
 
-  file(GLOB QT_VERSIONS "C:/Qt/5.*")
+  elseif(WIN32)
 
-endif()
-
-if(QT_VERSIONS)
-
-  list(GET QT_VERSIONS 0 QT_VERSION_PATH)
-
-  file(GLOB QT_COMPILERS RELATIVE ${QT_VERSION_PATH} ${QT_VERSION_PATH}/*)
-
-  if(MSVC)
-
-    foreach(QT_COMPILER ${QT_COMPILERS})
-      if(${QT_COMPILER} MATCHES "msvc")
-        set(CMAKE_PREFIX_PATH "${QT_VERSION_PATH}/${QT_COMPILER}")
-        break()
-      endif()
-    endforeach()
-
-  elseif(MINGW)
-
-    foreach(QT_COMPILER ${QT_COMPILERS})
-      if(${QT_COMPILER} MATCHES "mingw")
-        set(CMAKE_PREFIX_PATH "${QT_VERSION_PATH}/${QT_COMPILER}")
-        break()
-      endif()
-    endforeach()
-
-  else()
-
-    list(GET QT_COMPILERS 0 QT_COMPILER)
-    set(CMAKE_PREFIX_PATH "${QT_VERSION_PATH}/${QT_COMPILER}")
+    file(GLOB QT_VERSIONS "C:/Qt/5.*")
 
   endif()
 
-endif(QT_VERSIONS)
+  if(QT_VERSIONS)
+
+    list(GET QT_VERSIONS 0 QT_VERSION_PATH)
+
+    file(GLOB QT_COMPILERS RELATIVE ${QT_VERSION_PATH} ${QT_VERSION_PATH}/*)
+
+    if(MSVC)
+
+      foreach(QT_COMPILER ${QT_COMPILERS})
+        if(${QT_COMPILER} MATCHES "msvc")
+          set(CMAKE_PREFIX_PATH "${QT_VERSION_PATH}/${QT_COMPILER}")
+          break()
+        endif()
+      endforeach()
+
+    elseif(MINGW)
+
+      foreach(QT_COMPILER ${QT_COMPILERS})
+        if(${QT_COMPILER} MATCHES "mingw")
+          set(CMAKE_PREFIX_PATH "${QT_VERSION_PATH}/${QT_COMPILER}")
+          break()
+        endif()
+      endforeach()
+
+    else()
+
+      list(GET QT_COMPILERS 0 QT_COMPILER)
+      set(CMAKE_PREFIX_PATH "${QT_VERSION_PATH}/${QT_COMPILER}")
+
+    endif()
+
+  endif(QT_VERSIONS)
+
+endif(NOT CMAKE_PREFIX_PATH)
 
 find_package(Qt5Widgets REQUIRED)
 
