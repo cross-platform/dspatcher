@@ -1,41 +1,43 @@
-container:
-  matrix:
-    image: gcc:latest
-    image: high-sierra-xcode-9.4.1
+build_task:
 
-install:
-  only_if: $CIRRUS_OS == linux
-  script:
-    - brew install qt5 || (brew update && brew install qt5)
+  container:
+    matrix:
+      image: gcc:latest
+      image: high-sierra-xcode-9.4.1
 
-install:
-  only_if: $CIRRUS_OS == darwin
-  script:
-    - sudo apt-get install qt5-default libasound2-dev
-
-install:
-  only_if: $CIRRUS_OS == windows
-  script:
-    - sudo apt-get install qt5-default libasound2-dev
-
-configure:
-  script:
-    - git submodule update --init --recursive --remote
-    - mkdir debug
-    - cd debug
-    - cmake -D CMAKE_BUILD_TYPE=Debug ..
-    - cd ..
-    - mkdir release
-    - cd release
-    - cmake -D CMAKE_BUILD_TYPE=Release ..
-    - cd ..
-
-build:
-  script:
-    - cd debug
-    - make all
-    - cd ..
-    - cd release
-    - make all
-    - cd ..
-    
+  install:
+    only_if: $CIRRUS_OS == linux
+    script:
+      - brew install qt5 || (brew update && brew install qt5)
+  
+  install:
+    only_if: $CIRRUS_OS == darwin
+    script:
+      - sudo apt-get install qt5-default libasound2-dev
+  
+  install:
+    only_if: $CIRRUS_OS == windows
+    script:
+      - sudo apt-get install qt5-default libasound2-dev
+  
+  configure:
+    script:
+      - git submodule update --init --recursive --remote
+      - mkdir debug
+      - cd debug
+      - cmake -D CMAKE_BUILD_TYPE=Debug ..
+      - cd ..
+      - mkdir release
+      - cd release
+      - cmake -D CMAKE_BUILD_TYPE=Release ..
+      - cd ..
+  
+  build:
+    script:
+      - cd debug
+      - make all
+      - cd ..
+      - cd release
+      - make all
+      - cd ..
+  
