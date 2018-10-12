@@ -1,5 +1,4 @@
 build_task:
-
   container:
     matrix:
       image: gcc:latest
