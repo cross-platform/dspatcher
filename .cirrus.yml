@@ -1,0 +1,33 @@
+install:
+  container:
+      image: gcc:latest
+  script:
+    - sudo apt-get install qt5-default libasound2-dev
+    
+install:
+  container:
+      image: high-sierra-xcode-9.4.1
+  script:
+    - brew install qt5 || (brew update && brew install qt5)
+
+configure:
+  script:
+    - git submodule update --init --recursive --remote
+    - mkdir debug
+    - cd debug
+    - cmake -D CMAKE_BUILD_TYPE=Debug ..
+    - cd ..
+    - mkdir release
+    - cd release
+    - cmake -D CMAKE_BUILD_TYPE=Release ..
+    - cd ..
+
+build:
+  script:
+    - cd debug
+    - make all
+    - cd ..
+    - cd release
+    - make all
+    - cd ..
+  
