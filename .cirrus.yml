@@ -5,7 +5,7 @@ install_task:
     - sudo apt-get install qt5-default libasound2-dev
     
 install_task:
-  container:
+  osx_instance:
       image: high-sierra-xcode-9.4.1
   script:
     - brew install qt5 || (brew update && brew install qt5)
