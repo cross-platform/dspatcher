@@ -62,7 +62,7 @@ install:
 
 before_script:
     - if [ $TRAVIS_OS_NAME = linux ] && [ -n "$CMakeArgs" ]; then git clone https://github.com/mxe/mxe.git; fi
-    - if [ $TRAVIS_OS_NAME = linux ] && [ -n "$CMakeArgs" ]; then cd mxe; make qtbase; cd .. fi
+    - if [ $TRAVIS_OS_NAME = linux ] && [ -n "$CMakeArgs" ]; then cd mxe; make qtbase; cd ..; fi
     - git submodule update --init --recursive --remote
     - mkdir debug
     - cd debug
