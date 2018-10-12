@@ -4,22 +4,22 @@ build_task:
       image: gcc:latest
       image: high-sierra-xcode-9.4.1
 
-  install:
+  install_task:
     only_if: $CIRRUS_OS == linux
     script:
       - brew install qt5 || (brew update && brew install qt5)
   
-  install:
+  install_task:
     only_if: $CIRRUS_OS == darwin
     script:
       - sudo apt-get install qt5-default libasound2-dev
   
-  install:
+  install_task:
     only_if: $CIRRUS_OS == windows
     script:
       - sudo apt-get install qt5-default libasound2-dev
   
-  configure:
+  configure_task:
     script:
       - git submodule update --init --recursive --remote
       - mkdir debug
@@ -31,7 +31,7 @@ build_task:
       - cmake -D CMAKE_BUILD_TYPE=Release ..
       - cd ..
   
-  build:
+  build_task:
     script:
       - cd debug
       - make all
