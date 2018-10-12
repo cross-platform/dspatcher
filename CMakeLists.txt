@@ -13,7 +13,7 @@ if(MSVC)
 elseif(MINGW)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -pedantic -Wall -Wextra -Wnon-virtual-dtor -Wno-unknown-pragmas")
 else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -pthread -pedantic -Wall -Wextra -Wnon-virtual-dtor")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -fPIC -pthread -pedantic -Wall -Wextra -Wnon-virtual-dtor")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-return-type-c-linkage -Wno-gnu-zero-variadic-macro-arguments -Wno-vla-extension")
 endif()
 
@@ -28,17 +28,11 @@ if(APPLE)
 elseif(WIN32)
 
   file(GLOB QT_VERSIONS "C:/Qt/5.*")
-  file(GLOB QT_VERSIONS "D:/Qt/5.*")
-  file(GLOB QT_VERSIONS "E:/Qt/5.*")
-  file(GLOB QT_VERSIONS "F:/Qt/5.*")
-  file(GLOB QT_VERSIONS "G:/Qt/5.*")
 
 endif()
 
 if(QT_VERSIONS)
 
-  list(SORT QT_VERSIONS)
-  list(REVERSE QT_VERSIONS)
   list(GET QT_VERSIONS 0 QT_VERSION_PATH)
 
   file(GLOB QT_COMPILERS RELATIVE ${QT_VERSION_PATH} ${QT_VERSION_PATH}/*)

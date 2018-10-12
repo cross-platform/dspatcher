@@ -12,7 +12,7 @@ matrix:
     compiler: clang
 
 install:
-- if [ $TRAVIS_OS_NAME = linux ]; then sudo apt install git cmake qt5-default libasound2-dev; fi
+- if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install qt5-default libasound2-dev; fi
 - if [ $TRAVIS_OS_NAME = osx ]; then brew install qt5 || (brew update && brew install qt5); fi
 
 before_script:
