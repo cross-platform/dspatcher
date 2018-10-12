@@ -3,7 +3,7 @@ linux_build_task:
     image: gcc:latest
   install_script:
     - apt-get -y update
-    - apt-get -y install qt5-default libasound2-dev
+    - apt-get -y install cmake qt5-default libasound2-dev
   config_script:
     - git submodule update --init --recursive --remote
     - mkdir debug
