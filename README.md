@@ -16,11 +16,15 @@ cmake ..
 make
 ```
 
+- *If `cmake ..` fails, try `cmake -D CMAKE_PREFIX_PATH=<path/to/Qt/x.y.z/compiler> ..`.*
+- *`cmake ..` will auto-detect your IDE / compiler. To manually select one, use `cmake -G`.*
+- *When building for an IDE, instead of `make`, simply open the cmake generated project file.*
+
 DSPatcher is a cross-platform graphical tool for building DSPatch circuits.
 
 The DSPatcher project is made up of 2 parts:
-* QtPatcher - A cross-platform circuit drawing library written in Qt C++.
-* DSPatcher - A graphical tool based on QtPatcher for building DSPatch circuits.
+1. QtPatcher - A cross-platform circuit drawing library written in Qt C++.
+2. DSPatcher - A graphical tool based on QtPatcher for building DSPatch circuits.
 
 *See also:*
 
