@@ -132,7 +132,7 @@ void DsprController::_loadPlugins()
             auto loader = std::make_shared<Plugin>( path.toUtf8().constData() );
             if ( loader->IsLoaded() )
             {
-                _pluginLoaders.push_back( loader );
+                _pluginLoaders.emplace_back( loader );
                 Component::SPtr comp = loader->Create();
 
                 QtpComp::CompInfo compInfo;
