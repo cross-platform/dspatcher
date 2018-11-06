@@ -29,6 +29,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <QDirIterator>
 
+#include <thread>
+
 using namespace DSPatch;
 using namespace DSPatcher;
 
@@ -40,7 +42,7 @@ DsprController::DsprController( QtpMain& mainWindow )
 
     _loadPlugins();
 
-    _circuit->SetThreadCount( 2 );
+    _circuit->SetThreadCount( std::thread::hardware_concurrency() );
 
     connect( _mainWindow.diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted );
     connect( _mainWindow.diagram(), &QtpDiag::compRemoved, this, &DsprController::compRemoved );
