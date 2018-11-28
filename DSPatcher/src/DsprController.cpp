@@ -102,8 +102,8 @@ void DsprController::compRemoved( int compId )
 
 void DsprController::wireConnected( int fromComp, int fromPin, int toComp, int toPin )
 {
-    _circuit->StartAutoTick();
     _circuit->ConnectOutToIn( _components[fromComp], fromPin, _components[toComp], toPin );
+    _circuit->StartAutoTick();
 }
 
 void DsprController::wireDisconnected( int toComp, int toPin )
