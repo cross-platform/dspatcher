@@ -42,7 +42,7 @@ DsprController::DsprController( QtpMain& mainWindow )
 
     _loadPlugins();
 
-    _circuit->SetThreadCount( std::thread::hardware_concurrency() );
+    _circuit->SetBufferCount( std::thread::hardware_concurrency() );
 
     connect( _mainWindow.diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted );
     connect( _mainWindow.diagram(), &QtpDiag::compRemoved, this, &DsprController::compRemoved );
