@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/cross-platform/DSPatcher.svg?branch=master)](https://travis-ci.org/cross-platform/DSPatcher)
+[![Build Status](https://travis-ci.org/cross-platform/DSPatcher.svg?branch=master)](https://travis-ci.org/MarcusTomlinson/DSPatcher)
 [![Build status](https://ci.appveyor.com/api/projects/status/nyitfgo2f56dbs6w/branch/master?svg=true)](https://ci.appveyor.com/project/cross-platform/dspatcher/branch/master)
 
 # DSPatcher
