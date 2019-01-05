@@ -1,4 +1,4 @@
 [submodule "DSPatchables"]
 	path = DSPatchables
-	url = https://github.com/MarcusTomlinson/DSPatchables.git
+	url = https://github.com/cross-platform/DSPatchables.git
 	branch = master
