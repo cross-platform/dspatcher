@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/MarcusTomlinson/DSPatcher.svg?branch=master)](https://travis-ci.org/MarcusTomlinson/DSPatcher)
-[![Build status](https://ci.appveyor.com/api/projects/status/nyitfgo2f56dbs6w/branch/master?svg=true)](https://ci.appveyor.com/project/MarcusTomlinson/dspatcher/branch/master)
+[![Build Status](https://travis-ci.org/cross-platform/DSPatcher.svg?branch=master)](https://travis-ci.org/cross-platform/DSPatcher)
+[![Build status](https://ci.appveyor.com/api/projects/status/nyitfgo2f56dbs6w/branch/master?svg=true)](https://ci.appveyor.com/project/cross-platform/dspatcher/branch/master)
 
 # DSPatcher
 Cross-Platform Graphical Tool for DSPatch
@@ -7,7 +7,7 @@ Cross-Platform Graphical Tool for DSPatch
 This project requires Qt: https://www.qt.io/download
 
 ```
-git clone https://github.com/MarcusTomlinson/DSPatcher.git
+git clone https://github.com/cross-platform/DSPatcher.git
 cd DSPatcher
 git submodule update --init --recursive --remote
 mkdir build
@@ -28,6 +28,6 @@ The DSPatcher project is made up of 2 parts:
 
 *See also:*
 
-DSPatch (https://github.com/MarcusTomlinson/DSPatch): A powerful C++ dataflow framework.
+DSPatch (https://github.com/cross-platform/DSPatch): A powerful C++ dataflow framework.
 
-DSPatchables (https://github.com/MarcusTomlinson/DSPatchables): A DSPatch component repository.
+DSPatchables (https://github.com/cross-platform/DSPatchables): A DSPatch component repository.
