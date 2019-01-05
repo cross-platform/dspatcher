@@ -28,6 +28,6 @@ The DSPatcher project is made up of 2 parts:
 
 *See also:*
 
-DSPatch (https://github.com/MarcusTomlinson/DSPatch): A powerful C++ flow-based programming framework.
+DSPatch (https://github.com/MarcusTomlinson/DSPatch): A powerful C++ dataflow framework.
 
 DSPatchables (https://github.com/MarcusTomlinson/DSPatchables): A DSPatch component repository.

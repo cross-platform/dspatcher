@@ -1,6 +1,6 @@
 /************************************************************************
 DSPatcher - Cross-Platform Graphical Tool for DSPatch
-Copyright (c) 2014-2018 Marcus Tomlinson
+Copyright (c) 2014-2019 Marcus Tomlinson
 
 This file is part of DSPatcher.
 
