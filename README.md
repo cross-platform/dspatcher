@@ -2,10 +2,13 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/nyitfgo2f56dbs6w/branch/master?svg=true)](https://ci.appveyor.com/project/MarcusTomlinson/dspatcher/branch/master)
 
 # DSPatcher
+
 Cross-Platform Graphical Tool for DSPatch
 
 This project requires Qt: https://www.qt.io/download
 
+
+Building DSPatcher:
 ```
 git clone https://github.com/cross-platform/DSPatcher.git
 cd DSPatcher
@@ -19,6 +22,7 @@ make
 - *If `cmake ..` fails, try `cmake -D CMAKE_PREFIX_PATH=<path/to/Qt/x.y.z/compiler> ..`.*
 - *`cmake ..` will auto-detect your IDE / compiler. To manually select one, use `cmake -G`.*
 - *When building for an IDE, instead of `make`, simply open the cmake generated project file.*
+
 
 DSPatcher is a cross-platform graphical tool for building DSPatch circuits.
 
