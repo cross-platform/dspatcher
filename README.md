@@ -15,7 +15,7 @@ The DSPatcher project is made up of 2 parts:
 This project requires Qt: https://www.qt.io/download
 
 ```
-git clone https://github.com/cross-platform/DSPatcher.git
+git clone https://github.com/cross-platform/dspatcher.git
 cd DSPatcher
 git submodule update --init --recursive --remote
 mkdir build
@@ -31,6 +31,6 @@ make
 
 ### See also:
 
-DSPatch (https://github.com/cross-platform/DSPatch): A powerful C++ dataflow framework.
+DSPatch (https://github.com/cross-platform/dspatch): A powerful C++ dataflow framework.
 
-DSPatchables (https://github.com/cross-platform/DSPatchables): A DSPatch component repository.
+DSPatchables (https://github.com/cross-platform/dspatchables): A DSPatch component repository.
