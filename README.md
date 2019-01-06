@@ -3,12 +3,17 @@
 
 # DSPatcher
 
-Cross-Platform Graphical Tool for DSPatch
+A Cross-Platform Graphical Tool for Building DSPatch Circuits.
+
+The DSPatcher project is made up of 2 parts:
+1. QtPatcher - A cross-platform circuit drawing library written in Qt C++.
+2. DSPatcher - A graphical tool based on QtPatcher for building DSPatch circuits.
+
+
+## Build
 
 This project requires Qt: https://www.qt.io/download
 
-
-Building DSPatcher:
 ```
 git clone https://github.com/cross-platform/DSPatcher.git
 cd DSPatcher
@@ -24,13 +29,7 @@ make
 - *When building for an IDE, instead of `make`, simply open the cmake generated project file.*
 
 
-DSPatcher is a cross-platform graphical tool for building DSPatch circuits.
-
-The DSPatcher project is made up of 2 parts:
-1. QtPatcher - A cross-platform circuit drawing library written in Qt C++.
-2. DSPatcher - A graphical tool based on QtPatcher for building DSPatch circuits.
-
-*See also:*
+### See also:
 
 DSPatch (https://github.com/cross-platform/DSPatch): A powerful C++ dataflow framework.
 
