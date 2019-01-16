@@ -29,7 +29,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 class QtpPin;
 
-class QtpWire : public QGraphicsLineItem
+class QtpWire : public QGraphicsPathItem
 {
 public:
     enum
@@ -56,7 +56,7 @@ private:
     QtpPin* _startPin;
     QtpPin* _endPin;
     QColor _color;
-    QPolygonF _wireHead;
+    QPainterPath _path;
 };
 
 #endif  // QTPWIRE_H

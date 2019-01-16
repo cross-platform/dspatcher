@@ -37,7 +37,7 @@ QtpDiag::QtpDiag( QObject* parent )
     _nextComp = QtpComp::CompInfo();
     _line = 0;
     _compColor = Qt::white;
-    _lineColor = Qt::black;
+    _lineColor = QColor::fromRgb( random() );
     _pinHovered = 0;
 }
 
@@ -262,6 +262,8 @@ void QtpDiag::mouseReleaseEvent( QGraphicsSceneMouseEvent* mouseEvent )
                     newWire->setColor( _lineColor );
                     newWire->setZValue( 1000.0 );
                     newWire->updatePosition();
+
+                    _lineColor = QColor::fromRgb( random() );
 
                     addItem( newWire );
 
