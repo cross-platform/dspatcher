@@ -16,7 +16,7 @@ This project requires Qt: https://www.qt.io/download
 
 ```
 git clone https://github.com/cross-platform/dspatcher.git
-cd DSPatcher
+cd dspatcher
 git submodule update --init --recursive --remote
 mkdir build
 cd build
