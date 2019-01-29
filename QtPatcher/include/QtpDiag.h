@@ -29,6 +29,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <QGraphicsScene>
 
+#include <random>
+
 class QtpPin;
 
 class QtpDiag : public QGraphicsScene
@@ -82,6 +84,7 @@ private:
     QColor _compColor;
     QColor _lineColor;
     QtpPin* _pinHovered;
+    std::mt19937 _mt;
 };
 
 #endif  // QTPDIAG_H
