@@ -1,7 +1,9 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/DSPatchables/Components
     ${CMAKE_SOURCE_DIR}/DSPatchables/DSPatch/include
     ${CMAKE_SOURCE_DIR}/QtPatcher/include
+    ${CMAKE_SOURCE_DIR}/UiComponents/include
 )
 
 file(GLOB srcs src/*.cpp)
@@ -19,6 +21,7 @@ target_link_libraries(
   ${PROJECT_NAME}
   DSPatch
   QtPatcher
+  UiComponents
 )
 
 if(APPLE)
