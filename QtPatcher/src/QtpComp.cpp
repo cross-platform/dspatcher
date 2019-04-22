@@ -97,7 +97,7 @@ void QtpComp::setColor( const QColor& color )
 void QtpComp::addInPin( QString pinName )
 {
     QtpPin* pin = new QtpPin( QtpPin::InPin, pinName, _inPins.size(), this );
-    pin->setPos( -_hw - 6, 20 * _inPins.size() );
+    pin->setPos( -_hw - 6, -_hh + 15 + 20 * _inPins.size() );
     pin->setBrush( _color );
     _inPins.push_back( pin );
 
@@ -107,7 +107,7 @@ void QtpComp::addInPin( QString pinName )
 void QtpComp::addOutPin( QString pinName )
 {
     QtpPin* pin = new QtpPin( QtpPin::OutPin, pinName, _outPins.size(), this );
-    pin->setPos( _hw + 6, 20 * _outPins.size() );
+    pin->setPos( _hw + 6, -_hh + 15 + 20 * _outPins.size() );
     pin->setBrush( _color );
     _outPins.push_back( pin );
 
@@ -231,10 +231,13 @@ void QtpComp::updatePolygon()
     int pinsAfterFirst = std::max( _inPins.size(), _outPins.size() );
     pinsAfterFirst = --pinsAfterFirst < 0 ? 0 : pinsAfterFirst;
 
+    auto height = -_hh + 30 + 20 * pinsAfterFirst;
+    height = _hh > height ? _hh : height;
+
     _polygon.replace( 0, QPointF( -_hw, -_hh ) );
     _polygon.replace( 1, QPointF( _hw, -_hh ) );
-    _polygon.replace( 2, QPointF( _hw, _hh + ( 20 * pinsAfterFirst ) ) );
-    _polygon.replace( 3, QPointF( -_hw, _hh + ( 20 * pinsAfterFirst ) ) );
+    _polygon.replace( 2, QPointF( _hw, height ) );
+    _polygon.replace( 3, QPointF( -_hw, height ) );
     _polygon.replace( 4, QPointF( -_hw, -_hh ) );
 
     setPolygon( _polygon );

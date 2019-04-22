@@ -54,10 +54,10 @@ public:
         label->setText( QString::number( (float)slider->sliderPosition() / 100 ) );
         label->setFixedWidth( 30 );
 
-        widget->connect( slider, &QSlider::valueChanged,
+        slider->connect( slider, &QSlider::valueChanged,
                          [label]( int value ) { label->setText( QString::number( (float)value / 100 ) ); } );
 
-        widget->connect( slider, &QSlider::valueChanged, [this]( int value ) { gain = (float)value / 100; } );
+        slider->connect( slider, &QSlider::valueChanged, [this]( int value ) { gain = (float)value / 100; } );
 
         QHBoxLayout* layout = new QHBoxLayout( widget );
         layout->addWidget( slider );

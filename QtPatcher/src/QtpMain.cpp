@@ -54,7 +54,7 @@ QtpMain::QtpMain()
     QWidget* widget = new QWidget;
     widget->setLayout( layout );
 
-    setGeometry( 100, 100, 800, 500 );
+    setGeometry( 100, 100, 1000, 600 );
     setCentralWidget( widget );
     setWindowTitle( tr( "DSPatcher" ) );
     setUnifiedTitleAndToolBarOnMac( true );
