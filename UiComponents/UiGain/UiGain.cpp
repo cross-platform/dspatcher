@@ -68,16 +68,11 @@ public:
     ~UiGain()
     {
         slider->disconnect();
-
-        if ( deleteWidget )
-        {
-            delete widget;
-        }
+        widget->deleteLater();
     }
 
     QSlider* slider;
     QWidget* widget;
-    bool deleteWidget = true;
 
     float gain = 1.0f;
 };
@@ -96,7 +91,6 @@ UiGain::UiGain()
 
 QWidget* UiGain::widget()
 {
-    p->deleteWidget = false;
     return p->widget;
 }
 
