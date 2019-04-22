@@ -27,23 +27,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 using namespace DSPatch;
 using namespace DSPatcher;
 
-UiComponent::UiComponent( ParamType paramType, int inCount, int outCount )
-    : InOut( inCount, outCount )
-    , paramType( paramType )
-{
-}
-
-UiComponent::UiComponent( ParamType paramType, int inCount, int outCount, std::pair<int, int> const& intRange )
-    : InOut( inCount, outCount )
-    , paramType( paramType )
-    , intRange( intRange )
-{
-}
-
-UiComponent::UiComponent( ParamType paramType, int inCount, int outCount, std::pair<float, float> const& floatRange )
-    : InOut( inCount, outCount )
-    , paramType( paramType )
-    , floatRange( floatRange )
+UiComponent::UiComponent( ProcessOrder processOrder )
+    : Component( processOrder )
 {
 }
 

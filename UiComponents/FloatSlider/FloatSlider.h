@@ -25,39 +25,33 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #pragma once
 
 #include <DSPatch.h>
-#include <InOut/InOut.h>
+#include <UiComponent.h>
 
 namespace DSPatch
 {
 namespace DSPatcher
 {
 
-class DLLEXPORT UiComponent final : public DSPatchables::InOut
+namespace internal
+{
+class FloatSlider;
+}
+
+class DLLEXPORT FloatSlider final : public UiComponent
 {
 public:
-    DEFINE_PTRS( UiComponent );
+    FloatSlider();
 
-    enum ParamType
-    {
-        Bool,
-        Int,
-        Float,
-        String,
-        FilePath,  // this is essentially just a string, but helps when determining an appropriate user input method
-        List,      // this type acts as a vector (available items), an int (index selected), and a string (item selected)
-        Trigger    // this type has no value, SetParam(triggerParam) simply represents a trigger. E.g. a button press
-    };
+    QWidget* widget() override;
 
-    UiComponent( ParamType paramType, int inCount, int outCount );
-    UiComponent( ParamType paramType, int inCount, int outCount, std::pair<int, int> const& intRange );
-    UiComponent( ParamType paramType, int inCount, int outCount, std::pair<float, float> const& floatRange );
+protected:
+    virtual void Process_( SignalBus const& inputs, SignalBus& outputs ) override;
 
-    ~UiComponent();
-
-    ParamType const paramType;
-    std::pair<int, int> const intRange = std::make_pair( 0, 100 );
-    std::pair<float, float> const floatRange = std::make_pair( 0.0f, 1.0f );
+private:
+    std::unique_ptr<internal::FloatSlider> p;
 };
+
+EXPORT_PLUGIN( FloatSlider )
 
 }  // namespace DSPatcher
 }  // namespace DSPatch

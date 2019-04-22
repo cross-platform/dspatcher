@@ -22,42 +22,28 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ************************************************************************/
 
-#include <FloatSlider.h>
+#pragma once
 
-using namespace DSPatch;
-using namespace DSPatcher;
+#include <DSPatch.h>
+
+class QWidget;
 
 namespace DSPatch
 {
 namespace DSPatcher
 {
-namespace internal
-{
 
-class FloatSlider
+class DLLEXPORT UiComponent : public Component
 {
 public:
-    FloatSlider()
-    {
-    }
+    NONCOPYABLE( UiComponent );
+    DEFINE_PTRS( UiComponent );
+
+    UiComponent( ProcessOrder processOrder = ProcessOrder::InOrder );
+    virtual ~UiComponent();
+
+    virtual QWidget* widget() = 0;
 };
 
-}  // namespace internal
 }  // namespace DSPatcher
 }  // namespace DSPatch
-
-FloatSlider::FloatSlider()
-    : UiComponent( ProcessOrder::OutOfOrder )
-    , p( new internal::FloatSlider() )
-{
-    SetOutputCount_( 1, {"out"} );
-}
-
-QWidget* FloatSlider::widget()
-{
-    return nullptr;
-}
-
-void FloatSlider::Process_( SignalBus const&, SignalBus& )
-{
-}

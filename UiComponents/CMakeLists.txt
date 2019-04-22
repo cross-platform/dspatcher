@@ -1,13 +1,12 @@
-project(UiComponents)
+project(UiComponent)
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/DSPatchables/DSPatch/include
-    ${CMAKE_SOURCE_DIR}/DSPatchables/Components
 )
 
-file(GLOB srcs src/*.cpp)
-file(GLOB hdrs include/*.h)
+file(GLOB srcs *.cpp)
+file(GLOB hdrs *.h)
 
 add_library(
     ${PROJECT_NAME} SHARED
@@ -18,7 +17,6 @@ add_library(
 target_link_libraries(
     ${PROJECT_NAME}
     DSPatch
-    InOut
 )
 
 add_subdirectory(FloatSlider)
