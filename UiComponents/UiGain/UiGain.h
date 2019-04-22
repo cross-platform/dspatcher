@@ -34,24 +34,24 @@ namespace DSPatcher
 
 namespace internal
 {
-class FloatSlider;
+class UiGain;
 }
 
-class DLLEXPORT FloatSlider final : public UiComponent
+class DLLEXPORT UiGain final : public UiComponent
 {
 public:
-    FloatSlider();
+    UiGain();
 
-    QWidget* widget() override;
+    virtual QWidget* widget() override;
 
 protected:
     virtual void Process_( SignalBus const& inputs, SignalBus& outputs ) override;
 
 private:
-    std::unique_ptr<internal::FloatSlider> p;
+    std::unique_ptr<internal::UiGain> p;
 };
 
-EXPORT_PLUGIN( FloatSlider )
+EXPORT_PLUGIN( UiGain )
 
 }  // namespace DSPatcher
 }  // namespace DSPatch

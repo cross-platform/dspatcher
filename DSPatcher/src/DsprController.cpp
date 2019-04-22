@@ -74,6 +74,12 @@ void DsprController::compInserted( QtpComp* qtpComp )
         return;
     }
 
+    auto ui_component = std::dynamic_pointer_cast<UiComponent>( component );
+    if ( ui_component )
+    {
+        qtpComp->setWidget( ui_component->widget() );
+    }
+
     qtpComp->removeInPins();
     qtpComp->removeOutPins();
     for ( int i = 0; i < component->GetInputCount(); ++i )
@@ -141,14 +147,6 @@ void DsprController::_loadPlugins()
                 QtpComp::CompInfo compInfo;
                 compInfo.typeId = _pluginLoaders.size() - 1;
                 compInfo.typeName = file.baseName().mid( 0, 3 ) == "lib" ? file.baseName().mid( 3 ) : file.baseName();
-                if ( std::dynamic_pointer_cast<UiComponent>( comp ) )
-                {
-                    compInfo.hasWidget = true;
-                }
-                else
-                {
-                    compInfo.hasWidget = false;
-                }
 
                 if ( comp )
                 {

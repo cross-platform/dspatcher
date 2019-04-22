@@ -44,26 +44,6 @@ QtpComp::QtpComp( CompInfo const& compInfo, int id, QPointF const& position, QGr
     _hw = 15;
     _hh = 15;
 
-    if ( _compInfo.hasWidget )
-    {
-        _widget = new QWidget();
-        QSlider* slider;
-
-        slider = new QSlider( Qt::Horizontal, _widget );
-        slider->setRange( 0, 100 );
-
-        QLabel* label = new QLabel( _widget );
-        label->setText( QString::number( (float)slider->sliderPosition() / 100 ) );
-
-        QHBoxLayout* layout = new QHBoxLayout( _widget );
-        layout->addWidget( slider );
-        layout->addWidget( label );
-        _widget->resize( layout->sizeHint() );
-
-        _hw = _widget->width() / 2;
-        _hh = _widget->height() / 2;
-    }
-
     _polygon << QPointF( -_hw, -_hh ) << QPointF( _hw, -_hh ) << QPointF( _hw, _hh ) << QPointF( -_hw, _hh ) << QPointF( -_hw, -_hh );
 
     _nameText = new QGraphicsTextItem( this );
@@ -77,7 +57,7 @@ QtpComp::QtpComp( CompInfo const& compInfo, int id, QPointF const& position, QGr
     {
         addOutPin( pin );
     }
-    
+
     setPolygon( _polygon );
 }
 
@@ -179,7 +159,17 @@ QMenu* QtpComp::contextMenu()
     return _contextMenu;
 }
 
-QWidget* QtpComp::compWidget()
+void QtpComp::setWidget( QWidget* widget )
+{
+    _widget = widget;
+
+    _hw = _widget->width() / 2;
+    _hh = _widget->height() / 2;
+
+    updatePolygon();
+}
+
+QWidget* QtpComp::getWidget() const
 {
     return _widget;
 }
@@ -241,8 +231,13 @@ void QtpComp::updatePolygon()
     int pinsAfterFirst = std::max( _inPins.size(), _outPins.size() );
     pinsAfterFirst = --pinsAfterFirst < 0 ? 0 : pinsAfterFirst;
 
+    _polygon.replace( 0, QPointF( -_hw, -_hh ) );
+    _polygon.replace( 1, QPointF( _hw, -_hh ) );
     _polygon.replace( 2, QPointF( _hw, _hh + ( 20 * pinsAfterFirst ) ) );
     _polygon.replace( 3, QPointF( -_hw, _hh + ( 20 * pinsAfterFirst ) ) );
+    _polygon.replace( 4, QPointF( -_hw, -_hh ) );
 
     setPolygon( _polygon );
+
+    _nameText->setPos( -_nameText->boundingRect().width() / 2, -_hh - 24 );
 }

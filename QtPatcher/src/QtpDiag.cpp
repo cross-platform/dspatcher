@@ -185,8 +185,9 @@ void QtpDiag::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
     if ( _mode == InsertComp )
     {
         QtpComp* comp = new QtpComp( _nextComp, _compId++, mouseEvent->scenePos() );
+        emit compInserted( comp );
 
-        auto compWidget = comp->compWidget();
+        auto compWidget = comp->getWidget();
         if ( compWidget )
         {
             auto initPos = mouseEvent->scenePos();
@@ -214,8 +215,6 @@ void QtpDiag::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
             comp->setFlag( QGraphicsItem::ItemIsMovable, true );
             comp->setFlag( QGraphicsItem::ItemIsSelectable, true );
         }
-
-        emit compInserted( comp );
     }
     else if ( startItems.count() && startItems.first()->type() == QtpPin::Type )
     {

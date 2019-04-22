@@ -19,4 +19,9 @@ target_link_libraries(
     DSPatch
 )
 
-add_subdirectory(FloatSlider)
+qt5_use_modules(
+  ${PROJECT_NAME}
+  Widgets
+)
+
+add_subdirectory(UiGain)

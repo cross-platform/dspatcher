@@ -44,7 +44,6 @@ public:
         QString typeName;
         QList<QString> inPins;
         QList<QString> outPins;
-        bool hasWidget;
     };
 
     QtpComp( CompInfo const& compInfo, int id, QPointF const& position, QGraphicsItem* parent = 0 );
@@ -64,7 +63,8 @@ public:
 
     QMenu* contextMenu();
 
-    QWidget* compWidget();
+    void setWidget( QWidget* widget );
+    QWidget* getWidget() const;
 
     QPixmap image() const;
     CompInfo compInfo() const;
