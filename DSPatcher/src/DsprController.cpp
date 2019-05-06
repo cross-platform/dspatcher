@@ -38,7 +38,25 @@ using namespace DSPatcher;
 DsprController::DsprController( QtpMain& mainWindow )
     : _mainWindow( mainWindow )
 {
-    _fileWatcher.addPath( PLUGIN_DIR );
+    _pluginPath = qgetenv( "DSPATCH_USER_PLUGINS" );
+    if ( !_pluginPath.isEmpty() )
+    {
+        auto userPlugins = QDir( _pluginPath );
+        auto dspatchPlugins = QDir( qgetenv( "DSPATCH_PLUGINS" ) );
+        if ( userPlugins.isEmpty() )
+        {
+            foreach ( QString fileName, dspatchPlugins.entryList( QDir::Files ) )
+            {
+                QFile::copy( dspatchPlugins.path() + "/" + fileName, userPlugins.path() + "/" + fileName );
+            }
+        }
+    }
+    else
+    {
+        _pluginPath = DEFAULT_PLUGIN_DIR;
+    }
+
+    _fileWatcher.addPath( _pluginPath );
     connect( &_fileWatcher, SIGNAL( directoryChanged( QString const& ) ), this, SLOT( _loadPlugins() ) );
 
     _loadPlugins();
@@ -125,7 +143,7 @@ void DsprController::_loadPlugins()
     // Load DSPatch plugins from "DSPatchables" folder
     QFileInfoList files;
 
-    QDirIterator it( PLUGIN_DIR, QDir::Files, QDirIterator::Subdirectories );
+    QDirIterator it( _pluginPath, QDir::Files, QDirIterator::Subdirectories );
     while ( it.hasNext() )
         files += QFileInfo( it.next() );
 

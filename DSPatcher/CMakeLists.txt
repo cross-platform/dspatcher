@@ -8,7 +8,7 @@ include_directories(
 file(GLOB srcs src/*.cpp)
 file(GLOB hdrs include/*.h)
 
-add_definitions(-DPLUGIN_DIR="${CMAKE_BINARY_DIR}/DSPatchables/Components")
+add_definitions(-DDEFAULT_PLUGIN_DIR="${CMAKE_BINARY_DIR}/DSPatchables/Components")
 
 add_executable(
   ${PROJECT_NAME}
@@ -23,9 +23,7 @@ target_link_libraries(
   UiComponent
 )
 
-if(APPLE)
-  #execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/update_install_names.sh)
-endif(APPLE)
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
 if(WIN32)
 

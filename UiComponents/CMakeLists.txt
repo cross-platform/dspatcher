@@ -25,3 +25,5 @@ qt5_use_modules(
 )
 
 add_subdirectory(UiGain)
+
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)

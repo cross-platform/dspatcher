@@ -55,6 +55,7 @@ private slots:
     void _loadPlugins();
 
 private:
+    QString _pluginPath;
     QFileSystemWatcher _fileWatcher;
     QtpMain& _mainWindow;
     std::set<int> _settingParams;

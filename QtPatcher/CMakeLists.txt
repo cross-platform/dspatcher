@@ -19,3 +19,5 @@ qt5_use_modules(
   ${PROJECT_NAME}
   Widgets
 )
+
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
