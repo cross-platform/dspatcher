@@ -37,11 +37,14 @@ QtpComp::QtpComp( CompInfo const& compInfo, int id, QPointF const& position, QGr
     setPos( position );
 
     _id = id;
-    _color = Qt::black;
+    _color = Qt::white;
     _compInfo = compInfo;
     _contextMenu = new QMenu();
 
-    _polygon << QPointF( -15, -15 ) << QPointF( 15, -15 ) << QPointF( 15, 15 ) << QPointF( -15, 15 ) << QPointF( -15, -15 );
+    _hw = 15;
+    _hh = 15;
+
+    _polygon << QPointF( -_hw, -_hh ) << QPointF( _hw, -_hh ) << QPointF( _hw, _hh ) << QPointF( -_hw, _hh ) << QPointF( -_hw, -_hh );
 
     _nameText = new QGraphicsTextItem( this );
 
@@ -56,9 +59,6 @@ QtpComp::QtpComp( CompInfo const& compInfo, int id, QPointF const& position, QGr
     }
 
     setPolygon( _polygon );
-
-    setFlag( QGraphicsItem::ItemIsMovable, true );
-    setFlag( QGraphicsItem::ItemIsSelectable, true );
 }
 
 QtpComp::~QtpComp()
@@ -97,7 +97,7 @@ void QtpComp::setColor( const QColor& color )
 void QtpComp::addInPin( QString pinName )
 {
     QtpPin* pin = new QtpPin( QtpPin::InPin, pinName, _inPins.size(), this );
-    pin->setPos( -21, 20 * _inPins.size() );
+    pin->setPos( -_hw - 6, -_hh + 15 + 20 * _inPins.size() );
     pin->setBrush( _color );
     _inPins.push_back( pin );
 
@@ -107,7 +107,7 @@ void QtpComp::addInPin( QString pinName )
 void QtpComp::addOutPin( QString pinName )
 {
     QtpPin* pin = new QtpPin( QtpPin::OutPin, pinName, _outPins.size(), this );
-    pin->setPos( 21, 20 * _outPins.size() );
+    pin->setPos( _hw + 6, -_hh + 15 + 20 * _outPins.size() );
     pin->setBrush( _color );
     _outPins.push_back( pin );
 
@@ -159,6 +159,21 @@ QMenu* QtpComp::contextMenu()
     return _contextMenu;
 }
 
+void QtpComp::setWidget( QWidget* widget )
+{
+    _widget = widget;
+
+    _hw = _widget->width() / 2;
+    _hh = _widget->height() / 2;
+
+    updatePolygon();
+}
+
+QWidget* QtpComp::getWidget() const
+{
+    return _widget;
+}
+
 QPixmap QtpComp::image() const
 {
     QPixmap pixmap( 250, 250 );
@@ -172,19 +187,19 @@ QPixmap QtpComp::image() const
     painter.translate( 125, 125 - ( 10 * pinsAfterFirst ) );
     painter.drawPolyline( _polygon );
 
-    painter.translate( -20, 0 );
+    painter.translate( -_hw - 5, 0 );
     foreach ( QtpPin* pin, _inPins )
     {
         painter.drawPolyline( pin->polygon() );
-        painter.translate( 0, 20 );
+        painter.translate( 0, _hh + 5 );
     }
 
     painter.resetTransform();
-    painter.translate( 150, 125 - ( 10 * pinsAfterFirst ) );
+    painter.translate( 125 + _hw + 10, 125 - ( 10 * pinsAfterFirst ) );
     foreach ( QtpPin* pin, _outPins )
     {
         painter.drawPolyline( pin->polygon() );
-        painter.translate( 0, 20 );
+        painter.translate( 0, _hh + 5 );
     }
 
     return pixmap;
@@ -208,7 +223,7 @@ void QtpComp::contextMenuEvent( QGraphicsSceneContextMenuEvent* event )
 void QtpComp::setName( QString name )
 {
     _nameText->setPlainText( name );
-    _nameText->setPos( -_nameText->boundingRect().width() / 2, -39 );
+    _nameText->setPos( -_nameText->boundingRect().width() / 2, -_hh - 24 );
 }
 
 void QtpComp::updatePolygon()
@@ -216,8 +231,16 @@ void QtpComp::updatePolygon()
     int pinsAfterFirst = std::max( _inPins.size(), _outPins.size() );
     pinsAfterFirst = --pinsAfterFirst < 0 ? 0 : pinsAfterFirst;
 
-    _polygon.replace( 2, QPointF( 15, 15 + ( 20 * pinsAfterFirst ) ) );
-    _polygon.replace( 3, QPointF( -15, 15 + ( 20 * pinsAfterFirst ) ) );
+    auto height = -_hh + 30 + 20 * pinsAfterFirst;
+    height = _hh > height ? _hh : height;
+
+    _polygon.replace( 0, QPointF( -_hw, -_hh ) );
+    _polygon.replace( 1, QPointF( _hw, -_hh ) );
+    _polygon.replace( 2, QPointF( _hw, height ) );
+    _polygon.replace( 3, QPointF( -_hw, height ) );
+    _polygon.replace( 4, QPointF( -_hw, -_hh ) );
 
     setPolygon( _polygon );
+
+    _nameText->setPos( -_nameText->boundingRect().width() / 2, -_hh - 24 );
 }

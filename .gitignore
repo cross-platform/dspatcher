@@ -1,3 +1,6 @@
+*.snap
 *.user
+*.wav
 .DS_Store
+.vscode
 build*

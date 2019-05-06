@@ -22,49 +22,14 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ************************************************************************/
 
-#pragma once
+#include <UiComponent.h>
 
-#include <DSPatch.h>
-#include <QtpMain.h>
+using namespace DSPatch;
+using namespace DSPatcher;
 
-#include <QFileSystemWatcher>
-#include <QObject>
-
-#include <set>
-
-namespace DSPatch
+UiComponent::UiComponent( ProcessOrder processOrder )
+    : Component( processOrder )
 {
-namespace DSPatcher
-{
+}
 
-class DsprController : public QObject
-{
-    Q_OBJECT
-
-public:
-    DsprController( QtpMain& mainWindow );
-    ~DsprController();
-
-public slots:
-    void compInserted( QtpComp* qtpComp );
-    void compRemoved( int compId );
-    void wireConnected( int fromComp, int fromPin, int toComp, int toPin );
-    void wireDisconnected( int toComp, int toPin );
-
-private slots:
-    void _loadPlugins();
-
-private:
-    QString _pluginPath;
-    QFileSystemWatcher _fileWatcher;
-    QtpMain& _mainWindow;
-    std::set<int> _settingParams;
-    std::vector<Plugin::SPtr> _pluginLoaders;
-
-    std::map<Component::SPtr, QtpComp*> _qtpComps;
-    std::map<int, Component::SPtr> _components;
-    Circuit::SPtr _circuit = std::make_shared<Circuit>();
-};
-
-}  // namespace DSPatcher
-}  // namespace DSPatch
+UiComponent::~UiComponent() = default;

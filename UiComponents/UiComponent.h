@@ -25,45 +25,24 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #pragma once
 
 #include <DSPatch.h>
-#include <QtpMain.h>
 
-#include <QFileSystemWatcher>
-#include <QObject>
-
-#include <set>
+class QWidget;
 
 namespace DSPatch
 {
 namespace DSPatcher
 {
 
-class DsprController : public QObject
+class DLLEXPORT UiComponent : public Component
 {
-    Q_OBJECT
-
 public:
-    DsprController( QtpMain& mainWindow );
-    ~DsprController();
+    NONCOPYABLE( UiComponent );
+    DEFINE_PTRS( UiComponent );
 
-public slots:
-    void compInserted( QtpComp* qtpComp );
-    void compRemoved( int compId );
-    void wireConnected( int fromComp, int fromPin, int toComp, int toPin );
-    void wireDisconnected( int toComp, int toPin );
+    UiComponent( ProcessOrder processOrder = ProcessOrder::InOrder );
+    virtual ~UiComponent();
 
-private slots:
-    void _loadPlugins();
-
-private:
-    QString _pluginPath;
-    QFileSystemWatcher _fileWatcher;
-    QtpMain& _mainWindow;
-    std::set<int> _settingParams;
-    std::vector<Plugin::SPtr> _pluginLoaders;
-
-    std::map<Component::SPtr, QtpComp*> _qtpComps;
-    std::map<int, Component::SPtr> _components;
-    Circuit::SPtr _circuit = std::make_shared<Circuit>();
+    virtual QWidget* widget() = 0;
 };
 
 }  // namespace DSPatcher

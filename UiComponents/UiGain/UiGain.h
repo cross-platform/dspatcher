@@ -25,46 +25,33 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #pragma once
 
 #include <DSPatch.h>
-#include <QtpMain.h>
-
-#include <QFileSystemWatcher>
-#include <QObject>
-
-#include <set>
+#include <UiComponent.h>
 
 namespace DSPatch
 {
 namespace DSPatcher
 {
 
-class DsprController : public QObject
+namespace internal
 {
-    Q_OBJECT
+class UiGain;
+}
 
+class DLLEXPORT UiGain final : public UiComponent
+{
 public:
-    DsprController( QtpMain& mainWindow );
-    ~DsprController();
+    UiGain();
 
-public slots:
-    void compInserted( QtpComp* qtpComp );
-    void compRemoved( int compId );
-    void wireConnected( int fromComp, int fromPin, int toComp, int toPin );
-    void wireDisconnected( int toComp, int toPin );
+    virtual QWidget* widget() override;
 
-private slots:
-    void _loadPlugins();
+protected:
+    virtual void Process_( SignalBus const& inputs, SignalBus& outputs ) override;
 
 private:
-    QString _pluginPath;
-    QFileSystemWatcher _fileWatcher;
-    QtpMain& _mainWindow;
-    std::set<int> _settingParams;
-    std::vector<Plugin::SPtr> _pluginLoaders;
-
-    std::map<Component::SPtr, QtpComp*> _qtpComps;
-    std::map<int, Component::SPtr> _components;
-    Circuit::SPtr _circuit = std::make_shared<Circuit>();
+    std::unique_ptr<internal::UiGain> p;
 };
+
+EXPORT_PLUGIN( UiGain )
 
 }  // namespace DSPatcher
 }  // namespace DSPatch

@@ -26,8 +26,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <QtpPin.h>
 #include <QtpWire.h>
 
+#include <QGraphicsProxyWidget>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
+#include <QWidget>
 
 QtpDiag::QtpDiag( QObject* parent )
     : QGraphicsScene( parent )
@@ -149,7 +151,24 @@ void QtpDiag::deleteItem()
 
     foreach ( QGraphicsItem* item, selectedItems() )
     {
-        emit compRemoved( qgraphicsitem_cast<QtpComp*>( item )->id() );
+        auto comp = qgraphicsitem_cast<QtpComp*>( item );
+        if ( comp )
+        {
+            emit compRemoved( comp->id() );
+        }
+        else
+        {
+            foreach ( QGraphicsItem* child, item->childItems() )
+            {
+                comp = qgraphicsitem_cast<QtpComp*>( child );
+                if ( comp )
+                {
+                    emit compRemoved( comp->id() );
+                    break;
+                }
+            }
+        }
+
         delete item;
     }
 }
@@ -166,11 +185,36 @@ void QtpDiag::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
     if ( _mode == InsertComp )
     {
         QtpComp* comp = new QtpComp( _nextComp, _compId++, mouseEvent->scenePos() );
-
-        comp->setColor( _compColor );
-        addItem( comp );
-
         emit compInserted( comp );
+
+        auto compWidget = comp->getWidget();
+        if ( compWidget )
+        {
+            auto initPos = mouseEvent->scenePos();
+
+            auto hw = compWidget->width() / 2;
+            auto hh = compWidget->height() / 2;
+
+            auto proxyControl =
+                addRect( initPos.x() - hw, initPos.y() - hh, comp->boundingRect().width(), comp->boundingRect().height(), Qt::NoPen );
+            proxyControl->setFlag( QGraphicsItem::ItemIsMovable, true );
+            proxyControl->setFlag( QGraphicsItem::ItemIsSelectable, true );
+
+            auto proxy = addWidget( compWidget );
+            proxy->setPos( initPos.x() - hw, initPos.y() - hh );
+            proxy->setParentItem( proxyControl );
+
+            addItem( comp );
+            comp->setParentItem( proxyControl );
+        }
+        else
+        {
+            comp->setColor( _compColor );
+            addItem( comp );
+
+            comp->setFlag( QGraphicsItem::ItemIsMovable, true );
+            comp->setFlag( QGraphicsItem::ItemIsSelectable, true );
+        }
     }
     else if ( startItems.count() && startItems.first()->type() == QtpPin::Type )
     {

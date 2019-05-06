@@ -63,6 +63,9 @@ public:
 
     QMenu* contextMenu();
 
+    void setWidget( QWidget* widget );
+    QWidget* getWidget() const;
+
     QPixmap image() const;
     CompInfo compInfo() const;
 
@@ -82,6 +85,9 @@ private:
     QList<QtpPin*> _inPins;
     QList<QtpPin*> _outPins;
     QGraphicsTextItem* _nameText;
+    QWidget* _widget = nullptr;
+    int _hw;
+    int _hh;
 };
 
 #endif  // QTPCOMP_H

@@ -103,7 +103,7 @@ void QtpWire::paint( QPainter* painter, const QStyleOptionGraphicsItem*, QWidget
     }
     else
     {
-        painter->setPen( QPen( _color, 2, Qt::SolidLine ) );
+        painter->setPen( QPen( _color, 3, Qt::SolidLine ) );
     }
 
     painter->drawPath( _path );
