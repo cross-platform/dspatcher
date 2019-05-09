@@ -15,9 +15,8 @@ apps:
       DSPATCH_USER_PLUGINS: $SNAP_USER_COMMON
       WAVEREADER_FILE: $SNAP_USER_COMMON/Sample.wav
     plugs:
+      - alsa
       - home
-      - opengl
-      - pulseaudio
       - unity7
       - x11
 
@@ -47,11 +46,38 @@ parts:
       - xdg-user-dirs
       - fcitx-frontend-qt5
 
+  alsa-lib:
+    source: https://mirrorservice.org/sites/ftp.alsa-project.org/pub/lib/alsa-lib-1.1.6.tar.bz2
+    plugin: autotools
+    configflags:
+    - --prefix=/usr
+    - --sysconfdir=/etc
+    - --libexec=/usr/lib
+    - --libdir=/usr/lib
+    - --localstatedir=/var
+    - --with-configdir=/snap/$SNAPCRAFT_PROJECT_NAME/current/usr/share/alsa
+    - --with-plugindir=/snap/$SNAPCRAFT_PROJECT_NAME/current/usr/lib/alsa-lib
+    - --disable-alisp
+    - --disable-aload
+    - --disable-python
+    - --disable-rawmidi
+    - --disable-static
+    - --disable-topology
+    - --disable-ucm
+    - --enable-symbolic-functions
+    organize:
+      snap/*/current/usr/lib/*: usr/lib/
+      snap/*/current/usr/share/*: usr/share/
+    stage:
+    - usr/include
+    - usr/lib
+    - usr/share/alsa
+    prime:
+    - usr/lib/*.so
+    - usr/lib/*.so.*
+    - usr/share/alsa
+
   dspatcher-app:
-    after: [desktop-qt5]
+    after: [alsa-lib]
     source: .
     plugin: cmake
-    build-packages:
-      - libpulse-dev
-    stage-packages:
-      - libpulse0
