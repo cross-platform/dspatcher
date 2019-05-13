@@ -43,7 +43,7 @@ DsprController::DsprController( QtpMain& mainWindow )
     {
         auto userPlugins = QDir( _pluginPath );
         auto dspatchPlugins = QDir( qgetenv( "DSPATCH_PLUGINS" ) );
-        if ( userPlugins.isEmpty() )
+        if ( userPlugins.entryInfoList( QDir::NoDotAndDotDot | QDir::AllEntries ).count() == 0 )
         {
             foreach ( QString fileName, dspatchPlugins.entryList( QDir::Files ) )
             {
