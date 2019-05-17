@@ -103,7 +103,7 @@ if(WIN32)
     add_custom_command(
       TARGET ${PROJECT_NAME} POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      ${CMAKE_PREFIX_PATH}/bin/libgcc_s_dw2-1.dll
+      ${CMAKE_PREFIX_PATH}/bin/libgcc_s_seh-1.dll
       ${CMAKE_CURRENT_BINARY_DIR}
     )
 
