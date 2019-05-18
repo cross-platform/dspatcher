@@ -62,6 +62,7 @@ public:
         QHBoxLayout* layout = new QHBoxLayout( widget );
         layout->addWidget( slider );
         layout->addWidget( label );
+        layout->setContentsMargins( 10, 10, 10, 10 );
         widget->resize( layout->sizeHint() );
     }
 

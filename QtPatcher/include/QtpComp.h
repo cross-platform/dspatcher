@@ -44,6 +44,7 @@ public:
         QString typeName;
         QList<QString> inPins;
         QList<QString> outPins;
+        bool isWidget;
     };
 
     QtpComp( CompInfo const& compInfo, int id, QPointF const& position, QGraphicsItem* parent = 0 );

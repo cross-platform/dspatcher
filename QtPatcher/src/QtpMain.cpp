@@ -67,12 +67,21 @@ QtpDiag* QtpMain::diagram()
 
 void QtpMain::registerComponent( QtpComp::CompInfo const& compInfo )
 {
-    _compWidget->layout()->addWidget( createCellWidget( compInfo ) );
+    if ( compInfo.isWidget )
+    {
+        _uiCompWidget->layout()->addWidget( createCellWidget( compInfo ) );
+    }
+    else
+    {
+        _compWidget->layout()->addWidget( createCellWidget( compInfo ) );
+    }
 
     _toolBox->deleteLater();
     _toolBox = new QToolBox;
-    _toolBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Ignored );
-    _toolBox->addItem( _compWidget, tr( "Components" ) );
+    _toolBox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Ignored );
+    _toolBox->setMinimumWidth( std::max( _uiCompWidget->width(), _compWidget->width() ) );
+    _toolBox->addItem( _compWidget, tr( "User Components" ) );
+    _toolBox->addItem( _uiCompWidget, tr( "UI Components" ) );
 
     centralWidget()->layout()->removeWidget( _view );
     centralWidget()->layout()->addWidget( _toolBox );
@@ -83,6 +92,7 @@ void QtpMain::unregisterComponents()
 {
     _buttonGroup->deleteLater();
     _compWidget->deleteLater();
+    _uiCompWidget->deleteLater();
     _toolBox->deleteLater();
 
     createToolBox();
@@ -132,15 +142,24 @@ void QtpMain::createToolBox()
     connect( _buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( buttonGroupClicked( int ) ) );
 
     QGridLayout* compLayout = new QGridLayout;
-    compLayout->setColumnStretch( 1, 1 );
+    compLayout->setColumnStretch( 2, 1 );
     compLayout->setRowStretch( 1000, 1 );
 
     _compWidget = new QWidget;
     _compWidget->setLayout( compLayout );
 
+    QGridLayout* uiCompLayout = new QGridLayout;
+    uiCompLayout->setColumnStretch( 2, 1 );
+    uiCompLayout->setRowStretch( 1000, 1 );
+
+    _uiCompWidget = new QWidget;
+    _uiCompWidget->setLayout( uiCompLayout );
+
     _toolBox = new QToolBox;
-    _toolBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Ignored );
-    _toolBox->addItem( _compWidget, tr( "Components" ) );
+    _toolBox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Ignored );
+    _toolBox->setMinimumWidth( std::max( _uiCompWidget->width(), _compWidget->width() ) );
+    _toolBox->addItem( _compWidget, tr( "User Components" ) );
+    _toolBox->addItem( _uiCompWidget, tr( "UI Components" ) );
 }
 
 void QtpMain::createActions()
@@ -197,14 +216,15 @@ QWidget* QtpMain::createCellWidget( QtpComp::CompInfo compInfo )
 
     QToolButton* button = new QToolButton;
     button->setIcon( icon );
-    button->setIconSize( QSize( 50, 50 ) );
+    button->setIconSize( QSize( 40, 40 ) );
     button->setCheckable( true );
     _comps.append( compInfo );
     _buttonGroup->addButton( button, _comps.size() - 1 );
 
     QGridLayout* layout = new QGridLayout;
     layout->addWidget( button, 0, 0, Qt::AlignHCenter );
-    layout->addWidget( new QLabel( compInfo.typeName ), 1, 0, Qt::AlignCenter );
+    layout->addWidget( new QLabel( compInfo.typeName.left( 15 ) ), 1, 0, Qt::AlignCenter );
+    layout->setContentsMargins( 0, 0, 0, 0 );
 
     QWidget* widget = new QWidget;
     widget->setLayout( layout );

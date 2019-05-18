@@ -83,6 +83,7 @@ private:
     QPointF _zoomViewportPos;
 
     QWidget* _compWidget;
+    QWidget* _uiCompWidget;
     QList<QtpComp::CompInfo> _comps;
 };
 

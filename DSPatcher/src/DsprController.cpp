@@ -166,6 +166,12 @@ void DsprController::_loadPlugins()
                 compInfo.typeId = _pluginLoaders.size() - 1;
                 compInfo.typeName = file.baseName().mid( 0, 3 ) == "lib" ? file.baseName().mid( 3 ) : file.baseName();
 
+                compInfo.isWidget = false;
+                if ( std::dynamic_pointer_cast<UiComponent>( comp ) )
+                {
+                    compInfo.isWidget = true;
+                }
+
                 if ( comp )
                 {
                     for ( int i = 0; i < comp->GetInputCount(); ++i )
