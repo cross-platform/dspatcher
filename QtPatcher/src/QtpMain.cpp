@@ -142,6 +142,8 @@ void QtpMain::createToolBox()
     connect( _buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( buttonGroupClicked( int ) ) );
 
     QGridLayout* compLayout = new QGridLayout;
+    compLayout->setColumnStretch( 0, 1 );
+    compLayout->setColumnStretch( 1, 1 );
     compLayout->setColumnStretch( 2, 1 );
     compLayout->setRowStretch( 1000, 1 );
 
@@ -149,6 +151,8 @@ void QtpMain::createToolBox()
     _compWidget->setLayout( compLayout );
 
     QGridLayout* uiCompLayout = new QGridLayout;
+    uiCompLayout->setColumnStretch( 0, 1 );
+    uiCompLayout->setColumnStretch( 1, 1 );
     uiCompLayout->setColumnStretch( 2, 1 );
     uiCompLayout->setRowStretch( 1000, 1 );
 
