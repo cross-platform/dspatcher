@@ -24,6 +24,6 @@ qt5_use_modules(
   Widgets
 )
 
-add_subdirectory(UiGain)
+add_subdirectory(FloatSlider)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)

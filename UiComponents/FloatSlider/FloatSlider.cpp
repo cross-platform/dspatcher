@@ -22,7 +22,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ************************************************************************/
 
-#include <UiGain.h>
+#include <FloatSlider.h>
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -39,10 +39,10 @@ namespace DSPatcher
 namespace internal
 {
 
-class UiGain
+class FloatSlider
 {
 public:
-    UiGain()
+    FloatSlider()
     {
         widget = new QWidget();
 
@@ -57,7 +57,7 @@ public:
         slider->connect( slider, &QSlider::valueChanged,
                          [label]( int value ) { label->setText( QString::number( (float)value / 100 ) ); } );
 
-        slider->connect( slider, &QSlider::valueChanged, [this]( int value ) { gain = (float)value / 100; } );
+        slider->connect( slider, &QSlider::valueChanged, [this]( int value ) { floatValue = (float)value / 100; } );
 
         QHBoxLayout* layout = new QHBoxLayout( widget );
         layout->addWidget( slider );
@@ -66,7 +66,7 @@ public:
         widget->resize( layout->sizeHint() );
     }
 
-    ~UiGain()
+    ~FloatSlider()
     {
         slider->disconnect();
         widget->deleteLater();
@@ -75,38 +75,26 @@ public:
     QSlider* slider;
     QWidget* widget;
 
-    float gain = 1.0f;
+    float floatValue = 1.0f;
 };
 
 }  // namespace internal
 }  // namespace DSPatcher
 }  // namespace DSPatch
 
-UiGain::UiGain()
+FloatSlider::FloatSlider()
     : UiComponent( ProcessOrder::OutOfOrder )
-    , p( new internal::UiGain() )
+    , p( new internal::FloatSlider() )
 {
-    SetInputCount_( 1, {"in"} );
-    SetOutputCount_( 1, {"out"} );
+    SetOutputCount_( 1 );
 }
 
-QWidget* UiGain::widget()
+QWidget* FloatSlider::widget()
 {
     return p->widget;
 }
 
-void UiGain::Process_( SignalBus const& inputs, SignalBus& outputs )
+void FloatSlider::Process_( SignalBus const&, SignalBus& outputs )
 {
-    auto in = inputs.GetValue<std::vector<short>>( 0 );
-    if ( !in )
-    {
-        return;
-    }
-
-    for ( auto& inSample : *in )
-    {
-        inSample *= p->gain;  // apply gain sample-by-sample
-    }
-
-    outputs.MoveSignal( 0, inputs.GetSignal( 0 ) );  // move gained input signal to output
+    outputs.SetValue( 0, p->floatValue );
 }
