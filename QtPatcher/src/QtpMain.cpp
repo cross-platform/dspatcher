@@ -79,7 +79,7 @@ void QtpMain::registerComponent( QtpComp::CompInfo const& compInfo )
     _toolBox->deleteLater();
     _toolBox = new QToolBox;
     _toolBox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Ignored );
-    _toolBox->setMinimumWidth( std::max( _uiCompWidget->width(), _compWidget->width() ) );
+    _toolBox->setMinimumWidth( std::max( _uiCompWidget->sizeHint().width(), _compWidget->sizeHint().width() ) );
     _toolBox->addItem( _compWidget, tr( "User Components" ) );
     _toolBox->addItem( _uiCompWidget, tr( "UI Components" ) );
 
@@ -161,7 +161,7 @@ void QtpMain::createToolBox()
 
     _toolBox = new QToolBox;
     _toolBox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Ignored );
-    _toolBox->setMinimumWidth( std::max( _uiCompWidget->width(), _compWidget->width() ) );
+    _toolBox->setMinimumWidth( std::max( _uiCompWidget->sizeHint().width(), _compWidget->sizeHint().width() ) );
     _toolBox->addItem( _compWidget, tr( "User Components" ) );
     _toolBox->addItem( _uiCompWidget, tr( "UI Components" ) );
 }
