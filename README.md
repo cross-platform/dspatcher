@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/cross-platform/dspatcher.svg?branch=master)](https://travis-ci.org/cross-platform/dspatcher)
 [![Build status](https://ci.appveyor.com/api/projects/status/nyitfgo2f56dbs6w/branch/master?svg=true)](https://ci.appveyor.com/project/MarcusTomlinson/dspatcher/branch/master)
 
+[![Snap](https://snapcraft.io/static/images/badges/en/snap-store-white.svg)](https://snapcraft.io/dspatcher)
+
 # DSPatcher
 
 Cross-Platform Graphical Tool for DSPatch.
