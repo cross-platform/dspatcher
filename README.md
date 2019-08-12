@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/cross-platform/dspatcher.svg?branch=master)](https://travis-ci.org/cross-platform/dspatcher)
-[![Build status](https://ci.appveyor.com/api/projects/status/nyitfgo2f56dbs6w/branch/master?svg=true)](https://ci.appveyor.com/project/MarcusTomlinson/dspatcher/branch/master)
+[![Build Status](https://bit.ly/2GYsfv9)](https://travis-ci.org/cross-platform/dspatcher)
+[![Build status](https://bit.ly/2OPL4qR)](https://ci.appveyor.com/project/MarcusTomlinson/dspatcher/branch/master)
 
-[![Snap](https://snapcraft.io/static/images/badges/en/snap-store-white.svg)](https://snapcraft.io/dspatcher)
+[![Snap](https://bit.ly/2ZWfetD)](https://snapcraft.io/dspatcher)
 
 # DSPatcher
 
@@ -11,6 +11,7 @@ The DSPatcher project is made up of 2 parts:
 1. QtPatcher - A cross-platform circuit drawing library written in Qt C++.
 2. DSPatcher - A graphical tool based on QtPatcher for building DSPatch circuits.
 
+![Screenshot](https://bit.ly/33vlCuc)
 
 ## Build
 
