@@ -1,3 +1,6 @@
+v.0.2.0 (31 January 2020)
+    - Re-license DSPatcher to BSD 2-Clause.
+
 v.0.11 (12 October 2018)
     - Updates to support DSPatch v4.
     - Added CI.
