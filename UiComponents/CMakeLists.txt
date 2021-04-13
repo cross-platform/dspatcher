@@ -25,5 +25,6 @@ qt5_use_modules(
 )
 
 add_subdirectory(FloatSlider)
+add_subdirectory(TextInput)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)

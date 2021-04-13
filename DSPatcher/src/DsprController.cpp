@@ -1,6 +1,6 @@
 /******************************************************************************
 DSPatcher - Cross-Platform Graphical Tool for DSPatch
-Copyright (c) 2020, Marcus Tomlinson
+Copyright (c) 2021, Marcus Tomlinson
 
 BSD 2-Clause License
 
@@ -88,6 +88,7 @@ DsprController::~DsprController()
 
 void DsprController::compInserted( QtpComp* qtpComp )
 {
+    _circuit->StartAutoTick( Component::TickMode::Parallel );
     auto loader = _pluginLoaders[qtpComp->compInfo().typeId];
 
     Component::SPtr component = loader->Create();
@@ -132,7 +133,6 @@ void DsprController::compRemoved( int compId )
 void DsprController::wireConnected( int fromComp, int fromPin, int toComp, int toPin )
 {
     _circuit->ConnectOutToIn( _components[fromComp], fromPin, _components[toComp], toPin );
-    _circuit->StartAutoTick( Component::TickMode::Parallel );
 }
 
 void DsprController::wireDisconnected( int toComp, int toPin )
