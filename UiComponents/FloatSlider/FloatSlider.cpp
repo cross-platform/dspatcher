@@ -61,7 +61,7 @@ public:
         slider->connect( slider, &QSlider::valueChanged,
                          [label]( int value ) { label->setText( QString::number( (float)value / 100 ) ); } );
 
-        slider->connect( slider, &QSlider::valueChanged, [this]( int value ) { floatValue = (float)value / 100; } );
+        slider->connect( slider, &QSlider::valueChanged, [this]( int value ) { currentValue = (float)value / 100; } );
 
         QHBoxLayout* layout = new QHBoxLayout( widget );
         layout->addWidget( slider );
@@ -79,7 +79,7 @@ public:
     QSlider* slider;
     QWidget* widget;
 
-    float floatValue = 1.0f;
+    float currentValue = 1.0f;
 };
 
 }  // namespace internal
@@ -100,5 +100,5 @@ QWidget* FloatSlider::widget()
 
 void FloatSlider::Process_( SignalBus const&, SignalBus& outputs )
 {
-    outputs.SetValue( 0, p->floatValue );
+    outputs.SetValue( 0, p->currentValue );
 }

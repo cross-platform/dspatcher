@@ -50,6 +50,8 @@ public:
 
         textEdit = new QLineEdit( widget );
 
+        textEdit->connect( textEdit, &QLineEdit::textChanged, [this]( const QString& value ) { currentValue = value.toStdString(); } );
+
         QHBoxLayout* layout = new QHBoxLayout( widget );
         layout->addWidget( textEdit );
         layout->setContentsMargins( 15, 15, 15, 15 );
@@ -58,11 +60,13 @@ public:
 
     ~TextInput()
     {
+        textEdit->disconnect();
         widget->deleteLater();
     }
 
     QLineEdit* textEdit;
     QWidget* widget;
+    std::string currentValue;
 };
 
 }  // namespace internal
@@ -83,5 +87,5 @@ QWidget* TextInput::widget()
 
 void TextInput::Process_( SignalBus const&, SignalBus& outputs )
 {
-    outputs.SetValue( 0, p->textEdit->text().toStdString() );
+    outputs.SetValue( 0, p->currentValue );
 }
