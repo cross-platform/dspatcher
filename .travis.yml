@@ -7,29 +7,40 @@ matrix:
   - os: linux
     compiler: clang
   - os: osx
+    osx_image: xcode12
     compiler: gcc
+    addons:
+      homebrew:
+        packages:
+          - qt5
+        update: true
   - os: osx
+    osx_image: xcode12
     compiler: clang
+    addons:
+      homebrew:
+        packages:
+          - qt5
+        update: true
 
 install:
-- if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install qt5-default libasound2-dev; fi
-- if [ $TRAVIS_OS_NAME = osx ]; then brew install qt5 || (brew update && brew install qt5); fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install qt5-default libasound2-dev; fi
 
 before_script:
-    - git submodule update --init --recursive --remote
-    - mkdir debug
-    - cd debug
-    - cmake -D CMAKE_BUILD_TYPE=Debug ..
-    - cd ..
-    - mkdir release
-    - cd release
-    - cmake -D CMAKE_BUILD_TYPE=Release ..
-    - cd ..
+  - git submodule update --init --recursive --remote
+  - mkdir debug
+  - cd debug
+  - cmake -D CMAKE_BUILD_TYPE=Debug ..
+  - cd ..
+  - mkdir release
+  - cd release
+  - cmake -D CMAKE_BUILD_TYPE=Release ..
+  - cd ..
 
 script:
-    - cd debug
-    - make all
-    - cd ..
-    - cd release
-    - make all
-    - cd ..
+  - cd debug
+  - make all
+  - cd ..
+  - cd release
+  - make all
+  - cd ..
