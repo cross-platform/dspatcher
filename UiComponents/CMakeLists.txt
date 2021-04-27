@@ -24,6 +24,12 @@ qt5_use_modules(
   Widgets
 )
 
+set_target_properties(
+    ${PROJECT_NAME} PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/DSPatcher
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/DSPatcher
+)
+
 add_subdirectory(FloatSlider)
 add_subdirectory(TextInput)
 

@@ -19,6 +19,7 @@ target_link_libraries(
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/DSPatchables/Components
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/DSPatchables/Components
 )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib/dspatch/components)
