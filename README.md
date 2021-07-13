@@ -5,7 +5,7 @@
 
 # DSPatcher
 
-Cross-Platform Graphical Tool for DSPatch.
+Cross-Platform Graphical Tool for [DSPatch](https://github.com/cross-platform/dspatch).
 
 The DSPatcher project is made up of 2 parts:
 1. QtPatcher - A cross-platform circuit drawing library written in Qt C++.
