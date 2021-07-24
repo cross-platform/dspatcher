@@ -15,9 +15,9 @@ add_library(
   ${rcs}
 )
 
-qt5_use_modules(
-  ${PROJECT_NAME}
-  Widgets
+target_link_libraries(
+    ${PROJECT_NAME}
+    ${Qt5Widgets_LIBRARIES}
 )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
