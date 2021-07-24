@@ -81,3 +81,10 @@ parts:
     after: [alsa-lib]
     source: .
     plugin: cmake
+    build-packages:
+      - python3-pip
+      - python3-setuptools
+      - ninja-build
+    override-build: |
+      pip3 install meson
+      snapcraftctl build
