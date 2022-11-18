@@ -65,7 +65,7 @@ DsprController::DsprController( QtpMain& mainWindow )
 
     _loadPlugins();
 
-    _circuit->SetBufferCount( std::thread::hardware_concurrency() );
+    _circuit.SetBufferCount( std::thread::hardware_concurrency() );
 
     connect( _mainWindow.diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted );
     connect( _mainWindow.diagram(), &QtpDiag::compRemoved, this, &DsprController::compRemoved );
@@ -75,12 +75,12 @@ DsprController::DsprController( QtpMain& mainWindow )
 
 DsprController::~DsprController()
 {
-    _circuit->StopAutoTick();
+    _circuit.StopAutoTick();
 
     typedef std::pair<int, Component::SPtr> ComponentPair;
     foreach ( ComponentPair comp, _components )
     {
-        _circuit->RemoveComponent( comp.second );
+        _circuit.RemoveComponent( comp.second );
     }
     _components.clear();
     _qtpComps.clear();
@@ -88,7 +88,7 @@ DsprController::~DsprController()
 
 void DsprController::compInserted( QtpComp* qtpComp )
 {
-    _circuit->StartAutoTick( Component::TickMode::Parallel );
+    _circuit.StartAutoTick( Component::TickMode::Parallel );
     auto loader = _pluginLoaders[qtpComp->compInfo().typeId];
 
     Component::SPtr component = loader->Create();
@@ -114,7 +114,7 @@ void DsprController::compInserted( QtpComp* qtpComp )
         qtpComp->addOutPin( component->GetOutputName( i ).c_str() );
     }
 
-    _circuit->AddComponent( component );
+    _circuit.AddComponent( component );
 
     _components[qtpComp->id()] = component;
 
@@ -123,7 +123,7 @@ void DsprController::compInserted( QtpComp* qtpComp )
 
 void DsprController::compRemoved( int compId )
 {
-    _circuit->RemoveComponent( _components[compId] );
+    _circuit.RemoveComponent( _components[compId] );
 
     _qtpComps.erase( _components[compId] );
 
@@ -132,7 +132,7 @@ void DsprController::compRemoved( int compId )
 
 void DsprController::wireConnected( int fromComp, int fromPin, int toComp, int toPin )
 {
-    _circuit->ConnectOutToIn( _components[fromComp], fromPin, _components[toComp], toPin );
+    _circuit.ConnectOutToIn( _components[fromComp], fromPin, _components[toComp], toPin );
 }
 
 void DsprController::wireDisconnected( int toComp, int toPin )

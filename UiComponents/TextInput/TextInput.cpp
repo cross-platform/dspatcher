@@ -85,7 +85,7 @@ QWidget* TextInput::widget()
     return p->widget;
 }
 
-void TextInput::Process_( SignalBus const&, SignalBus& outputs )
+void TextInput::Process_( SignalBus&, SignalBus& outputs )
 {
     outputs.SetValue( 0, p->currentValue );
 }

@@ -41,7 +41,6 @@ class DLLEXPORT UiComponent : public Component
 {
 public:
     NONCOPYABLE( UiComponent );
-    DEFINE_PTRS( UiComponent );
 
     UiComponent( ProcessOrder processOrder = ProcessOrder::InOrder );
     virtual ~UiComponent();

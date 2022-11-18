@@ -63,11 +63,11 @@ private:
     QFileSystemWatcher _fileWatcher;
     QtpMain& _mainWindow;
     std::set<int> _settingParams;
-    std::vector<Plugin::SPtr> _pluginLoaders;
+    std::vector<std::shared_ptr<Plugin>> _pluginLoaders;
 
     std::map<Component::SPtr, QtpComp*> _qtpComps;
     std::map<int, Component::SPtr> _components;
-    Circuit::SPtr _circuit = std::make_shared<Circuit>();
+    Circuit _circuit;
 };
 
 }  // namespace DSPatcher

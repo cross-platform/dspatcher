@@ -98,7 +98,7 @@ QWidget* FloatSlider::widget()
     return p->widget;
 }
 
-void FloatSlider::Process_( SignalBus const&, SignalBus& outputs )
+void FloatSlider::Process_( SignalBus&, SignalBus& outputs )
 {
     outputs.SetValue( 0, p->currentValue );
 }
