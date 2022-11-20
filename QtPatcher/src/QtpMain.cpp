@@ -253,8 +253,7 @@ bool QtpMain::eventFilter( QObject*, QEvent* event )
             _view->scale( factor, factor );
             _view->centerOn( _zoomDiagPos );
 
-            QPointF deltaViewportPos =
-                _zoomViewportPos - QPointF( _view->viewport()->width() / 2.0, _view->viewport()->height() / 2.0 );
+            QPointF deltaViewportPos = _zoomViewportPos - QPointF( _view->viewport()->width() / 2.0, _view->viewport()->height() / 2.0 );
             QPointF viewportCenter = _view->mapFromScene( _zoomDiagPos ) - deltaViewportPos;
 
             _view->centerOn( _view->mapToScene( viewportCenter.toPoint() ) );

@@ -45,7 +45,7 @@ QtpDiag::QtpDiag( QObject* parent )
     _compColor = Qt::white;
 
     std::random_device r;
-    std::seed_seq seed{r(), r(), r(), r(), r(), r(), r(), r()};
+    std::seed_seq seed{ r(), r(), r(), r(), r(), r(), r(), r() };
     _mt = std::mt19937( seed );
 
     std::uniform_int_distribution<unsigned int> dist;

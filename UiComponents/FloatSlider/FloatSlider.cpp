@@ -76,6 +76,9 @@ public:
         widget->deleteLater();
     }
 
+    FloatSlider( FloatSlider const& ) = delete;
+    FloatSlider& operator=( FloatSlider const& ) = delete;
+
     QSlider* slider;
     QWidget* widget;
 

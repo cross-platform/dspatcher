@@ -64,6 +64,9 @@ public:
         widget->deleteLater();
     }
 
+    TextInput( TextInput const& ) = delete;
+    TextInput& operator=( TextInput const& ) = delete;
+
     QLineEdit* textEdit;
     QWidget* widget;
     std::string currentValue;
