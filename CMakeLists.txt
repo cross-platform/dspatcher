@@ -21,7 +21,9 @@ if(NOT CMAKE_PREFIX_PATH)
 
   if(APPLE)
 
-    if(IS_DIRECTORY "/usr/local/opt/qt")
+    if(IS_DIRECTORY "/usr/local/opt/qt5")
+      set(CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
+    elseif(IS_DIRECTORY "/usr/local/opt/qt")
       set(CMAKE_PREFIX_PATH "/usr/local/opt/qt")
     else()
       file(GLOB QT_VERSIONS "$ENV{HOME}/Qt/5.*")
