@@ -65,8 +65,6 @@ DsprController::DsprController( QtpMain& mainWindow )
 
     _loadPlugins();
 
-    _circuit.SetBufferCount( std::thread::hardware_concurrency() );
-
     connect( _mainWindow.diagram(), &QtpDiag::compInserted, this, &DsprController::compInserted );
     connect( _mainWindow.diagram(), &QtpDiag::compRemoved, this, &DsprController::compRemoved );
     connect( _mainWindow.diagram(), &QtpDiag::wireConnected, this, &DsprController::wireConnected );
@@ -88,7 +86,7 @@ DsprController::~DsprController()
 
 void DsprController::compInserted( QtpComp* qtpComp )
 {
-    _circuit.StartAutoTick( Component::TickMode::Parallel );
+    _circuit.StartAutoTick();
     auto loader = _pluginLoaders[qtpComp->compInfo().typeId];
 
     Component::SPtr component = loader->Create();
