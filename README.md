@@ -15,7 +15,7 @@ The DSPatcher project is made up of 2 parts:
 
 ## Build
 
-This project requires Qt: https://www.qt.io/download
+This project requires Qt5: https://www.qt.io/download
 
 ```
 git clone https://github.com/cross-platform/dspatcher.git
