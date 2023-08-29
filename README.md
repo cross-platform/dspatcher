@@ -23,8 +23,8 @@ cd dspatcher
 git submodule update --init --recursive --remote
 mkdir build
 cd build
-cmake ..
-make
+cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake --build . --config Release
 ```
 
 - *If `cmake ..` fails, try `cmake -D CMAKE_PREFIX_PATH=<path/to/Qt/x.y.z/compiler> ..`.*
