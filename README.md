@@ -27,9 +27,9 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . --config Release
 ```
 
-- *If `cmake ..` fails, try `cmake -D CMAKE_PREFIX_PATH=<path/to/Qt/x.y.z/compiler> ..`.*
-- *`cmake ..` will auto-detect your IDE / compiler. To manually select one, use `cmake -G`.*
-- *When building for an IDE, instead of `make`, simply open the cmake generated project file.*
+- *If `cmake` fails, try adding `-DCMAKE_PREFIX_PATH=<path/to/Qt/x.y.z/compiler>`.*
+- *`cmake` will auto-detect your IDE / compiler. To manually select one, use `cmake -G`.*
+- *When building for an IDE, instead of `cmake --build`, simply open the cmake generated project file.*
 
 
 ### See also:
