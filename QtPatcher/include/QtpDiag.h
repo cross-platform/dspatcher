@@ -1,6 +1,6 @@
 /******************************************************************************
 QtPatcher - Cross-Platform Circuit Drawing Library
-Copyright (c) 2021, Marcus Tomlinson
+Copyright (c) 2024, Marcus Tomlinson
 
 BSD 2-Clause License
 
