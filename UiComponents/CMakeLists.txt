@@ -14,7 +14,6 @@ add_library(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    DSPatch
     ${Qt5Widgets_LIBRARIES}
 )
 

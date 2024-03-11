@@ -40,7 +40,8 @@ namespace DSPatcher
 class DLLEXPORT UiComponent : public Component
 {
 public:
-    NONCOPYABLE( UiComponent );
+    UiComponent( const UiComponent& ) = delete;
+    UiComponent& operator=( const UiComponent& ) = delete;
 
     UiComponent( ProcessOrder processOrder = ProcessOrder::InOrder );
     virtual ~UiComponent();

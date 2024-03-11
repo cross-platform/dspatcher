@@ -18,7 +18,6 @@ add_executable(
 
 target_link_libraries(
   ${PROJECT_NAME}
-  DSPatch
   QtPatcher
   UiComponent
 )
@@ -28,13 +27,6 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 if(WIN32)
 
   if(MSVC)
-
-    add_custom_command(
-      TARGET ${PROJECT_NAME} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      ${CMAKE_CURRENT_BINARY_DIR}/../DSPatchables/DSPatch/$<CONFIGURATION>/DSPatch.dll
-      ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>
-    )
 
     set(
       QT5_DEBUG_DLLS
@@ -71,13 +63,6 @@ if(WIN32)
   endif(MSVC)
 
   if(MINGW)
-
-    add_custom_command(
-      TARGET ${PROJECT_NAME} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      ${CMAKE_CURRENT_BINARY_DIR}/../DSPatchables/DSPatch/libDSPatch.dll
-      ${CMAKE_CURRENT_BINARY_DIR}
-    )
 
     string(TOLOWER "${CMAKE_BUILD_TYPE}" cmake_build_type)
 
