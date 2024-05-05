@@ -149,6 +149,8 @@ void DsprController::_loadPlugins()
     while ( it.hasNext() )
         files += QFileInfo( it.next() );
 
+    std::sort( files.begin(), files.end(), []( const QFileInfo& one, const QFileInfo& two ) { return one.fileName() < two.fileName(); } );
+
     foreach ( QFileInfo const& file, files )
     {
 #ifdef _WIN32
