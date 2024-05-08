@@ -177,6 +177,11 @@ void QtpDiag::deleteItem()
     }
 }
 
+void QtpDiag::playPause()
+{
+    emit playPauseTriggered();
+}
+
 void QtpDiag::mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent )
 {
     if ( mouseEvent->button() != Qt::LeftButton )

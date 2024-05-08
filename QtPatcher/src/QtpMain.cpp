@@ -46,6 +46,7 @@ QtpMain::QtpMain()
     connect( _toFrontAction, SIGNAL( triggered() ), _diagram, SLOT( bringToFront() ) );
     connect( _sendBackAction, SIGNAL( triggered() ), _diagram, SLOT( sendToBack() ) );
     connect( _deleteAction, SIGNAL( triggered() ), _diagram, SLOT( deleteItem() ) );
+    connect( _playPauseAction, SIGNAL( triggered() ), _diagram, SLOT( playPause() ) );
 
     _view = new QGraphicsView( _diagram );
     _view->viewport()->installEventFilter( this );
@@ -189,6 +190,10 @@ void QtpMain::createActions()
     _deleteAction->setShortcuts( deleteKeys );
     _deleteAction->setStatusTip( tr( "Delete component from diagram" ) );
     addAction( _deleteAction );
+
+    _playPauseAction = new QAction( tr( "Play/Pause" ), this );
+    _playPauseAction->setShortcut( Qt::Key_Space );
+    addAction( _playPauseAction );
 
     _exitAction = new QAction( tr( "E&xit" ), this );
     _exitAction->setShortcuts( QKeySequence::Quit );

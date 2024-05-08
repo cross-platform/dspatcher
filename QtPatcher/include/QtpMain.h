@@ -71,6 +71,7 @@ private:
 
     QAction* _exitAction;
     QAction* _deleteAction;
+    QAction* _playPauseAction;
 
     QAction* _toFrontAction;
     QAction* _sendBackAction;

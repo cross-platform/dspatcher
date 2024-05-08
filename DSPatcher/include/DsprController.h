@@ -54,6 +54,7 @@ public slots:
     void compRemoved( int compId );
     void wireConnected( int fromComp, int fromPin, int toComp, int toPin );
     void wireDisconnected( int toComp, int toPin );
+    void playPauseTriggered();
 
 private slots:
     void _loadPlugins();
@@ -68,6 +69,7 @@ private:
     std::map<Component::SPtr, QtpComp*> _qtpComps;
     std::map<int, Component::SPtr> _components;
     Circuit _circuit;
+    bool isPlaying = false;
 };
 
 }  // namespace DSPatcher

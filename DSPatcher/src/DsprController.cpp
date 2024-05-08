@@ -69,6 +69,7 @@ DsprController::DsprController( QtpMain& mainWindow )
     connect( _mainWindow.diagram(), &QtpDiag::compRemoved, this, &DsprController::compRemoved );
     connect( _mainWindow.diagram(), &QtpDiag::wireConnected, this, &DsprController::wireConnected );
     connect( _mainWindow.diagram(), &QtpDiag::wireDisconnected, this, &DsprController::wireDisconnected );
+    connect( _mainWindow.diagram(), &QtpDiag::playPauseTriggered, this, &DsprController::playPauseTriggered );
 }
 
 DsprController::~DsprController()
@@ -86,7 +87,9 @@ DsprController::~DsprController()
 
 void DsprController::compInserted( QtpComp* qtpComp )
 {
+    isPlaying = true;
     _circuit.StartAutoTick();
+
     auto loader = _pluginLoaders[qtpComp->compInfo().typeId];
 
     Component::SPtr component = loader->Create();
@@ -136,6 +139,20 @@ void DsprController::wireConnected( int fromComp, int fromPin, int toComp, int t
 void DsprController::wireDisconnected( int toComp, int toPin )
 {
     _components[toComp]->DisconnectInput( toPin );
+}
+
+void DsprController::playPauseTriggered()
+{
+    if ( isPlaying )
+    {
+        isPlaying = false;
+        _circuit.PauseAutoTick();
+    }
+    else
+    {
+        isPlaying = true;
+        _circuit.ResumeAutoTick();
+    }
 }
 
 void DsprController::_loadPlugins()

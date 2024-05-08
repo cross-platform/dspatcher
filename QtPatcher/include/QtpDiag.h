@@ -62,6 +62,7 @@ signals:
     void compRemoved( int compId );
     void wireConnected( int fromComp, int fromPin, int toComp, int toPin );
     void wireDisconnected( int toComp, int toPin );
+    void playPauseTriggered();
 
 public slots:
     void setMode( Mode mode );
@@ -70,6 +71,7 @@ public slots:
     void bringToFront();
     void sendToBack();
     void deleteItem();
+    void playPause();
 
 protected:
     void mousePressEvent( QGraphicsSceneMouseEvent* mouseEvent );
