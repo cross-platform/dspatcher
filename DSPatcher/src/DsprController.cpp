@@ -87,8 +87,12 @@ DsprController::~DsprController()
 
 void DsprController::compInserted( QtpComp* qtpComp )
 {
-    isPlaying = true;
-    _circuit.StartAutoTick();
+    if ( !started )
+    {
+        started = true;
+        isPlaying = true;
+        _circuit.StartAutoTick();
+    }
 
     auto loader = _pluginLoaders[qtpComp->compInfo().typeId];
 

@@ -70,6 +70,7 @@ private:
     std::map<int, Component::SPtr> _components;
     Circuit _circuit;
     bool isPlaying = false;
+    bool started = false;
 };
 
 }  // namespace DSPatcher
